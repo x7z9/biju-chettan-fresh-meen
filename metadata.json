@@ -1,0 +1,6 @@
+{
+  "name": "ബിജു ചേട്ടന്റെ ഫ്രെഷ് മീൻ | Biju Chettante Fresh Fish",
+  "description": "ഇന്നത്തെ മീൻ ലഭ്യതയും ഫോട്ടോകളും WhatsApp-ൽ പങ്കിടാൻ — ബിജു ചേട്ടന്റെ ഫ്രെഷ് മീൻ വണ്ടി (ഒച്ചിറ – കൃഷ്ണപുരം).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

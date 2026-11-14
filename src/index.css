@@ -1,0 +1,61 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --brand-navy: #082d59;
+    --brand-tray: #0879d9;
+    --brand-surface: #f5f8fc;
+    --brand-highlight: #facc15;
+  }
+
+  html {
+    font-family: "Noto Sans Malayalam", "Manjari", "Kartika", "Nirmala UI", system-ui, -apple-system, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    background-color: #f5f8fc;
+    color: #0f172a;
+  }
+
+  html.dark {
+    background-color: #000000;
+    color: #ffffff;
+    color-scheme: dark;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    background-color: #f5f8fc;
+  }
+
+  html.dark body {
+    background-color: #000000;
+  }
+
+  button,
+  [role="button"],
+  a,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+
+  :focus-visible {
+    outline: 3px solid #0879d9;
+    outline-offset: 2px;
+  }
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

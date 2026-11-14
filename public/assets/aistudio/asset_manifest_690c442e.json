@@ -1,0 +1,210 @@
+{
+  "numbered_reference_sheet": "reference/numbered_image_reference_sheet.png",
+  "numbered_mapping": [
+    {
+      "number": 1,
+      "fish_id": "kannan_ayala",
+      "name_ml": "കണ്ണൻ അയല",
+      "pronunciation_latin": "Kannan Ayala",
+      "app_asset": "assets/fish_reference_posters/01_kannan_ayala.png",
+      "original_generated_filename": "a_bright_high_clarity_food_market_style_poster_a.png",
+      "use": "catalogue visual reference only; not proof of current stock"
+    },
+    {
+      "number": 2,
+      "fish_id": "kayal_koori",
+      "name_ml": "കായൽ കൂരി",
+      "pronunciation_latin": "Kayal Koori",
+      "app_asset": "assets/fish_reference_posters/02_kayal_koori.png",
+      "original_generated_filename": "a_clean_commercial_grocery_market_style_poster_ima.png",
+      "use": "catalogue visual reference only; not proof of current stock"
+    },
+    {
+      "number": 3,
+      "fish_id": "vella_choora",
+      "name_ml": "വെള്ള ചൂര",
+      "pronunciation_latin": "Vella Choora",
+      "app_asset": "assets/fish_reference_posters/03_vella_choora.png",
+      "original_generated_filename": "a_crisp_high_contrast_top_down_product_fish_mark.png",
+      "use": "catalogue visual reference only; not proof of current stock"
+    },
+    {
+      "number": 4,
+      "fish_id": "ayala",
+      "name_ml": "അയല",
+      "pronunciation_latin": "Ayala",
+      "app_asset": "assets/fish_reference_posters/04_ayala.png",
+      "original_generated_filename": "a_crisp_high_detail_food_market_style_promotional.png",
+      "use": "catalogue visual reference only; not proof of current stock"
+    },
+    {
+      "number": 5,
+      "fish_id": "kochu_mathi",
+      "name_ml": "കൊച്ചു മത്തി",
+      "pronunciation_latin": "Kochu Mathi",
+      "app_asset": "assets/fish_reference_posters/05_kochu_mathi.png",
+      "original_generated_filename": "a_crisp_high_detail_colorful_food_market_style_p.png",
+      "use": "catalogue visual reference only; not proof of current stock"
+    },
+    {
+      "number": 6,
+      "fish_id": "unnimery",
+      "name_ml": "ഉണ്ണിമേരി",
+      "pronunciation_latin": "Unnimery",
+      "app_asset": "assets/fish_reference_posters/06_unnimery.png",
+      "original_generated_filename": "a_high_detail_brightly_lit_food_market_style_post.png",
+      "use": "catalogue visual reference only; not proof of current stock"
+    },
+    {
+      "number": 7,
+      "fish_id": "vaala",
+      "name_ml": "വാള",
+      "pronunciation_latin": "Vaala",
+      "app_asset": "assets/fish_reference_posters/07_vaala.png",
+      "original_generated_filename": "a_high_resolution_vibrant_poster_like_image_ident.png",
+      "use": "catalogue visual reference only; not proof of current stock"
+    },
+    {
+      "number": 8,
+      "fish_id": "mankada",
+      "name_ml": "മങ്കട",
+      "pronunciation_latin": "Mankada",
+      "app_asset": "assets/fish_reference_posters/08_mankada.png",
+      "original_generated_filename": "a_vibrant_high_clarity_promotional_product_photo.png",
+      "use": "catalogue visual reference only; not proof of current stock"
+    },
+    {
+      "number": 9,
+      "fish_id": "kera_choora",
+      "name_ml": "കേര ചൂര",
+      "pronunciation_latin": "Kera Choora",
+      "app_asset": "assets/fish_reference_posters/09_kera_choora.png",
+      "original_generated_filename": "a_vibrant_high_resolution_top_down_product_poste.png",
+      "use": "catalogue visual reference only; not proof of current stock"
+    },
+    {
+      "number": 10,
+      "fish_id": "valiya_mathi",
+      "name_ml": "വലിയ മത്തി",
+      "pronunciation_latin": "Valiya Mathi",
+      "app_asset": "assets/fish_reference_posters/10_valiya_mathi.png",
+      "original_generated_filename": "a_vivid_advertising_style_product_photo_a_bright.png",
+      "use": "catalogue visual reference only; not proof of current stock"
+    }
+  ],
+  "legacy_fish_artwork": [
+    {
+      "filename": "a_crisp_high_contrast_close_up_promotional_photo.png",
+      "path": "assets/legacy_fish_artwork/a_crisp_high_contrast_close_up_promotional_photo.png",
+      "use": "legacy design reference only; review before use"
+    },
+    {
+      "filename": "a_crisp_high_resolution_brightly_lit_close_up_pr.png",
+      "path": "assets/legacy_fish_artwork/a_crisp_high_resolution_brightly_lit_close_up_pr.png",
+      "use": "legacy design reference only; review before use"
+    },
+    {
+      "filename": "a_crisp_high_resolution_close_up_product_style_p.png",
+      "path": "assets/legacy_fish_artwork/a_crisp_high_resolution_close_up_product_style_p.png",
+      "use": "legacy design reference only; review before use"
+    },
+    {
+      "filename": "a_crisp_high_resolution_top_down_close_up_produc.png",
+      "path": "assets/legacy_fish_artwork/a_crisp_high_resolution_top_down_close_up_produc.png",
+      "use": "legacy design reference only; review before use"
+    },
+    {
+      "filename": "a_high_resolution_close_up_top_down_photo_of_the.png",
+      "path": "assets/legacy_fish_artwork/a_high_resolution_close_up_top_down_photo_of_the.png",
+      "use": "legacy design reference only; review before use"
+    },
+    {
+      "filename": "a_high_resolution_vibrant_product_style_photo_pos.png",
+      "path": "assets/legacy_fish_artwork/a_high_resolution_vibrant_product_style_photo_pos.png",
+      "use": "legacy design reference only; review before use"
+    },
+    {
+      "filename": "a_vibrant_high_contrast_poster_like_close_up_scen.png",
+      "path": "assets/legacy_fish_artwork/a_vibrant_high_contrast_poster_like_close_up_scen.png",
+      "use": "legacy design reference only; review before use"
+    },
+    {
+      "filename": "a_vibrant_high_detail_food_market_style_poster_in.png",
+      "path": "assets/legacy_fish_artwork/a_vibrant_high_detail_food_market_style_poster_in.png",
+      "use": "legacy design reference only; review before use"
+    },
+    {
+      "filename": "a_vivid_commercial_style_seafood_poster_a_close_u.png",
+      "path": "assets/legacy_fish_artwork/a_vivid_commercial_style_seafood_poster_a_close_u.png",
+      "use": "legacy design reference only; review before use"
+    },
+    {
+      "filename": "a_vivid_high_contrast_food_advertisement_style_im.png",
+      "path": "assets/legacy_fish_artwork/a_vivid_high_contrast_food_advertisement_style_im.png",
+      "use": "legacy design reference only; review before use"
+    },
+    {
+      "filename": "a_vivid_high_detail_realistic_food_style_product.png",
+      "path": "assets/legacy_fish_artwork/a_vivid_high_detail_realistic_food_style_product.png",
+      "use": "legacy design reference only; review before use"
+    }
+  ],
+  "business_brand_assets": [
+    {
+      "filename": "a_circular_advertisement_poster_for_a_fish_deliver.png",
+      "path": "assets/business_brand_assets/a_circular_advertisement_poster_for_a_fish_deliver.png",
+      "use": "business branding reference; inspect before use"
+    },
+    {
+      "filename": "a_circular_professional_business_logo_poster_cir.png",
+      "path": "assets/business_brand_assets/a_circular_professional_business_logo_poster_cir.png",
+      "use": "business branding reference; inspect before use"
+    },
+    {
+      "filename": "a_clean_circular_whatsapp_group_logo_design_with.png",
+      "path": "assets/business_brand_assets/a_clean_circular_whatsapp_group_logo_design_with.png",
+      "use": "business branding reference; inspect before use"
+    },
+    {
+      "filename": "a_clean_modern_circular_framed_poster_whatsapp_l.png",
+      "path": "assets/business_brand_assets/a_clean_modern_circular_framed_poster_whatsapp_l.png",
+      "use": "business branding reference; inspect before use"
+    },
+    {
+      "filename": "a_clean_realistic_graphic_logo_label_style_design.png",
+      "path": "assets/business_brand_assets/a_clean_realistic_graphic_logo_label_style_design.png",
+      "use": "business branding reference; inspect before use"
+    },
+    {
+      "filename": "a_high_quality_colorful_promotional_sticker_graphi.png",
+      "path": "assets/business_brand_assets/a_high_quality_colorful_promotional_sticker_graphi.png",
+      "use": "business branding reference; inspect before use"
+    },
+    {
+      "filename": "a_polished_high_resolution_circular_promotional_p.png",
+      "path": "assets/business_brand_assets/a_polished_high_resolution_circular_promotional_p.png",
+      "use": "business branding reference; inspect before use"
+    },
+    {
+      "filename": "a_vibrant_high_quality_circular_commercial_adve.png",
+      "path": "assets/business_brand_assets/a_vibrant_high_quality_circular_commercial_adve.png",
+      "use": "business branding reference; inspect before use"
+    },
+    {
+      "filename": "a_vibrant_highly_edited_promotional_poster_whatsa.png",
+      "path": "assets/business_brand_assets/a_vibrant_highly_edited_promotional_poster_whatsa.png",
+      "use": "business branding reference; inspect before use"
+    }
+  ],
+  "app_icons": [
+    "assets/app_icons/app-icon-192.png",
+    "assets/app_icons/app-icon-512.png"
+  ],
+  "counts": {
+    "numbered_reference_images": 10,
+    "legacy_fish_artwork": 11,
+    "business_brand_assets": 9,
+    "total_generated_images": 30
+  },
+  "important_note": "Generated images are visual references. The app must use the father’s newly uploaded actual fish photo for that day’s product poster."
+}

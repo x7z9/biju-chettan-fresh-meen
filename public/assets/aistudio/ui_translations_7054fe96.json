@@ -1,0 +1,222 @@
+{
+  "app_title": {
+    "ml": "ബിജു ചേട്ടന്റെ ഫ്രെഷ് മീൻ",
+    "en": "Biju Chettante Fresh Fish"
+  },
+  "app_short": {
+    "ml": "ബിജു മീൻ",
+    "en": "Biju Fish"
+  },
+  "today": {
+    "ml": "ഇന്ന്",
+    "en": "Today"
+  },
+  "fish_list": {
+    "ml": "മീൻ പട്ടിക",
+    "en": "Fish List"
+  },
+  "add_fish": {
+    "ml": "പുതിയ മീൻ ചേർക്കുക",
+    "en": "Add New Fish"
+  },
+  "backup": {
+    "ml": "പകർപ്പ്",
+    "en": "Backup"
+  },
+  "today_fish": {
+    "ml": "ഇന്നത്തെ മീൻ",
+    "en": "Today's Fish"
+  },
+  "available": {
+    "ml": "ലഭ്യമാണ്",
+    "en": "Available"
+  },
+  "sold_out": {
+    "ml": "തീർന്നു",
+    "en": "Sold Out"
+  },
+  "mark_available": {
+    "ml": "ലഭ്യമാണ് എന്ന് അടയാളപ്പെടുത്തുക",
+    "en": "Mark as available"
+  },
+  "mark_sold_out": {
+    "ml": "തീർന്നു എന്ന് അടയാളപ്പെടുത്തുക",
+    "en": "Mark as sold out"
+  },
+  "add_today": {
+    "ml": "ഇന്നത്തെ മീൻ ചേർക്കുക",
+    "en": "Add today's fish"
+  },
+  "make_list": {
+    "ml": "ഇന്നത്തെ പട്ടിക തയ്യാറാക്കുക",
+    "en": "Prepare today's list"
+  },
+  "share_today": {
+    "ml": "വാട്സാപ്പിൽ പങ്കിടുക",
+    "en": "Share on WhatsApp"
+  },
+  "share_photo": {
+    "ml": "ഫോട്ടോ പങ്കിടുക",
+    "en": "Share Photo"
+  },
+  "download_photo": {
+    "ml": "ഫോട്ടോ ഡൗൺലോഡ് ചെയ്യുക",
+    "en": "Download Photo"
+  },
+  "copy_message": {
+    "ml": "സന്ദേശം പകർത്തുക",
+    "en": "Copy Message"
+  },
+  "add_photo": {
+    "ml": "ഫോട്ടോ ചേർക്കുക",
+    "en": "Add Photo"
+  },
+  "take_photo": {
+    "ml": "ഫോട്ടോ എടുക്കുക",
+    "en": "Take Photo"
+  },
+  "fish_name_ml": {
+    "ml": "മീനിന്റെ പേര് (മലയാളം)",
+    "en": "Fish Name (Malayalam)"
+  },
+  "pronunciation": {
+    "ml": "ഇംഗ്ലീഷ് ഉച്ചാരണം",
+    "en": "Pronunciation (English letters)"
+  },
+  "english_name": {
+    "ml": "ഇംഗ്ലീഷ് പേര്",
+    "en": "English Name"
+  },
+  "price": {
+    "ml": "വില",
+    "en": "Price"
+  },
+  "price_optional": {
+    "ml": "വില ചേർക്കുക (വേണ്ടെങ്കിൽ മാത്രം)",
+    "en": "Add Price (Optional)"
+  },
+  "per_kg": {
+    "ml": "കിലോയ്ക്ക്",
+    "en": "Per kg"
+  },
+  "per_piece": {
+    "ml": "ഒന്നിന്",
+    "en": "Per piece"
+  },
+  "per_packet": {
+    "ml": "പാക്കറ്റിന്",
+    "en": "Per packet"
+  },
+  "save": {
+    "ml": "സേവ് ചെയ്യുക",
+    "en": "Save"
+  },
+  "cancel": {
+    "ml": "റദ്ദാക്കുക",
+    "en": "Cancel"
+  },
+  "edit": {
+    "ml": "തിരുത്തുക",
+    "en": "Edit"
+  },
+  "delete": {
+    "ml": "ഒഴിവാക്കുക",
+    "en": "Delete"
+  },
+  "confirm_delete": {
+    "ml": "ഈ മീൻ പട്ടികയിൽ നിന്ന് ഒഴിവാക്കട്ടേ?",
+    "en": "Remove this fish from the list?"
+  },
+  "language": {
+    "ml": "ഭാഷ",
+    "en": "Language"
+  },
+  "install": {
+    "ml": "ഹോം സ്ക്രീനിൽ ചേർക്കുക",
+    "en": "Add to Home Screen"
+  },
+  "install_app": {
+    "ml": "ആപ്പായി ഇൻസ്റ്റാൾ ചെയ്യുക",
+    "en": "Install App"
+  },
+  "install_help": {
+    "ml": "ഈ ആപ്പ് ഫോണിന്റെ ഹോം സ്ക്രീനിൽ ചേർത്താൽ ദിവസവും എളുപ്പത്തിൽ തുറക്കാം.",
+    "en": "Add this app to your phone home screen for quick daily access."
+  },
+  "install_android": {
+    "ml": "ബ്രൗസറിൽ ഇൻസ്റ്റാൾ ചെയ്യുക എന്ന സന്ദേശം വന്നാൽ Install അമർത്തുക.",
+    "en": "When the browser shows the install prompt, tap Install."
+  },
+  "install_ios": {
+    "ml": "Safari തുറക്കുക → Share അമർത്തുക → Add to Home Screen തിരഞ്ഞെടുക്കുക → Add അമർത്തുക.",
+    "en": "Open in Safari → tap Share → choose Add to Home Screen → tap Add."
+  },
+  "open_group_note": {
+    "ml": "WhatsApp തുറന്നാൽ നിങ്ങളുടെ ഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക.",
+    "en": "When WhatsApp opens, choose your group."
+  },
+  "today_message": {
+    "ml": "ഇന്നത്തെ മീനുകൾ ലഭ്യമാണ്",
+    "en": "Fish available today"
+  },
+  "call_for_price": {
+    "ml": "വില അറിയാൻ വിളിക്കുക",
+    "en": "Call for price"
+  },
+  "search": {
+    "ml": "മീൻ തിരയുക",
+    "en": "Search fish"
+  },
+  "no_fish": {
+    "ml": "ഇന്ന് മീൻ ചേർത്തിട്ടില്ല",
+    "en": "No fish added for today"
+  },
+  "add_new_photo": {
+    "ml": "പുതിയ മീൻ ഫോട്ടോ ചേർക്കുക",
+    "en": "Add a new fish photo"
+  },
+  "history": {
+    "ml": "പഴയ ദിവസങ്ങൾ",
+    "en": "Daily History"
+  },
+  "restore": {
+    "ml": "പകർപ്പ് തിരിച്ചെടുക്കുക",
+    "en": "Restore Backup"
+  },
+  "export": {
+    "ml": "പകർപ്പ് എടുക്കുക",
+    "en": "Create Backup"
+  },
+  "creative_note": {
+    "ml": "സൂചന: പരസ്യത്തിനായുള്ള സൃഷ്ടിപരമായ ദൃശ്യാവിഷ്കാരം.",
+    "en": "Note: Creative visual representation for advertising."
+  },
+  "available_count": {
+    "ml": "ലഭ്യമായ മീനുകൾ",
+    "en": "Available Fish"
+  },
+  "tap_to_select": {
+    "ml": "മീൻ തിരഞ്ഞെടുക്കാൻ ചിത്രത്തിൽ തൊടുക",
+    "en": "Tap a photo to select a fish"
+  },
+  "saved": {
+    "ml": "സേവ് ചെയ്തു",
+    "en": "Saved"
+  },
+  "error_photo": {
+    "ml": "ഈ ഫോട്ടോ തുറക്കാൻ കഴിഞ്ഞില്ല. മറ്റൊരു ഫോട്ടോ തിരഞ്ഞെടുക്കുക.",
+    "en": "Could not open this photo. Please choose another image."
+  },
+  "backup_success": {
+    "ml": "പകർപ്പ് തയ്യാറായി",
+    "en": "Backup created"
+  },
+  "share_fallback": {
+    "ml": "ഫോട്ടോ ആദ്യം ഡൗൺലോഡ് ചെയ്ത് WhatsApp-ൽ ചേർക്കുക.",
+    "en": "Download the photo first, then attach it in WhatsApp."
+  },
+  "app_settings": {
+    "ml": "ക്രമീകരണങ്ങൾ",
+    "en": "Settings"
+  }
+}
