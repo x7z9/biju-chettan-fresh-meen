@@ -685,6 +685,7 @@ export default function App() {
                 />
               ) : activeTab === 'add' ? (
                 <AddEditFishScreen
+                  key={editingFish?.id ?? 'new'}
                   lang={lang}
                   editingFish={editingFish}
                   defaultBackground={settings.defaultBackground}

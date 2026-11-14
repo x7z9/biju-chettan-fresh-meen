@@ -54,38 +54,62 @@ export function speakPronunciation(text: string): void {
   }
 }
 
+const MAX_UPLOAD_BYTES = 25 * 1024 * 1024;
+const SAFE_RASTER_DATA_URL_RE =
+  /^data:image\/(jpeg|jpg|png|webp);base64,[A-Za-z0-9+/=]+$/i;
+
 export async function fileToOptimizedDataUrl(
   file: File,
   maxDimension = 1600,
   quality = 0.9
 ): Promise<string> {
+  if (file.size > MAX_UPLOAD_BYTES) {
+    throw new Error('Image file too large');
+  }
+  if (
+    file.type &&
+    (!file.type.startsWith('image/') || file.type.toLowerCase().includes('svg'))
+  ) {
+    throw new Error('Unsupported image format');
+  }
+
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = () => reject(new Error('Failed to read file'));
     reader.onload = () => {
       const result = reader.result;
-      if (typeof result !== 'string') {
+      if (
+        typeof result !== 'string' ||
+        !/^data:image\/(jpeg|jpg|png|webp|gif|bmp|avif|heic|heif);base64,/i.test(
+          result
+        )
+      ) {
         reject(new Error('Invalid image result'));
         return;
       }
       const img = new Image();
       img.onload = () => {
         const { width, height } = img;
-        if (width <= maxDimension && height <= maxDimension) {
-          resolve(result);
+        if (!width || !height) {
+          reject(new Error('Empty image dimensions'));
           return;
         }
-        const scale = Math.min(maxDimension / width, maxDimension / height);
-        const targetW = Math.round(width * scale);
-        const targetH = Math.round(height * scale);
+        const scale =
+          width <= maxDimension && height <= maxDimension
+            ? 1
+            : Math.min(maxDimension / width, maxDimension / height);
+        const targetW = Math.max(1, Math.round(width * scale));
+        const targetH = Math.max(1, Math.round(height * scale));
         const canvas = document.createElement('canvas');
         canvas.width = targetW;
         canvas.height = targetH;
         const ctx = canvas.getContext('2d');
         if (!ctx) {
-          resolve(result);
+          reject(new Error('Canvas unavailable'));
           return;
         }
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, targetW, targetH);
         ctx.drawImage(img, 0, 0, targetW, targetH);
         resolve(canvas.toDataURL('image/jpeg', quality));
       };
@@ -97,9 +121,12 @@ export async function fileToOptimizedDataUrl(
 }
 
 export function dataUrlToBlob(dataUrl: string): Blob {
+  if (!SAFE_RASTER_DATA_URL_RE.test(dataUrl)) {
+    throw new Error('Invalid image data URL');
+  }
   const [meta, base64] = dataUrl.split(',');
-  const mimeMatch = /data:([^;]+);/.exec(meta);
-  const mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+  const mimeMatch = /^data:(image\/(?:jpeg|jpg|png|webp));base64$/i.exec(meta);
+  const mime = mimeMatch ? mimeMatch[1].toLowerCase() : 'image/jpeg';
   const binary = atob(base64);
   const len = binary.length;
   const bytes = new Uint8Array(len);

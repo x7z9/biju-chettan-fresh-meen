@@ -48,10 +48,10 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
   settings,
   onClose,
 }) => {
-  const [msgLang, setMsgLang] = useState<Language>(lang);
-  const [shareMode, setShareMode] = useState<ShareMode>('menu_card');
+  const [msgLang, setMsgLang] = useState<Language>('ml');
+  const [shareMode, setShareMode] = useState<ShareMode>('all_photos');
   const [messageText, setMessageText] = useState(() =>
-    buildWhatsAppListMessage(fishList, dailyRecord, settings, lang)
+    buildWhatsAppListMessage(fishList, dailyRecord, settings, 'ml')
   );
   const [copied, setCopied] = useState(false);
   const [shareNote, setShareNote] = useState('');
@@ -241,6 +241,21 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
       // shareMode === 'all_photos'
       const targets =
         checkedPhotoEntries.length > 0 ? checkedPhotoEntries : fishPhotoEntries;
+      if (targets.length === 0) {
+        if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+          try {
+            await navigator.share({
+              title: shareTitle,
+              text: messageText,
+            });
+            return;
+          } catch (err) {
+            if (err instanceof DOMException && err.name === 'AbortError') return;
+          }
+        }
+        openWhatsAppTextLink(messageText);
+        return;
+      }
       const converted = await Promise.all(
         targets.map((item) =>
           imageSrcToJpegFile(
@@ -250,6 +265,10 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
         )
       );
       const files = converted.filter((f): f is File => f !== null);
+      if (files.length === 0) {
+        openWhatsAppTextLink(messageText);
+        return;
+      }
       const outcome = await shareFilesWithTextOrFallback(
         files,
         shareTitle,
@@ -384,20 +403,6 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
                 <button
                   type="button"
                   role="tab"
-                  aria-selected={shareMode === 'menu_card'}
-                  onClick={() => setShareMode('menu_card')}
-                  className={`min-h-[44px] px-2 py-2 rounded-xl text-[11px] sm:text-xs font-bold flex flex-col sm:flex-row items-center justify-center gap-1 leading-snug text-center transition ${
-                    shareMode === 'menu_card'
-                      ? 'bg-[#082d59] dark:bg-[#0879d9] text-white shadow-xs'
-                      : 'text-slate-700 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  <ImageIcon className="w-4 h-4 shrink-0" />
-                  <span className="break-words">{t(lang, 'share_mode_menu_card')}</span>
-                </button>
-                <button
-                  type="button"
-                  role="tab"
                   aria-selected={shareMode === 'all_photos'}
                   onClick={() => setShareMode('all_photos')}
                   className={`min-h-[44px] px-2 py-2 rounded-xl text-[11px] sm:text-xs font-bold flex flex-col sm:flex-row items-center justify-center gap-1 leading-snug text-center transition ${
@@ -410,6 +415,20 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
                   <span className="break-words">
                     {t(lang, 'share_mode_all_photos')}
                   </span>
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={shareMode === 'menu_card'}
+                  onClick={() => setShareMode('menu_card')}
+                  className={`min-h-[44px] px-2 py-2 rounded-xl text-[11px] sm:text-xs font-bold flex flex-col sm:flex-row items-center justify-center gap-1 leading-snug text-center transition ${
+                    shareMode === 'menu_card'
+                      ? 'bg-[#082d59] dark:bg-[#0879d9] text-white shadow-xs'
+                      : 'text-slate-700 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <ImageIcon className="w-4 h-4 shrink-0" />
+                  <span className="break-words">{t(lang, 'share_mode_menu_card')}</span>
                 </button>
                 <button
                   type="button"

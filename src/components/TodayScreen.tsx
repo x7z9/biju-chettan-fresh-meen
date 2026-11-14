@@ -158,17 +158,18 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
               fallbackCustom ||
               fish.referenceImage;
 
-            const isReferenceShown = !hasTodayPhoto && !fallbackCustom;
+            const isReferenceShown =
+              !hasTodayPhoto && !fallbackCustom && !!fish.referenceImage;
             const showDetailsDrawer =
               isAvailable && (dailyRecord.includePrices || expandedNotes[fish.id]);
 
             return (
               <article
                 key={fish.id}
-                className={`rounded-2xl sm:rounded-3xl bg-white dark:bg-[#0a0a0a] p-2.5 sm:p-4 transition border-2 flex flex-col justify-between overflow-hidden min-w-0 ${
+                className={`rounded-2xl sm:rounded-3xl p-2.5 sm:p-4 transition-colors duration-150 border-2 flex flex-col justify-between overflow-hidden min-w-0 ${
                   isAvailable
-                    ? 'border-[#0879d9] shadow-md'
-                    : 'border-slate-200/80 dark:border-neutral-800 shadow-xs'
+                    ? 'bg-emerald-50/95 dark:bg-emerald-950/70 border-emerald-500 dark:border-emerald-400 ring-2 ring-emerald-500/25 dark:ring-emerald-400/30 shadow-md'
+                    : 'bg-white dark:bg-[#0a0a0a] border-slate-200/80 dark:border-neutral-800 shadow-xs'
                 }`}
               >
                 <div className="min-w-0">
@@ -182,19 +183,25 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
                       isAvailable ? t(lang, 'available') : t(lang, 'sold_out')
                     }`}
                   >
-                    <div className="relative w-full aspect-[3/4] rounded-xl sm:rounded-2xl bg-slate-100 dark:bg-black border border-transparent dark:border-neutral-900 overflow-hidden flex items-center justify-center">
+                    <div
+                      className={`relative w-full aspect-[3/4] rounded-xl sm:rounded-2xl border overflow-hidden flex items-center justify-center transition-colors duration-150 ${
+                        isAvailable
+                          ? 'bg-white dark:bg-black border-emerald-400/70 dark:border-emerald-500/70'
+                          : 'bg-slate-100 dark:bg-black border-transparent dark:border-neutral-900'
+                      }`}
+                    >
                       {cardImageSrc ? (
                         <img
                           src={cardImageSrc}
                           alt={`${fish.nameMl} (${fish.pronunciationLatin})`}
                           className={`w-full h-full object-contain transition-transform duration-150 ${
-                            isAvailable ? 'scale-[1.01]' : 'opacity-90'
+                            isAvailable ? 'scale-[1.01]' : ''
                           }`}
                           loading="lazy"
                           decoding="async"
                         />
                       ) : (
-                        <div className="p-3 text-center text-slate-400 text-xs">
+                        <div className="p-3 text-center text-slate-600 dark:text-neutral-300 text-xs font-semibold">
                           {fish.nameMl}
                         </div>
                       )}
@@ -202,7 +209,13 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
                   </button>
 
                   {/* Quiet unboxed metadata line */}
-                  <div className="mt-2 flex flex-wrap items-center justify-between gap-x-1.5 gap-y-0.5 text-[11px] sm:text-xs text-slate-500 dark:text-neutral-400">
+                  <div
+                    className={`mt-2 flex flex-wrap items-center justify-between gap-x-1.5 gap-y-0.5 text-[11px] sm:text-xs ${
+                      isAvailable
+                        ? 'text-emerald-800 dark:text-emerald-300'
+                        : 'text-slate-600 dark:text-neutral-300'
+                    }`}
+                  >
                     <span className="leading-snug break-words">
                       {isReferenceShown
                         ? t(lang, 'reference_badge')
@@ -218,17 +231,33 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
                   {/* Malayalam name (always kept in Malayalam) + Pronunciation + Speaker */}
                   <div className="mt-1.5 flex items-start justify-between gap-1">
                     <div className="min-w-0 flex-1">
-                      <h3 className="text-[15px] sm:text-lg font-bold text-slate-900 dark:text-white leading-snug break-words">
+                      <h3
+                        className={`text-[15px] sm:text-lg font-bold leading-snug break-words ${
+                          isAvailable
+                            ? 'text-emerald-950 dark:text-white'
+                            : 'text-slate-900 dark:text-white'
+                        }`}
+                      >
                         {fish.nameMl}
                       </h3>
-                      <p className="text-xs sm:text-sm text-slate-600 dark:text-neutral-400 leading-snug break-words mt-0.5">
+                      <p
+                        className={`text-xs sm:text-sm leading-snug break-words mt-0.5 ${
+                          isAvailable
+                            ? 'text-emerald-800/90 dark:text-emerald-200/90'
+                            : 'text-slate-700 dark:text-neutral-300'
+                        }`}
+                      >
                         {fish.pronunciationLatin}
                       </p>
                     </div>
                     <button
                       type="button"
                       onClick={() => speakPronunciation(fish.pronunciationLatin)}
-                      className="min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] rounded-xl text-slate-600 dark:text-neutral-300 hover:bg-slate-100 dark:hover:bg-neutral-900 hover:text-[#082d59] dark:hover:text-sky-300 flex items-center justify-center shrink-0"
+                      className={`min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] rounded-xl flex items-center justify-center shrink-0 transition ${
+                        isAvailable
+                          ? 'text-emerald-800 dark:text-emerald-200 hover:bg-emerald-100 dark:hover:bg-emerald-900/60'
+                          : 'text-slate-600 dark:text-neutral-300 hover:bg-slate-100 dark:hover:bg-neutral-900 hover:text-[#082d59] dark:hover:text-sky-300'
+                      }`}
                       aria-label={`${t(lang, 'listen_pronunciation')}: ${fish.pronunciationLatin}`}
                       title={t(lang, 'listen_pronunciation')}
                     >

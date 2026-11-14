@@ -332,22 +332,272 @@ export async function buildFullBackup(): Promise<BackupPayload> {
   };
 }
 
+const SAFE_BACKUP_DATA_URL_RE =
+  /^data:image\/(jpeg|jpg|png|webp);base64,[A-Za-z0-9+/=]+$/i;
+const SAFE_LOCAL_ASSET_RE = /^\/?(?:[a-z0-9._-]+\/)*assets\/[a-z0-9._/-]+$/i;
+
+export function isSafeImageSrc(value: unknown): value is string {
+  if (typeof value !== 'string' || !value) return false;
+  return SAFE_BACKUP_DATA_URL_RE.test(value) || SAFE_LOCAL_ASSET_RE.test(value);
+}
+
+function asSafeString(value: unknown, fallback = '', maxLen = 500): string {
+  if (typeof value !== 'string') return fallback;
+  return value.slice(0, maxLen);
+}
+
+function asSafeNumber(value: unknown, fallback: number): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
+function sanitizeFishItem(raw: unknown): FishItem | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const item = raw as Record<string, unknown>;
+  const id = asSafeString(item.id, '', 120).trim();
+  const nameMl = asSafeString(item.nameMl, '', 200).trim();
+  const pronunciationLatin = asSafeString(item.pronunciationLatin, '', 200).trim();
+  if (!id || !nameMl || !pronunciationLatin) return null;
+
+  const photosRaw = Array.isArray(item.customActualPhotos)
+    ? item.customActualPhotos
+    : [];
+  const customActualPhotos = photosRaw
+    .map((p) => {
+      if (!p || typeof p !== 'object') return null;
+      const photo = p as Record<string, unknown>;
+      if (!isSafeImageSrc(photo.dataUrl)) return null;
+      const pid = asSafeString(photo.id, `photo_${Date.now()}`, 120);
+      return {
+        id: pid,
+        dataUrl: photo.dataUrl,
+        createdAt: asSafeNumber(photo.createdAt, Date.now()),
+        ...(typeof photo.label === 'string'
+          ? { label: asSafeString(photo.label, '', 120) }
+          : {}),
+      };
+    })
+    .filter((p): p is NonNullable<typeof p> => p !== null);
+
+  return {
+    id,
+    referenceNumber:
+      typeof item.referenceNumber === 'number' && Number.isFinite(item.referenceNumber)
+        ? item.referenceNumber
+        : null,
+    nameMl,
+    pronunciationLatin,
+    ...(typeof item.nameEn === 'string' && item.nameEn.trim()
+      ? { nameEn: asSafeString(item.nameEn.trim(), '', 200) }
+      : {}),
+    ...(typeof item.scientificName === 'string' && item.scientificName.trim()
+      ? { scientificName: asSafeString(item.scientificName.trim(), '', 200) }
+      : {}),
+    ...(typeof item.speciesNote === 'string' && item.speciesNote.trim()
+      ? { speciesNote: asSafeString(item.speciesNote.trim(), '', 300) }
+      : {}),
+    referenceImage: isSafeImageSrc(item.referenceImage) ? item.referenceImage : null,
+    isReferenceArtworkOnly: Boolean(item.isReferenceArtworkOnly),
+    customActualPhotos,
+    preferredBackground:
+      item.preferredBackground === 'banana-leaf' ? 'banana-leaf' : 'blue-tray',
+    createdAt: asSafeNumber(item.createdAt, Date.now()),
+    updatedAt: asSafeNumber(item.updatedAt, Date.now()),
+  };
+}
+
+function sanitizeDailyRecord(raw: unknown): DailyRecord | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const rec = raw as Record<string, unknown>;
+  const dateKey = asSafeString(rec.dateKey, '', 20).trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) return null;
+
+  const cleanEntries: DailyRecord['entries'] = Object.create(null);
+  if (rec.entries && typeof rec.entries === 'object') {
+    for (const [k, v] of Object.entries(rec.entries as Record<string, unknown>)) {
+      if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue;
+      if (!v || typeof v !== 'object') continue;
+      const entry = v as Record<string, unknown>;
+      const safeKey = asSafeString(k, '', 120);
+      if (!safeKey) continue;
+      cleanEntries[safeKey] = {
+        fishId: asSafeString(entry.fishId, safeKey, 120) || safeKey,
+        available: Boolean(entry.available),
+        ...(typeof entry.note === 'string' && entry.note
+          ? { note: asSafeString(entry.note, '', 200) }
+          : {}),
+        ...(typeof entry.priceAmount === 'string' && entry.priceAmount
+          ? { priceAmount: asSafeString(entry.priceAmount, '', 30) }
+          : {}),
+        ...(entry.priceUnit === 'per_kg' ||
+        entry.priceUnit === 'per_piece' ||
+        entry.priceUnit === 'per_packet'
+          ? { priceUnit: entry.priceUnit }
+          : {}),
+        ...(isSafeImageSrc(entry.todayPhotoDataUrl)
+          ? { todayPhotoDataUrl: entry.todayPhotoDataUrl }
+          : {}),
+        ...(isSafeImageSrc(entry.todayPosterDataUrl)
+          ? { todayPosterDataUrl: entry.todayPosterDataUrl }
+          : {}),
+        updatedAt: asSafeNumber(entry.updatedAt, Date.now()),
+      };
+    }
+  }
+
+  return {
+    dateKey,
+    includePrices: Boolean(rec.includePrices),
+    entries: { ...cleanEntries },
+    updatedAt: asSafeNumber(rec.updatedAt, Date.now()),
+  };
+}
+
 export function validateBackupPayload(raw: unknown): BackupPayload | null {
   if (!raw || typeof raw !== 'object') return null;
   const obj = raw as Record<string, unknown>;
   if (!Array.isArray(obj.fish) || !Array.isArray(obj.dailyRecords)) return null;
   if (!obj.settings || typeof obj.settings !== 'object') return null;
+
+  const rawSettings = obj.settings as Record<string, unknown>;
+  const settings: BusinessSettings = {
+    businessNameMl: asSafeString(
+      rawSettings.businessNameMl,
+      DEFAULT_BUSINESS_SETTINGS.businessNameMl,
+      200
+    ),
+    businessNameEn: asSafeString(
+      rawSettings.businessNameEn,
+      DEFAULT_BUSINESS_SETTINGS.businessNameEn,
+      200
+    ),
+    whatsappGroupNameMl: asSafeString(
+      rawSettings.whatsappGroupNameMl,
+      DEFAULT_BUSINESS_SETTINGS.whatsappGroupNameMl,
+      200
+    ),
+    whatsappGroupNameEn: asSafeString(
+      rawSettings.whatsappGroupNameEn,
+      DEFAULT_BUSINESS_SETTINGS.whatsappGroupNameEn,
+      200
+    ),
+    ownerName: asSafeString(
+      rawSettings.ownerName,
+      DEFAULT_BUSINESS_SETTINGS.ownerName,
+      120
+    ),
+    locationMl: asSafeString(
+      rawSettings.locationMl,
+      DEFAULT_BUSINESS_SETTINGS.locationMl,
+      200
+    ),
+    locationEn: asSafeString(
+      rawSettings.locationEn,
+      DEFAULT_BUSINESS_SETTINGS.locationEn,
+      200
+    ),
+    phoneDisplay: asSafeString(
+      rawSettings.phoneDisplay,
+      DEFAULT_BUSINESS_SETTINGS.phoneDisplay,
+      40
+    ),
+    phoneDigits: asSafeString(
+      rawSettings.phoneDigits,
+      DEFAULT_BUSINESS_SETTINGS.phoneDigits,
+      25
+    ),
+    posterHeadingMl: asSafeString(
+      rawSettings.posterHeadingMl,
+      DEFAULT_BUSINESS_SETTINGS.posterHeadingMl,
+      200
+    ),
+    posterHeadingEn: asSafeString(
+      rawSettings.posterHeadingEn,
+      DEFAULT_BUSINESS_SETTINGS.posterHeadingEn,
+      200
+    ),
+    disclaimerMl: asSafeString(
+      rawSettings.disclaimerMl,
+      DEFAULT_BUSINESS_SETTINGS.disclaimerMl,
+      300
+    ),
+    disclaimerEn: asSafeString(
+      rawSettings.disclaimerEn,
+      DEFAULT_BUSINESS_SETTINGS.disclaimerEn,
+      300
+    ),
+    showDisclaimerOnPoster:
+      typeof rawSettings.showDisclaimerOnPoster === 'boolean'
+        ? rawSettings.showDisclaimerOnPoster
+        : DEFAULT_BUSINESS_SETTINGS.showDisclaimerOnPoster,
+    posterLanguage:
+      rawSettings.posterLanguage === 'ml' ||
+      rawSettings.posterLanguage === 'en' ||
+      rawSettings.posterLanguage === 'bilingual'
+        ? rawSettings.posterLanguage
+        : DEFAULT_BUSINESS_SETTINGS.posterLanguage,
+    defaultBackground:
+      rawSettings.defaultBackground === 'banana-leaf' ? 'banana-leaf' : 'blue-tray',
+  };
+
+  const fish = obj.fish
+    .map(sanitizeFishItem)
+    .filter((f): f is FishItem => f !== null);
+  const dailyRecords = obj.dailyRecords
+    .map(sanitizeDailyRecord)
+    .filter((d): d is DailyRecord => d !== null);
+
+  const posterHistory: PosterHistoryItem[] = Array.isArray(obj.posterHistory)
+    ? obj.posterHistory
+        .map((rawItem) => {
+          if (!rawItem || typeof rawItem !== 'object') return null;
+          const p = rawItem as Record<string, unknown>;
+          const id = asSafeString(p.id, '', 120).trim();
+          const dateKey = asSafeString(p.dateKey, '', 20).trim();
+          const fishId = asSafeString(p.fishId, '', 120).trim();
+          if (!id || !dateKey || !fishId || !isSafeImageSrc(p.posterDataUrl)) {
+            return null;
+          }
+          return {
+            id,
+            dateKey,
+            fishId,
+            fishNameMl: asSafeString(p.fishNameMl, fishId, 200),
+            background:
+              p.background === 'banana-leaf'
+                ? ('banana-leaf' as const)
+                : ('blue-tray' as const),
+            posterDataUrl: p.posterDataUrl,
+            createdAt: asSafeNumber(p.createdAt, Date.now()),
+          };
+        })
+        .filter((p): p is PosterHistoryItem => p !== null)
+    : [];
+
+  const trash: TrashFishItem[] = Array.isArray(obj.trash)
+    ? obj.trash
+        .map((rawTrash) => {
+          if (!rawTrash || typeof rawTrash !== 'object') return null;
+          const tr = rawTrash as Record<string, unknown>;
+          const safeFish = sanitizeFishItem(tr.fish);
+          if (!safeFish) return null;
+          return {
+            id: asSafeString(tr.id, safeFish.id, 120) || safeFish.id,
+            fish: safeFish,
+            deletedAt: asSafeNumber(tr.deletedAt, Date.now()),
+          };
+        })
+        .filter((tr): tr is TrashFishItem => tr !== null)
+    : [];
+
   return {
-    schemaVersion: typeof obj.schemaVersion === 'number' ? obj.schemaVersion : 1,
-    exportedAt: typeof obj.exportedAt === 'string' ? obj.exportedAt : new Date().toISOString(),
-    app: typeof obj.app === 'string' ? obj.app : 'biju-chettante-fresh-meen',
-    settings: { ...DEFAULT_BUSINESS_SETTINGS, ...(obj.settings as Partial<BusinessSettings>) },
-    fish: obj.fish as FishItem[],
-    dailyRecords: obj.dailyRecords as DailyRecord[],
-    posterHistory: Array.isArray(obj.posterHistory)
-      ? (obj.posterHistory as PosterHistoryItem[])
-      : [],
-    trash: Array.isArray(obj.trash) ? (obj.trash as TrashFishItem[]) : [],
+    schemaVersion: asSafeNumber(obj.schemaVersion, 1),
+    exportedAt: asSafeString(obj.exportedAt, new Date().toISOString(), 60),
+    app: asSafeString(obj.app, 'biju-chettante-fresh-meen', 80),
+    settings,
+    fish,
+    dailyRecords,
+    posterHistory,
+    trash,
   };
 }
 
