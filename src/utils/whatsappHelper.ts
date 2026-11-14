@@ -101,6 +101,46 @@ export async function sharePosterFileOrFallback(
   return 'fallback_downloaded';
 }
 
+export async function shareFilesWithTextOrFallback(
+  files: File[],
+  title: string,
+  text: string
+): Promise<'shared' | 'fallback_downloaded'> {
+  if (
+    files.length > 0 &&
+    typeof navigator !== 'undefined' &&
+    typeof navigator.share === 'function' &&
+    typeof navigator.canShare === 'function' &&
+    navigator.canShare({ files })
+  ) {
+    try {
+      await navigator.share({
+        files,
+        title,
+        text,
+      });
+      return 'shared';
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        return 'shared';
+      }
+      // Fall through to download + clipboard + WhatsApp fallback
+    }
+  }
+
+  for (const file of files) {
+    downloadBlob(file, file.name);
+  }
+  if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // Ignore clipboard failure
+    }
+  }
+  return 'fallback_downloaded';
+}
+
 export function openWhatsAppTextLink(message: string): void {
   const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
   const a = document.createElement('a');
