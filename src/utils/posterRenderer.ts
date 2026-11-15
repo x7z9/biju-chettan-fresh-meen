@@ -255,10 +255,18 @@ export async function renderFishPosterToDataUrl(
   ctx.textBaseline = 'middle';
   const maxHeaderTextW = POSTER_W - 200;
 
-  let heading = settings.posterHeadingMl;
-  if (posterLanguage === 'en') heading = settings.posterHeadingEn;
+  const isSeafoodOther = fish.catalogueGroup === 'seafood_other';
+  const defaultMlHeading = isSeafoodOther
+    ? 'ഇന്നത്തെ കടൽവിഭവം'
+    : settings.posterHeadingMl;
+  const defaultEnHeading = isSeafoodOther
+    ? "Today's Seafood"
+    : settings.posterHeadingEn;
+
+  let heading = defaultMlHeading;
+  if (posterLanguage === 'en') heading = defaultEnHeading;
   if (posterLanguage === 'bilingual') {
-    heading = `${settings.posterHeadingMl} · ${settings.posterHeadingEn}`;
+    heading = `${defaultMlHeading} · ${defaultEnHeading}`;
   }
 
   ctx.fillStyle = '#ffffff';

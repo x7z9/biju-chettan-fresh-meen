@@ -84,6 +84,7 @@ export const AddEditFishScreen: React.FC<AddEditFishScreenProps> = ({
           .replace(/^_|_$/g, '') || 'fish'}_${now.toString(36)}`;
 
       const item: FishItem = {
+        ...(editingFish || {}),
         id: baseId,
         referenceNumber: editingFish ? editingFish.referenceNumber : null,
         nameMl: cleanMl,

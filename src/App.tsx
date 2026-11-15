@@ -69,6 +69,7 @@ import type {
   PosterBackground,
   TrashFishItem,
 } from './types';
+import type { SearchActionTarget } from './utils/offlineSearch';
 import {
   formatDisplayDate,
   getLocalDateKey,
@@ -125,6 +126,7 @@ export default function App() {
   const [editingFish, setEditingFish] = useState<FishItem | null>(null);
   const [posterTargetFish, setPosterTargetFish] = useState<FishItem | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [moreFocusSection, setMoreFocusSection] = useState<string | null>(null);
 
   const isOnline = useOnlineStatus();
 
@@ -471,6 +473,25 @@ export default function App() {
     });
   };
 
+  const handleNavigateFromSearch = (target: SearchActionTarget) => {
+    if (target.type === 'share') {
+      setShowShareModal(true);
+    } else if (target.type === 'poster') {
+      setPosterTargetFish(target.fish);
+    } else if (target.type === 'edit_fish') {
+      setEditingFish(target.fish);
+      setActiveTab('add');
+    } else if (target.type === 'toggle_theme') {
+      handleToggleTheme();
+    } else if (target.type === 'switch_lang') {
+      handleLanguageChange(target.lang);
+    } else if (target.type === 'tab') {
+      if (target.tab === 'add') setEditingFish(null);
+      setMoreFocusSection(target.moreSection || null);
+      setActiveTab(target.tab);
+    }
+  };
+
   const navItems: { id: ActiveTab; label: string; icon: React.ReactNode }[] = [
     {
       id: 'today',
@@ -595,6 +616,7 @@ export default function App() {
                   type="button"
                   onClick={() => {
                     if (item.id === 'add') setEditingFish(null);
+                    setMoreFocusSection(null);
                     setActiveTab(item.id);
                   }}
                   className={`w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl font-bold text-sm flex items-center gap-3 transition ${
@@ -649,11 +671,15 @@ export default function App() {
               lang={lang}
               fishList={fishList}
               dailyRecord={dailyRecord}
+              allDailyRecords={allDailyRecords}
+              trashList={trashList}
+              settings={settings}
               onToggleAvailability={handleToggleAvailability}
               onToggleIncludePrices={handleToggleIncludePrices}
               onUpdateEntry={handleUpdateEntry}
               onOpenPosterStudio={(fish) => setPosterTargetFish(fish)}
               onOpenShareList={() => setShowShareModal(true)}
+              onNavigateFromSearch={handleNavigateFromSearch}
             />
           ) : (
             <Suspense
@@ -709,6 +735,7 @@ export default function App() {
                   onPermanentDeleteTrash={handlePermanentDeleteTrash}
                   onEmptyTrash={handleEmptyTrash}
                   onAfterRestore={loadAllData}
+                  focusSection={moreFocusSection}
                 />
               )}
             </Suspense>
@@ -730,6 +757,7 @@ export default function App() {
                 type="button"
                 onClick={() => {
                   if (item.id === 'add') setEditingFish(null);
+                  setMoreFocusSection(null);
                   setActiveTab(item.id);
                 }}
                 className={`flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold transition ${

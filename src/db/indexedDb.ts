@@ -130,15 +130,33 @@ async function deleteFromStore(storeName: string, key: IDBValidKey): Promise<voi
   });
 }
 
+const LEGACY_INITIAL_SEED_IDS = [
+  'kannan_ayala',
+  'kayal_koori',
+  'vella_choora',
+  'ayala',
+  'kochu_mathi',
+  'unnimery',
+  'vaala',
+  'mankada',
+  'kera_choora',
+  'valiya_mathi',
+];
+
 export async function initializeAndLoadCatalog(): Promise<FishItem[]> {
-  const [existing, trashItems, seededRec] = await Promise.all([
+  const [existing, trashItems, seededRec, ackRec] = await Promise.all([
     getAllFromStore<FishItem>(STORES.FISH),
     getAllFromStore<TrashFishItem>(STORES.TRASH),
     getFromStore<{ key: string; value: boolean }>(STORES.SETTINGS, 'catalogSeeded'),
+    getFromStore<{ key: string; value: string[] }>(
+      STORES.SETTINGS,
+      'acknowledgedSeedIds'
+    ),
   ]);
 
   if (existing.length === 0 && trashItems.length === 0 && !seededRec?.value) {
     const db = await openDB();
+    const allSeedIds = SEEDED_FISH_CATALOG.map((item) => item.id);
     await new Promise<void>((resolve, reject) => {
       const tx = db.transaction([STORES.FISH, STORES.SETTINGS], 'readwrite');
       const store = tx.objectStore(STORES.FISH);
@@ -146,6 +164,10 @@ export async function initializeAndLoadCatalog(): Promise<FishItem[]> {
         store.put(item);
       }
       tx.objectStore(STORES.SETTINGS).put({ key: 'catalogSeeded', value: true });
+      tx.objectStore(STORES.SETTINGS).put({
+        key: 'acknowledgedSeedIds',
+        value: allSeedIds,
+      });
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(wrapDbError(tx.error));
     });
@@ -155,11 +177,58 @@ export async function initializeAndLoadCatalog(): Promise<FishItem[]> {
     }));
   }
 
-  if (existing.length > 0 && !seededRec?.value) {
-    await putInStore(STORES.SETTINGS, { key: 'catalogSeeded', value: true });
+  // Incremental, strictly non-destructive seeding for returning installs:
+  // never modifies existing records and never resurrects deleted baseline records.
+  const existingIds = new Set(existing.map((item) => item.id));
+  const trashIds = new Set(trashItems.map((item) => item.id));
+  const acknowledged = new Set<string>(
+    Array.isArray(ackRec?.value)
+      ? ackRec.value
+      : [
+          ...LEGACY_INITIAL_SEED_IDS,
+          ...existingIds,
+          ...trashIds,
+        ]
+  );
+
+  const newlyAdded: FishItem[] = [];
+  for (const seedItem of SEEDED_FISH_CATALOG) {
+    if (
+      !acknowledged.has(seedItem.id) &&
+      !existingIds.has(seedItem.id) &&
+      !trashIds.has(seedItem.id)
+    ) {
+      newlyAdded.push(seedItem);
+    }
+    acknowledged.add(seedItem.id);
   }
 
-  return existing
+  const needsSettingsUpdate =
+    !seededRec?.value ||
+    !Array.isArray(ackRec?.value) ||
+    newlyAdded.length > 0;
+
+  if (needsSettingsUpdate) {
+    const db = await openDB();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction([STORES.FISH, STORES.SETTINGS], 'readwrite');
+      const fishStore = tx.objectStore(STORES.FISH);
+      for (const item of newlyAdded) {
+        fishStore.put(item);
+      }
+      tx.objectStore(STORES.SETTINGS).put({ key: 'catalogSeeded', value: true });
+      tx.objectStore(STORES.SETTINGS).put({
+        key: 'acknowledgedSeedIds',
+        value: Array.from(acknowledged),
+      });
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(wrapDbError(tx.error));
+    });
+  }
+
+  const merged = [...existing, ...newlyAdded];
+
+  return merged
     .map((item) => ({
       ...item,
       referenceImage: item.referenceImage ? resolvePublicAsset(item.referenceImage) : null,
@@ -378,22 +447,94 @@ function sanitizeFishItem(raw: unknown): FishItem | null {
     })
     .filter((p): p is NonNullable<typeof p> => p !== null);
 
+  const aliasesMl = Array.isArray(item.aliasesMl)
+    ? item.aliasesMl
+        .filter((a): a is string => typeof a === 'string' && a.trim().length > 0)
+        .map((a) => asSafeString(a.trim(), '', 120))
+    : undefined;
+
+  const sourceReferences = Array.isArray(item.sourceReferences)
+    ? item.sourceReferences
+        .map((ref) => {
+          if (!ref || typeof ref !== 'object') return null;
+          const r = ref as Record<string, unknown>;
+          const url = asSafeString(r.url, '', 400).trim();
+          const title = asSafeString(r.title, '', 200).trim();
+          const accessedAt = asSafeString(r.accessedAt, '', 30).trim();
+          if (!/^https:\/\//i.test(url) || !title) return null;
+          return { title, url, accessedAt: accessedAt || '2026-11-15' };
+        })
+        .filter((r): r is NonNullable<typeof r> => r !== null)
+    : undefined;
+
+  const confidence =
+    item.identificationConfidence === 'confirmed' ||
+    item.identificationConfidence === 'probable' ||
+    item.identificationConfidence === 'needs_local_confirmation'
+      ? item.identificationConfidence
+      : undefined;
+
+  const catalogueGroup =
+    item.catalogueGroup === 'finfish' || item.catalogueGroup === 'seafood_other'
+      ? item.catalogueGroup
+      : undefined;
+
+  const seafoodClass =
+    item.seafoodClass === 'finfish' ||
+    item.seafoodClass === 'crustacean' ||
+    item.seafoodClass === 'bivalve_mollusc' ||
+    item.seafoodClass === 'cephalopod'
+      ? item.seafoodClass
+      : undefined;
+
   return {
     id,
     referenceNumber:
       typeof item.referenceNumber === 'number' && Number.isFinite(item.referenceNumber)
         ? item.referenceNumber
         : null,
+    ...(catalogueGroup ? { catalogueGroup } : {}),
+    ...(seafoodClass ? { seafoodClass } : {}),
     nameMl,
     pronunciationLatin,
+    ...(aliasesMl && aliasesMl.length > 0 ? { aliasesMl } : {}),
     ...(typeof item.nameEn === 'string' && item.nameEn.trim()
       ? { nameEn: asSafeString(item.nameEn.trim(), '', 200) }
       : {}),
     ...(typeof item.scientificName === 'string' && item.scientificName.trim()
       ? { scientificName: asSafeString(item.scientificName.trim(), '', 200) }
       : {}),
+    ...(typeof item.family === 'string' && item.family.trim()
+      ? { family: asSafeString(item.family.trim(), '', 120) }
+      : {}),
     ...(typeof item.speciesNote === 'string' && item.speciesNote.trim()
-      ? { speciesNote: asSafeString(item.speciesNote.trim(), '', 300) }
+      ? { speciesNote: asSafeString(item.speciesNote.trim(), '', 400) }
+      : {}),
+    ...(typeof item.identificationFeatures === 'string' &&
+    item.identificationFeatures.trim()
+      ? {
+          identificationFeatures: asSafeString(
+            item.identificationFeatures.trim(),
+            '',
+            500
+          ),
+        }
+      : {}),
+    ...(typeof item.habitatSummary === 'string' && item.habitatSummary.trim()
+      ? { habitatSummary: asSafeString(item.habitatSummary.trim(), '', 400) }
+      : {}),
+    ...(typeof item.imageMethod === 'string' && item.imageMethod.trim()
+      ? { imageMethod: asSafeString(item.imageMethod.trim(), '', 400) }
+      : {}),
+    ...(typeof item.imageLicenseNote === 'string' && item.imageLicenseNote.trim()
+      ? { imageLicenseNote: asSafeString(item.imageLicenseNote.trim(), '', 400) }
+      : {}),
+    ...(sourceReferences && sourceReferences.length > 0
+      ? { sourceReferences }
+      : {}),
+    ...(confidence ? { identificationConfidence: confidence } : {}),
+    ...(typeof item.ambiguityNote === 'string' && item.ambiguityNote.trim()
+      ? { ambiguityNote: asSafeString(item.ambiguityNote.trim(), '', 400) }
       : {}),
     referenceImage: isSafeImageSrc(item.referenceImage) ? item.referenceImage : null,
     isReferenceArtworkOnly: Boolean(item.isReferenceArtworkOnly),
@@ -625,6 +766,10 @@ export async function restoreFullBackup(payload: BackupPayload): Promise<void> {
     for (const tr of payload.trash || []) trashStore.put(tr);
     settingsStore.put({ key: 'business', value: payload.settings });
     settingsStore.put({ key: 'catalogSeeded', value: true });
+    settingsStore.put({
+      key: 'acknowledgedSeedIds',
+      value: SEEDED_FISH_CATALOG.map((item) => item.id),
+    });
 
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(wrapDbError(tx.error));

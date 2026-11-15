@@ -1,46 +1,64 @@
 import React, { useMemo, useState } from 'react';
 import {
+  ArrowRight,
   Camera,
   Check,
   ChevronDown,
   ChevronUp,
+  Search,
   Share2,
+  Sparkles,
   Tag,
   Volume2,
   X,
 } from 'lucide-react';
 import { t } from '../data/translations';
 import type {
+  BusinessSettings,
   DailyFishEntry,
   DailyRecord,
   FishItem,
   Language,
   PriceUnit,
+  TrashFishItem,
 } from '../types';
+import {
+  runUniversalOfflineSearch,
+  type SearchActionTarget,
+} from '../utils/offlineSearch';
 import { formatDisplayDate, speakPronunciation } from '../utils/speechAndDate';
 
 interface TodayScreenProps {
   lang: Language;
   fishList: FishItem[];
   dailyRecord: DailyRecord;
+  allDailyRecords: DailyRecord[];
+  trashList: TrashFishItem[];
+  settings: BusinessSettings;
   onToggleAvailability: (fishId: string) => void;
   onToggleIncludePrices: (include: boolean) => void;
   onUpdateEntry: (fishId: string, patch: Partial<DailyFishEntry>) => void;
   onOpenPosterStudio: (fish: FishItem) => void;
   onOpenShareList: () => void;
+  onNavigateFromSearch: (target: SearchActionTarget) => void;
 }
 
 export const TodayScreen: React.FC<TodayScreenProps> = ({
   lang,
   fishList,
   dailyRecord,
+  allDailyRecords,
+  trashList,
+  settings,
   onToggleAvailability,
   onToggleIncludePrices,
   onUpdateEntry,
   onOpenPosterStudio,
   onOpenShareList,
+  onNavigateFromSearch,
 }) => {
   const [filter, setFilter] = useState<'all' | 'available'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [expandedNotes, setExpandedNotes] = useState<Record<string, boolean>>({});
 
   const availableCount = useMemo(
@@ -48,101 +66,208 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
     [fishList, dailyRecord.entries]
   );
 
-  const displayedFish = useMemo(
+  const searchOutput = useMemo(
     () =>
+      runUniversalOfflineSearch({
+        query: searchQuery,
+        fishList,
+        dailyRecord,
+        allDailyRecords,
+        trashList,
+        settings,
+        lang,
+      }),
+    [searchQuery, fishList, dailyRecord, allDailyRecords, trashList, settings, lang]
+  );
+
+  const hasSearch = searchQuery.trim().length > 0;
+
+  const displayedFish = useMemo(() => {
+    const base =
       filter === 'available'
         ? fishList.filter((f) => dailyRecord.entries[f.id]?.available)
-        : fishList,
-    [filter, fishList, dailyRecord.entries]
-  );
+        : fishList;
+    if (!hasSearch) return base;
+    return base.filter((f) => searchOutput.matchedFishIds.has(f.id));
+  }, [filter, fishList, dailyRecord.entries, hasSearch, searchOutput.matchedFishIds]);
 
   const toggleNoteDrawer = (fishId: string) => {
     setExpandedNotes((prev) => ({ ...prev, [fishId]: !prev[fishId] }));
   };
 
   return (
-    <div className="space-y-4 pb-28">
-      {/* Compact daily header & quick controls */}
-      <section className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 shadow-xs border border-slate-200/80 dark:border-neutral-800 space-y-3">
+    <div className="space-y-3 pb-28">
+      {/* Compact daily header, controls & universal offline search */}
+      <section className="rounded-2xl bg-white dark:bg-[#0a0a0a] p-2.5 sm:p-3 shadow-xs border border-slate-200/80 dark:border-neutral-800 space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="min-w-0">
-            <h2 className="text-lg sm:text-xl font-bold text-[#082d59] dark:text-sky-300 leading-snug">
+          <div className="flex items-baseline gap-2 min-w-0">
+            <h2 className="text-base sm:text-lg font-bold text-[#082d59] dark:text-sky-300 leading-tight truncate">
               {t(lang, 'today_fish')}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-neutral-400 flex flex-wrap items-center gap-x-2 gap-y-0.5">
-              <span>{formatDisplayDate(dailyRecord.dateKey, lang)}</span>
-              <span aria-hidden="true">·</span>
-              <span className="font-semibold text-[#082d59] dark:text-sky-300 tabular-nums">
-                {t(lang, 'available_count')}: {availableCount}
-              </span>
-            </p>
-          </div>
-
-          {/* Interactive filter segmented control */}
-          <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-neutral-900 rounded-xl border border-transparent dark:border-neutral-800 max-w-full">
-            <button
-              type="button"
-              onClick={() => setFilter('all')}
-              className={`min-h-[40px] px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition whitespace-nowrap ${
-                filter === 'all'
-                  ? 'bg-white dark:bg-neutral-800 text-[#082d59] dark:text-white shadow-xs'
-                  : 'text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              {t(lang, 'filter_all')} ({fishList.length})
-            </button>
-            <button
-              type="button"
-              onClick={() => setFilter('available')}
-              className={`min-h-[40px] px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition whitespace-nowrap ${
-                filter === 'available'
-                  ? 'bg-[#0879d9] text-white shadow-xs'
-                  : 'text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              {t(lang, 'filter_available')} ({availableCount})
-            </button>
-          </div>
-        </div>
-
-        {/* Optional Price Toggle (OFF by default) */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-neutral-800">
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-neutral-400">
-            {t(lang, 'tap_to_select')}
-          </p>
-          <button
-            type="button"
-            onClick={() => onToggleIncludePrices(!dailyRecord.includePrices)}
-            aria-pressed={dailyRecord.includePrices}
-            className={`min-h-[44px] px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 border transition max-w-full leading-snug text-left ${
-              dailyRecord.includePrices
-                ? 'bg-[#082d59] dark:bg-[#0879d9] text-white border-[#082d59] dark:border-[#0879d9]'
-                : 'bg-slate-50 dark:bg-neutral-900 text-slate-700 dark:text-neutral-200 border-slate-200 dark:border-neutral-800 hover:bg-slate-100 dark:hover:bg-neutral-800'
-            }`}
-          >
-            <Tag className="w-4 h-4 shrink-0" />
-            <span className="break-words">{t(lang, 'include_prices')}</span>
-            <span className="font-bold shrink-0">
-              {dailyRecord.includePrices ? 'ON' : 'OFF'}
+            <span className="text-[11px] sm:text-xs text-slate-500 dark:text-neutral-400 tabular-nums whitespace-nowrap">
+              {formatDisplayDate(dailyRecord.dateKey, lang)} ·{' '}
+              <strong className="text-[#082d59] dark:text-sky-300">
+                {availableCount}/{fishList.length}
+              </strong>
             </span>
-          </button>
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-wrap max-w-full">
+            <div className="flex items-center gap-0.5 p-0.5 bg-slate-100 dark:bg-neutral-900 rounded-xl border border-transparent dark:border-neutral-800">
+              <button
+                type="button"
+                onClick={() => setFilter('all')}
+                className={`min-h-[34px] px-2 sm:px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-semibold transition whitespace-nowrap ${
+                  filter === 'all'
+                    ? 'bg-white dark:bg-neutral-800 text-[#082d59] dark:text-white shadow-xs'
+                    : 'text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                {t(lang, 'filter_all')} ({fishList.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilter('available')}
+                className={`min-h-[34px] px-2 sm:px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-semibold transition whitespace-nowrap ${
+                  filter === 'available'
+                    ? 'bg-[#0879d9] text-white shadow-xs'
+                    : 'text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                {t(lang, 'filter_available')} ({availableCount})
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => onToggleIncludePrices(!dailyRecord.includePrices)}
+              aria-pressed={dailyRecord.includePrices}
+              title={t(lang, 'include_prices')}
+              className={`min-h-[34px] px-2.5 py-1 rounded-xl text-[11px] sm:text-xs font-semibold flex items-center gap-1 border transition whitespace-nowrap ${
+                dailyRecord.includePrices
+                  ? 'bg-[#082d59] dark:bg-[#0879d9] text-white border-[#082d59] dark:border-[#0879d9]'
+                  : 'bg-slate-50 dark:bg-neutral-900 text-slate-700 dark:text-neutral-200 border-slate-200 dark:border-neutral-800 hover:bg-slate-100 dark:hover:bg-neutral-800'
+              }`}
+            >
+              <Tag className="w-3.5 h-3.5 shrink-0" />
+              <span>{t(lang, 'price_short')}</span>
+              <span className="font-bold">
+                {dailyRecord.includePrices ? 'ON' : 'OFF'}
+              </span>
+            </button>
+          </div>
         </div>
+
+        {/* Universal Search Bar with Offline Bilingual Spell Check */}
+        <div className="relative">
+          <Search className="w-4 h-4 text-slate-400 dark:text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            spellCheck={true}
+            autoComplete="off"
+            placeholder={t(lang, 'universal_search_placeholder')}
+            aria-label={t(lang, 'universal_search_placeholder')}
+            className="w-full h-10 pl-9 pr-9 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-neutral-500 focus:bg-white dark:focus:bg-[#0a0a0a] focus:outline-none focus:ring-2 focus:ring-[#0879d9]/40"
+          />
+          {hasSearch && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              aria-label={t(lang, 'clear_search')}
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg text-slate-500 dark:text-neutral-400 hover:bg-slate-200 dark:hover:bg-neutral-800 flex items-center justify-center"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Offline Spell Check Suggestions + App-wide Search Matches */}
+        {hasSearch && (
+          <div className="space-y-2 pt-1">
+            {searchOutput.spellSuggestions.length > 0 ? (
+              <div className="flex flex-wrap items-center gap-1.5 rounded-xl bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 px-2.5 py-1.5 text-xs">
+                <span className="inline-flex items-center gap-1 font-semibold text-amber-900 dark:text-amber-200">
+                  <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                  <span>{t(lang, 'did_you_mean')}:</span>
+                </span>
+                {searchOutput.spellSuggestions.map((s) => (
+                  <button
+                    key={`${s.originalToken}_${s.suggested}`}
+                    type="button"
+                    onClick={() => setSearchQuery(s.replacedQuery)}
+                    className="px-2 py-0.5 rounded-lg bg-white dark:bg-neutral-900 border border-amber-300 dark:border-amber-700 text-[#082d59] dark:text-sky-300 font-bold hover:bg-amber-100 dark:hover:bg-neutral-800 transition"
+                  >
+                    {s.suggested}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              searchOutput.isValidKnownQuery && (
+                <div className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-400 px-1">
+                  <Check className="w-3.5 h-3.5 shrink-0" />
+                  <span>{t(lang, 'spell_exact_match')}</span>
+                </div>
+              )
+            )}
+
+            {searchOutput.appResults.length > 0 && (
+              <div className="rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 p-2 space-y-1">
+                <p className="text-[11px] font-bold text-slate-500 dark:text-neutral-400 px-1">
+                  {t(lang, 'app_matches_title')}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                  {searchOutput.appResults.map((res) => (
+                    <button
+                      key={res.id}
+                      type="button"
+                      onClick={() => {
+                        if (res.target) {
+                          onNavigateFromSearch(res.target);
+                        }
+                      }}
+                      className="w-full text-left px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#0a0a0a] border border-slate-200/80 dark:border-neutral-800 hover:border-[#0879d9] dark:hover:border-sky-500 flex items-center justify-between gap-2 transition"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                          {res.title}
+                        </p>
+                        {res.subtitle && (
+                          <p className="text-[11px] text-slate-500 dark:text-neutral-400 truncate">
+                            {res.subtitle}
+                          </p>
+                        )}
+                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 shrink-0 text-[#0879d9] dark:text-sky-400" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* Fish Cards Grid */}
       {displayedFish.length === 0 ? (
-        <div className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-8 text-center border border-slate-200/80 dark:border-neutral-800 space-y-3">
-          <p className="text-base font-semibold text-slate-700 dark:text-neutral-300">
-            {t(lang, 'no_fish')}
-          </p>
-          <button
-            type="button"
-            onClick={() => setFilter('all')}
-            className="min-h-[44px] px-5 py-2.5 rounded-xl bg-[#0879d9] text-white font-semibold text-sm"
-          >
-            {t(lang, 'filter_all')}
-          </button>
-        </div>
+        hasSearch && searchOutput.appResults.length > 0 ? null : (
+          <div className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-6 sm:p-8 text-center border border-slate-200/80 dark:border-neutral-800 space-y-3">
+            <p className="text-sm sm:text-base font-semibold text-slate-700 dark:text-neutral-300">
+              {hasSearch ? t(lang, 'no_search_results') : t(lang, 'no_fish')}
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                if (hasSearch) setSearchQuery('');
+                else setFilter('all');
+              }}
+              className="min-h-[42px] px-5 py-2 rounded-xl bg-[#0879d9] text-white font-semibold text-sm"
+            >
+              {hasSearch ? t(lang, 'clear_search') : t(lang, 'filter_all')}
+            </button>
+          </div>
+        )
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
           {displayedFish.map((fish) => {

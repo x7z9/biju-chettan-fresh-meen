@@ -15,14 +15,44 @@ export interface FishPhoto {
   label?: string;
 }
 
+export interface FishSourceReference {
+  title: string;
+  url: string;
+  accessedAt: string;
+}
+
+export type CatalogueGroup = 'finfish' | 'seafood_other';
+
+export type SeafoodClass =
+  | 'finfish'
+  | 'crustacean'
+  | 'bivalve_mollusc'
+  | 'cephalopod';
+
+export type IdentificationConfidence =
+  | 'confirmed'
+  | 'probable'
+  | 'needs_local_confirmation';
+
 export interface FishItem {
   id: string;
   referenceNumber: number | null;
+  catalogueGroup?: CatalogueGroup;
+  seafoodClass?: SeafoodClass;
   nameMl: string;
   pronunciationLatin: string;
+  aliasesMl?: string[];
   nameEn?: string;
   scientificName?: string;
+  family?: string;
   speciesNote?: string;
+  identificationFeatures?: string;
+  habitatSummary?: string;
+  imageMethod?: string;
+  imageLicenseNote?: string;
+  sourceReferences?: FishSourceReference[];
+  identificationConfidence?: IdentificationConfidence;
+  ambiguityNote?: string;
   referenceImage: string | null;
   isReferenceArtworkOnly: boolean;
   customActualPhotos: FishPhoto[];

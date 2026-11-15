@@ -38,7 +38,11 @@ export const FishCatalogueScreen: React.FC<FishCatalogueScreenProps> = ({
       (f) =>
         f.nameMl.toLowerCase().includes(q) ||
         f.pronunciationLatin.toLowerCase().includes(q) ||
-        (f.nameEn && f.nameEn.toLowerCase().includes(q))
+        (f.nameEn && f.nameEn.toLowerCase().includes(q)) ||
+        (f.scientificName && f.scientificName.toLowerCase().includes(q)) ||
+        (f.family && f.family.toLowerCase().includes(q)) ||
+        (f.seafoodClass && f.seafoodClass.toLowerCase().includes(q)) ||
+        (f.aliasesMl && f.aliasesMl.some((a) => a.toLowerCase().includes(q)))
     );
   }, [fishList, query]);
 
@@ -114,6 +118,17 @@ export const FishCatalogueScreen: React.FC<FishCatalogueScreenProps> = ({
                       {fish.nameEn && (
                         <p className="text-[11px] sm:text-xs text-slate-500 dark:text-neutral-400 mt-0.5 leading-snug break-words">
                           {fish.nameEn}
+                        </p>
+                      )}
+                      {fish.scientificName && (
+                        <p className="text-[11px] italic text-slate-500 dark:text-neutral-400 mt-0.5 leading-snug break-words">
+                          {fish.scientificName}
+                          {fish.family ? ` · ${fish.family}` : ''}
+                        </p>
+                      )}
+                      {fish.seafoodClass && fish.seafoodClass !== 'finfish' && (
+                        <p className="text-[11px] font-semibold text-[#0879d9] dark:text-sky-400 mt-0.5 leading-snug break-words">
+                          {t(lang, `class_${fish.seafoodClass}` as 'class_crustacean')}
                         </p>
                       )}
                     </div>

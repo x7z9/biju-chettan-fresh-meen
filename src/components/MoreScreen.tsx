@@ -47,6 +47,7 @@ interface MoreScreenProps {
   onPermanentDeleteTrash: (id: string) => Promise<void>;
   onEmptyTrash: () => Promise<void>;
   onAfterRestore: () => Promise<void>;
+  focusSection?: string | null;
 }
 
 export const MoreScreen: React.FC<MoreScreenProps> = ({
@@ -62,6 +63,7 @@ export const MoreScreen: React.FC<MoreScreenProps> = ({
   onPermanentDeleteTrash,
   onEmptyTrash,
   onAfterRestore,
+  focusSection,
 }) => {
   const [formSettings, setFormSettings] = useState<BusinessSettings>(settings);
   const [settingsSavedMsg, setSettingsSavedMsg] = useState('');
@@ -72,6 +74,18 @@ export const MoreScreen: React.FC<MoreScreenProps> = ({
   const [confirmEmptyTrash, setConfirmEmptyTrash] = useState(false);
   const [trashBusy, setTrashBusy] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (!focusSection) return;
+    if (focusSection === 'references') {
+      setShowReferences(true);
+    }
+    const timer = window.setTimeout(() => {
+      const el = document.getElementById(`more-section-${focusSection}`);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+    return () => window.clearTimeout(timer);
+  }, [focusSection]);
 
   useEffect(() => {
     setFormSettings(settings);
@@ -150,7 +164,10 @@ export const MoreScreen: React.FC<MoreScreenProps> = ({
   return (
     <div className="space-y-4 pb-24 max-w-3xl mx-auto">
       {/* Install App & Language Card */}
-      <section className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-4">
+      <section
+        id="more-section-language"
+        className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-4"
+      >
         <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-neutral-800">
           <img
             src={BUSINESS_LOGO_PATH}
@@ -207,6 +224,7 @@ export const MoreScreen: React.FC<MoreScreenProps> = ({
 
       {/* Trash Bin (Restore Accidentally Deleted Fish) */}
       <section
+        id="more-section-trash"
         aria-labelledby="trash-bin-heading"
         className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-3"
       >
@@ -350,7 +368,10 @@ export const MoreScreen: React.FC<MoreScreenProps> = ({
       </section>
 
       {/* Daily History */}
-      <section className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-3">
+      <section
+        id="more-section-history"
+        className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-3"
+      >
         <div className="flex items-center gap-2">
           <Calendar className="w-5 h-5 shrink-0 text-[#0879d9] dark:text-sky-400" />
           <h2 className="text-lg font-bold text-[#082d59] dark:text-sky-300 leading-snug">
@@ -392,7 +413,10 @@ export const MoreScreen: React.FC<MoreScreenProps> = ({
       </section>
 
       {/* Backup & Restore */}
-      <section className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-3">
+      <section
+        id="more-section-backup"
+        className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-3"
+      >
         <h2 className="text-lg font-bold text-[#082d59] dark:text-sky-300 leading-snug">
           {t(lang, 'backup')}
         </h2>
@@ -447,7 +471,10 @@ export const MoreScreen: React.FC<MoreScreenProps> = ({
       </section>
 
       {/* Business & Poster Settings */}
-      <section className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-4">
+      <section
+        id="more-section-settings"
+        className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-4"
+      >
         <div className="flex items-center gap-2">
           <SettingsIcon className="w-5 h-5 shrink-0 text-[#0879d9] dark:text-sky-400" />
           <h2 className="text-lg font-bold text-[#082d59] dark:text-sky-300 leading-snug">
@@ -607,7 +634,10 @@ export const MoreScreen: React.FC<MoreScreenProps> = ({
       </section>
 
       {/* Poster Reference Sheet Section */}
-      <section className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-3">
+      <section
+        id="more-section-references"
+        className="rounded-3xl bg-white dark:bg-[#0a0a0a] p-4 sm:p-5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-3"
+      >
         <button
           type="button"
           onClick={() => setShowReferences((v) => !v)}
