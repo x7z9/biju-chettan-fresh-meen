@@ -25,6 +25,7 @@ import {
 } from '../utils/posterRenderer';
 import { dataUrlToBlob, downloadBlob } from '../utils/speechAndDate';
 import {
+  buildWhatsAppBatchMessage,
   buildWhatsAppListMessage,
   detectShareBatchSize,
   directShareFilesWithText,
@@ -43,6 +44,13 @@ interface ShareListModalProps {
 
 type ShareMode = 'menu_card' | 'all_photos' | 'text_only';
 
+interface PairedShareBatch {
+  index: number;
+  startNum: number;
+  endNum: number;
+  items: Array<{ fish: FishItem; src: string; file: File }>;
+}
+
 export const ShareListModal: React.FC<ShareListModalProps> = ({
   lang,
   fishList,
@@ -55,6 +63,7 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
   const [messageText, setMessageText] = useState(() =>
     buildWhatsAppListMessage(fishList, dailyRecord, settings, 'ml')
   );
+  const [customBatchTexts, setCustomBatchTexts] = useState<Record<number, string>>({});
   const [copied, setCopied] = useState(false);
   const [shareNote, setShareNote] = useState('');
   const [showOpenWaBtn, setShowOpenWaBtn] = useState(false);
@@ -65,7 +74,9 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
 
   // Pre-prepared in-memory JPEG File objects so navigator.share() fires synchronously on tap
   const [preparedFiles, setPreparedFiles] = useState<Record<string, File>>({});
-  const [sentBatchCount, setSentBatchCount] = useState(0);
+  const [activeBatchIdx, setActiveBatchIdx] = useState(0);
+  const [completedBatches, setCompletedBatches] = useState<Record<number, boolean>>({});
+  const [overrideBatchSize, setOverrideBatchSize] = useState<number | null>(null);
 
   const availableFish = useMemo(
     () => fishList.filter((f) => dailyRecord.entries[f.id]?.available),
@@ -103,12 +114,6 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
     });
   }, [fishPhotoEntries]);
 
-  useEffect(() => {
-    setMessageText(
-      buildWhatsAppListMessage(fishList, dailyRecord, settings, msgLang)
-    );
-  }, [fishList, dailyRecord, settings, msgLang]);
-
   // Eagerly pre-prepare JPEG File objects in memory as soon as modal opens
   useEffect(() => {
     if (fishPhotoEntries.length === 0) {
@@ -119,7 +124,7 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
 
     const prepareAll = async () => {
       const nextMap: Record<string, File> = {};
-      const chunkSize = 4;
+      const chunkSize = 5;
       for (let i = 0; i < fishPhotoEntries.length; i += chunkSize) {
         if (cancelled) return;
         const slice = fishPhotoEntries.slice(i, i + chunkSize);
@@ -179,7 +184,6 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
         }
       });
 
-    // Also build full-res share File quietly so tapping Share fires synchronously
     renderDailyMenuPosterToDataUrl({
       fishList: availableFish,
       dailyRecord,
@@ -209,44 +213,109 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
     [fishPhotoEntries, selectedPhotoIds]
   );
 
-  // Reset batch progress whenever checked photos or share mode changes
+  // Reset batch state when selection or mode changes
   useEffect(() => {
-    setSentBatchCount(0);
+    setActiveBatchIdx(0);
+    setCompletedBatches({});
+    setCustomBatchTexts({});
+    setOverrideBatchSize(null);
     setShareNote('');
     setShowOpenWaBtn(false);
-  }, [checkedPhotoEntries.length, shareMode]);
+  }, [checkedPhotoEntries.length, shareMode, msgLang]);
 
   const activeTargetEntries = useMemo(
     () => (checkedPhotoEntries.length > 0 ? checkedPhotoEntries : fishPhotoEntries),
     [checkedPhotoEntries, fishPhotoEntries]
   );
 
-  const readyTargetFiles = useMemo(
+  const preparedItems = useMemo(
     () =>
       activeTargetEntries
-        .map((item) => preparedFiles[item.fish.id])
-        .filter((f): f is File => Boolean(f)),
+        .map((item) => {
+          const file = preparedFiles[item.fish.id];
+          return file ? { ...item, file } : null;
+        })
+        .filter((x): x is { fish: FishItem; src: string; file: File } => x !== null),
     [activeTargetEntries, preparedFiles]
   );
 
   const allTargetsPrepared =
     activeTargetEntries.length > 0 &&
-    readyTargetFiles.length === activeTargetEntries.length;
+    preparedItems.length === activeTargetEntries.length;
+
+  const fullListMessage = useMemo(
+    () => buildWhatsAppListMessage(fishList, dailyRecord, settings, msgLang),
+    [fishList, dailyRecord, settings, msgLang]
+  );
 
   const detectedBatchSize = useMemo(() => {
-    if (readyTargetFiles.length === 0) return 10;
-    const size = detectShareBatchSize(readyTargetFiles, messageText);
+    if (overrideBatchSize && overrideBatchSize > 0) return overrideBatchSize;
+    if (preparedItems.length === 0) return 10;
+    const files = preparedItems.map((p) => p.file);
+    const size = detectShareBatchSize(files, fullListMessage);
     return size > 0 ? size : 10;
-  }, [readyTargetFiles, messageText]);
+  }, [overrideBatchSize, preparedItems, fullListMessage]);
 
-  const shareBatches = useMemo(() => {
-    if (readyTargetFiles.length === 0) return [] as File[][];
-    return splitIntoShareBatches(readyTargetFiles, detectedBatchSize);
-  }, [readyTargetFiles, detectedBatchSize]);
+  const pairedBatches: PairedShareBatch[] = useMemo(() => {
+    if (preparedItems.length === 0) return [];
+    const chunks = splitIntoShareBatches(preparedItems, detectedBatchSize);
+    let cursor = 1;
+    return chunks.map((items, index) => {
+      const startNum = cursor;
+      const endNum = cursor + items.length - 1;
+      cursor = endNum + 1;
+      return { index, startNum, endNum, items };
+    });
+  }, [preparedItems, detectedBatchSize]);
 
-  const isMultiBatch = shareMode === 'all_photos' && shareBatches.length > 1;
-  const activeBatchIndex =
-    isMultiBatch && sentBatchCount < shareBatches.length ? sentBatchCount : 0;
+  const isMultiBatch = shareMode === 'all_photos' && pairedBatches.length > 1;
+  const safeActiveBatchIdx =
+    activeBatchIdx < pairedBatches.length ? activeBatchIdx : 0;
+  const currentBatch = pairedBatches[safeActiveBatchIdx];
+
+  // Auto-generate matching caption (for active batch when >10 photos, else full list)
+  useEffect(() => {
+    if (shareMode === 'all_photos' && pairedBatches.length > 1 && currentBatch) {
+      if (customBatchTexts[currentBatch.index] !== undefined) {
+        setMessageText(customBatchTexts[currentBatch.index]);
+        return;
+      }
+      setMessageText(
+        buildWhatsAppBatchMessage(
+          currentBatch.items.map((i) => i.fish),
+          currentBatch.index,
+          pairedBatches.length,
+          currentBatch.startNum,
+          preparedItems.length,
+          dailyRecord,
+          settings,
+          msgLang
+        )
+      );
+    } else {
+      setMessageText(fullListMessage);
+    }
+  }, [
+    shareMode,
+    pairedBatches.length,
+    currentBatch,
+    customBatchTexts,
+    preparedItems.length,
+    dailyRecord,
+    settings,
+    msgLang,
+    fullListMessage,
+  ]);
+
+  const handleMessageEdit = (val: string) => {
+    setMessageText(val);
+    if (isMultiBatch && currentBatch) {
+      setCustomBatchTexts((prev) => ({
+        ...prev,
+        [currentBatch.index]: val,
+      }));
+    }
+  };
 
   const togglePhotoSelection = (fishId: string) => {
     setSelectedPhotoIds((prev) => ({
@@ -256,8 +325,9 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
   };
 
   const handleCopy = async () => {
+    const textToCopy = isMultiBatch ? fullListMessage : messageText;
     try {
-      await navigator.clipboard.writeText(messageText);
+      await navigator.clipboard.writeText(textToCopy);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
@@ -299,7 +369,6 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
       try {
         await navigator.clipboard.writeText(messageText);
         setCopied(true);
-        return;
       } catch {
         // Ignore clipboard errors
       }
@@ -308,35 +377,44 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
 
   const handleOutcomeFeedback = async (
     outcome: DirectShareOutcome,
-    wasBatchIdx?: number,
+    batchIdx?: number,
     totalBatches?: number
   ) => {
-    if (outcome === 'shared') {
+    if (outcome === 'shared' || outcome === 'shared_caption_copied') {
       if (
-        typeof wasBatchIdx === 'number' &&
+        typeof batchIdx === 'number' &&
         typeof totalBatches === 'number' &&
         totalBatches > 1
       ) {
-        const nextSent = wasBatchIdx + 1;
-        setSentBatchCount(nextSent);
-        if (nextSent >= totalBatches) {
+        const nextCompleted = { ...completedBatches, [batchIdx]: true };
+        setCompletedBatches(nextCompleted);
+
+        // Find next unsent batch
+        let nextIdx = -1;
+        for (let i = 0; i < totalBatches; i++) {
+          if (!nextCompleted[i]) {
+            nextIdx = i;
+            break;
+          }
+        }
+
+        if (nextIdx === -1) {
           setShareNote(t(lang, 'share_all_batches_done'));
         } else {
+          setActiveBatchIdx(nextIdx);
+          const sentCount = Object.values(nextCompleted).filter(Boolean).length;
           setShareNote(
             lang === 'en'
-              ? `Part ${nextSent}/${totalBatches} sent ✓ Tap Send again for Part ${nextSent + 1}/${totalBatches}.`
-              : `ഭാഗം ${nextSent}/${totalBatches} അയച്ചു ✓ അടുത്ത ഭാഗം (${nextSent + 1}/${totalBatches}) അയക്കാൻ വീണ്ടും തൊടുക.`
+              ? `Part ${batchIdx + 1}/${totalBatches} sent ✓ (${sentCount}/${totalBatches} done). Tap Send for Part ${nextIdx + 1}/${totalBatches}!`
+              : `ഭാഗം ${batchIdx + 1}/${totalBatches} അയച്ചു ✓ ഇനി ഭാഗം ${nextIdx + 1}/${totalBatches} അയക്കാൻ ബട്ടൺ തൊടുക!`
           );
         }
+      } else if (outcome === 'shared_caption_copied') {
+        setCopied(true);
+        setShareNote(t(lang, 'share_caption_copied_note'));
       } else {
         setShareNote('');
       }
-      return;
-    }
-
-    if (outcome === 'shared_caption_copied') {
-      setCopied(true);
-      setShareNote(t(lang, 'share_caption_copied_note'));
       return;
     }
 
@@ -382,7 +460,6 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
     setShowOpenWaBtn(false);
 
     if (shareMode === 'menu_card') {
-      // Fast synchronous path if full menu card File is already built
       if (menuCardFile) {
         const outcome = await directShareFilesWithText(
           [menuCardFile],
@@ -426,54 +503,49 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
 
     // shareMode === 'all_photos'
     if (activeTargetEntries.length === 0) {
-      openWhatsAppTextLink(messageText);
+      openWhatsAppTextLink(fullListMessage);
       return;
     }
 
     // Synchronous zero-delay path when files are already prepared in memory
-    if (allTargetsPrepared && readyTargetFiles.length > 0) {
-      const batchSize = detectShareBatchSize(readyTargetFiles, messageText);
-      if (batchSize <= 0) {
-        await copyMessageForFallback();
-        setShareNote(t(lang, 'share_direct_unsupported'));
-        setShowOpenWaBtn(true);
-        return;
-      }
-
-      const batches = splitIntoShareBatches(readyTargetFiles, batchSize);
-      const currentIdx = sentBatchCount < batches.length ? sentBatchCount : 0;
-      const batchFiles = batches[currentIdx];
-      const batchText =
-        currentIdx === 0
-          ? messageText
-          : `${shareTitle} (${currentIdx + 1}/${batches.length})`;
-
+    if (allTargetsPrepared && currentBatch && pairedBatches.length > 0) {
+      const batchFiles = currentBatch.items.map((i) => i.file);
       const outcome = await directShareFilesWithText(
         batchFiles,
-        batchText,
+        messageText,
         shareTitle
       );
 
       if (outcome === 'batch_required' && batchFiles.length > 1) {
-        // Split further cleanly without downloading anything
-        const smallerBatches = splitIntoShareBatches(
-          readyTargetFiles,
-          Math.max(1, Math.floor(batchFiles.length / 2))
+        // Device enforces smaller per-share count or MB cap than detected: step down cleanly
+        const smallerStep = Math.max(1, Math.min(5, Math.floor(batchFiles.length / 2)));
+        setOverrideBatchSize(smallerStep);
+        const smallerChunks = splitIntoShareBatches(preparedItems, smallerStep);
+        const firstChunk = smallerChunks[0];
+        const firstCaption = buildWhatsAppBatchMessage(
+          firstChunk.map((i) => i.fish),
+          0,
+          smallerChunks.length,
+          1,
+          preparedItems.length,
+          dailyRecord,
+          settings,
+          msgLang
         );
-        const firstOutcome = await directShareFilesWithText(
-          smallerBatches[0],
-          messageText,
+        const retryOutcome = await directShareFilesWithText(
+          firstChunk.map((i) => i.file),
+          firstCaption,
           shareTitle
         );
-        await handleOutcomeFeedback(firstOutcome, 0, smallerBatches.length);
+        await handleOutcomeFeedback(retryOutcome, 0, smallerChunks.length);
         return;
       }
 
-      await handleOutcomeFeedback(outcome, currentIdx, batches.length);
+      await handleOutcomeFeedback(outcome, currentBatch.index, pairedBatches.length);
       return;
     }
 
-    // Fallback preparation only for any files not yet finished in background
+    // Fallback preparation only if tapped before background preparation finished
     setBusy(true);
     try {
       const nextPrepared: Record<string, File> = { ...preparedFiles };
@@ -489,16 +561,22 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
       );
       setPreparedFiles(nextPrepared);
 
-      const files = activeTargetEntries
-        .map((item) => nextPrepared[item.fish.id])
-        .filter((f): f is File => Boolean(f));
+      const rebuilt = activeTargetEntries
+        .map((item) => {
+          const file = nextPrepared[item.fish.id];
+          return file ? { ...item, file } : null;
+        })
+        .filter((x): x is { fish: FishItem; src: string; file: File } => x !== null);
 
-      if (files.length === 0) {
-        openWhatsAppTextLink(messageText);
+      if (rebuilt.length === 0) {
+        openWhatsAppTextLink(fullListMessage);
         return;
       }
 
-      const batchSize = detectShareBatchSize(files, messageText);
+      const batchSize = detectShareBatchSize(
+        rebuilt.map((r) => r.file),
+        fullListMessage
+      );
       if (batchSize <= 0) {
         await copyMessageForFallback();
         setShareNote(t(lang, 'share_direct_unsupported'));
@@ -506,13 +584,23 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
         return;
       }
 
-      const batches = splitIntoShareBatches(files, batchSize);
+      const chunks = splitIntoShareBatches(rebuilt, batchSize);
+      const firstCaption = buildWhatsAppBatchMessage(
+        chunks[0].map((i) => i.fish),
+        0,
+        chunks.length,
+        1,
+        rebuilt.length,
+        dailyRecord,
+        settings,
+        msgLang
+      );
       const outcome = await directShareFilesWithText(
-        batches[0],
-        messageText,
+        chunks[0].map((i) => i.file),
+        firstCaption,
         shareTitle
       );
-      await handleOutcomeFeedback(outcome, 0, batches.length);
+      await handleOutcomeFeedback(outcome, 0, chunks.length);
     } finally {
       setBusy(false);
     }
@@ -520,7 +608,13 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
 
   const handleShareSinglePhoto = async (fish: FishItem, src: string) => {
     if (busy) return;
-    const caption = `${fish.nameMl} — ${
+    const entry = dailyRecord.entries[fish.id];
+    const parts = [fish.nameMl];
+    if (entry?.note?.trim()) parts.push(`(${entry.note.trim()})`);
+    if (dailyRecord.includePrices && entry?.priceAmount?.trim()) {
+      parts.push(`— ₹${entry.priceAmount.trim()}`);
+    }
+    const caption = `${parts.join(' ')} • ${
       msgLang === 'en' ? settings.whatsappGroupNameEn : settings.whatsappGroupNameMl
     }`;
 
@@ -551,15 +645,8 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
   const primaryCtaLabel = (() => {
     if (busy) return t(lang, 'share_preparing');
     if (shareMode === 'text_only') return t(lang, 'share_whatsapp');
-    if (shareMode === 'all_photos' && isMultiBatch) {
-      const partNo = activeBatchIndex + 1;
-      const totalParts = shareBatches.length;
-      const startNum = activeBatchIndex * detectedBatchSize + 1;
-      const endNum = Math.min(
-        readyTargetFiles.length,
-        startNum + shareBatches[activeBatchIndex].length - 1
-      );
-      return `${t(lang, 'share_send_batch_prefix')} ${partNo}/${totalParts} (${startNum}–${endNum})`;
+    if (shareMode === 'all_photos' && isMultiBatch && currentBatch) {
+      return `${t(lang, 'share_send_batch_prefix')} ${currentBatch.index + 1}/${pairedBatches.length} (${currentBatch.startNum}–${currentBatch.endNum})`;
     }
     return t(lang, 'share_photos_and_list');
   })();
@@ -730,9 +817,9 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
                 </div>
               )}
 
-              {/* Mode 2: Individual Selected Fish Photos */}
+              {/* Mode 2: Individual Selected Fish Photos + Multi-Batch Stepper */}
               {shareMode === 'all_photos' && fishPhotoEntries.length > 0 && (
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <p className="text-xs font-bold text-slate-700 dark:text-neutral-300 leading-snug">
                       {t(lang, 'selected_photos_to_send')} (
@@ -748,13 +835,65 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
                     >
                       {allTargetsPrepared
                         ? `${t(lang, 'share_photos_ready')} ✓`
-                        : `${t(lang, 'share_preparing')} (${readyTargetFiles.length}/${activeTargetEntries.length})`}
+                        : `${t(lang, 'share_preparing')} (${preparedItems.length}/${activeTargetEntries.length})`}
                     </span>
                   </div>
 
-                  {isMultiBatch && (
-                    <div className="rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 px-3 py-2 text-xs font-medium text-amber-900 dark:text-amber-200 leading-relaxed">
-                      {t(lang, 'share_batch_notice')}
+                  {/* Interactive Multi-Batch Stepper when > 10 individual photos are selected */}
+                  {isMultiBatch && currentBatch && (
+                    <div className="rounded-2xl bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 p-3 space-y-2.5">
+                      <p className="text-xs font-medium text-amber-900 dark:text-amber-200 leading-relaxed">
+                        {t(lang, 'share_batch_notice')}
+                      </p>
+
+                      {/* Clickable Part Selector */}
+                      <div className="flex flex-wrap gap-1.5">
+                        {pairedBatches.map((batch) => {
+                          const isActive = batch.index === currentBatch.index;
+                          const isDone = !!completedBatches[batch.index];
+                          return (
+                            <button
+                              key={batch.index}
+                              type="button"
+                              onClick={() => setActiveBatchIdx(batch.index)}
+                              className={`min-h-[36px] px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 border transition tabular-nums ${
+                                isActive
+                                  ? 'bg-[#082d59] dark:bg-[#0879d9] text-white border-[#082d59] dark:border-[#0879d9] shadow-xs'
+                                  : isDone
+                                    ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-200 border-emerald-300 dark:border-emerald-700'
+                                    : 'bg-white dark:bg-neutral-900 text-slate-700 dark:text-neutral-300 border-slate-300 dark:border-neutral-700'
+                              }`}
+                            >
+                              {isDone && <Check className="w-3.5 h-3.5 shrink-0" />}
+                              <span>
+                                {t(lang, 'share_part_label')} {batch.index + 1} (
+                                {batch.startNum}–{batch.endNum})
+                              </span>
+                            </button>
+                          );
+                        })}
+                        <button
+                          type="button"
+                          onClick={() => openWhatsAppTextLink(fullListMessage)}
+                          className="min-h-[36px] px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-neutral-900 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-neutral-800 flex items-center gap-1"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5 shrink-0" />
+                          <span>{t(lang, 'share_send_full_text_btn')}</span>
+                        </button>
+                      </div>
+
+                      {/* Mini Thumbnail Preview of the Individual Photos in Active Part */}
+                      <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+                        {currentBatch.items.map(({ fish, src }) => (
+                          <img
+                            key={fish.id}
+                            src={src}
+                            alt={fish.nameMl}
+                            title={fish.nameMl}
+                            className="w-9 h-12 rounded-md object-cover border border-amber-300/80 dark:border-amber-700 shrink-0 bg-white dark:bg-neutral-900"
+                          />
+                        ))}
+                      </div>
                     </div>
                   )}
 
@@ -817,7 +956,7 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
                 id="whatsapp-message-preview"
                 rows={5}
                 value={messageText}
-                onChange={(e) => setMessageText(e.target.value)}
+                onChange={(e) => handleMessageEdit(e.target.value)}
                 className="w-full p-3.5 rounded-2xl border border-slate-300 dark:border-neutral-800 bg-slate-50 dark:bg-black text-sm sm:text-base text-slate-900 dark:text-white leading-relaxed focus:bg-white dark:focus:bg-[#0a0a0a]"
               />
 
@@ -833,7 +972,7 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
                   {showOpenWaBtn && (
                     <button
                       type="button"
-                      onClick={() => openWhatsAppTextLink(messageText)}
+                      onClick={() => openWhatsAppTextLink(fullListMessage)}
                       className="min-h-[42px] px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-bold flex items-center gap-2 hover:bg-emerald-700"
                     >
                       <MessageCircle className="w-4 h-4 shrink-0" />

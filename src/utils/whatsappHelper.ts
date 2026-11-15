@@ -67,6 +67,72 @@ export function buildWhatsAppListMessage(
   return lines.join('\n');
 }
 
+export function buildWhatsAppBatchMessage(
+  batchFish: FishItem[],
+  batchIndex: number,
+  totalBatches: number,
+  startNum: number,
+  totalFishCount: number,
+  dailyRecord: DailyRecord,
+  settings: BusinessSettings,
+  lang: Language
+): string {
+  if (totalBatches <= 1) {
+    return buildWhatsAppListMessage(batchFish, dailyRecord, settings, lang);
+  }
+  const endNum = startNum + batchFish.length - 1;
+  const isFirst = batchIndex === 0;
+  const isLast = batchIndex === totalBatches - 1;
+
+  if (lang === 'en') {
+    const lines: string[] = [
+      `🐟 Fish available today — Part ${batchIndex + 1}/${totalBatches} (${startNum}–${endNum} of ${totalFishCount})`,
+    ];
+    if (isFirst) {
+      lines.push(`📍 ${settings.locationEn}`);
+    }
+    for (const fish of batchFish) {
+      const entry = dailyRecord.entries[fish.id];
+      let line = `• ${fish.nameMl} (${fish.pronunciationLatin})`;
+      if (entry?.note?.trim()) {
+        line += ` — ${entry.note.trim()}`;
+      }
+      if (dailyRecord.includePrices && entry?.priceAmount?.trim()) {
+        line += ` — ₹${entry.priceAmount.trim()}${unitSuffix(entry.priceUnit, 'en')}`;
+      }
+      lines.push(line);
+    }
+    if (isLast) {
+      lines.push(`📞 Call for price: ${settings.phoneDisplay}`);
+    }
+    lines.push(`— ${settings.whatsappGroupNameEn}`);
+    return lines.join('\n');
+  }
+
+  const lines: string[] = [
+    `🐟 ഇന്നത്തെ മീനുകൾ — ഭാഗം ${batchIndex + 1}/${totalBatches} (${startNum}–${endNum}/${totalFishCount})`,
+  ];
+  if (isFirst) {
+    lines.push(`📍 ${settings.locationMl}`);
+  }
+  for (const fish of batchFish) {
+    const entry = dailyRecord.entries[fish.id];
+    let line = `• ${fish.nameMl}`;
+    if (entry?.note?.trim()) {
+      line += ` (${entry.note.trim()})`;
+    }
+    if (dailyRecord.includePrices && entry?.priceAmount?.trim()) {
+      line += ` — ₹${entry.priceAmount.trim()}${unitSuffix(entry.priceUnit, 'ml')}`;
+    }
+    lines.push(line);
+  }
+  if (isLast) {
+    lines.push(`📞 വില അറിയാൻ വിളിക്കുക: ${settings.phoneDisplay}`);
+  }
+  lines.push(`— ${settings.whatsappGroupNameMl}`);
+  return lines.join('\n');
+}
+
 export type DirectShareOutcome =
   | 'shared'
   | 'shared_caption_copied'
@@ -124,12 +190,12 @@ export function detectShareBatchSize(files: File[], text?: string): number {
   return 0;
 }
 
-export function splitIntoShareBatches(files: File[], maxPerBatch: number): File[][] {
-  if (files.length === 0) return [];
+export function splitIntoShareBatches<T>(items: T[], maxPerBatch: number): T[][] {
+  if (items.length === 0) return [];
   const step = Math.max(1, maxPerBatch);
-  const batches: File[][] = [];
-  for (let i = 0; i < files.length; i += step) {
-    batches.push(files.slice(i, i + step));
+  const batches: T[][] = [];
+  for (let i = 0; i < items.length; i += step) {
+    batches.push(items.slice(i, i + step));
   }
   return batches;
 }
@@ -169,7 +235,6 @@ export async function directShareFilesWithText(
   const supportsFilesOnly = canSharePayload({ files });
 
   if (!supportsFilesAndText && !supportsFilesOnly) {
-    // Could be too many files for this device even below 10 (e.g., total MB or OS cap)
     if (files.length > 1 && isSingleFileShareSupported(files[0])) {
       return 'batch_required';
     }
@@ -183,6 +248,10 @@ export async function directShareFilesWithText(
         text,
         ...(title && canSharePayload({ files, text, title }) ? { title } : {}),
       });
+      // Keep caption handy on clipboard in case iOS/OEM WhatsApp omits text on multi-image shares
+      if (files.length > 1 && text) {
+        void copyTextQuietly(text);
+      }
       return 'shared';
     }
 
