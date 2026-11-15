@@ -26,9 +26,11 @@ import {
 import { dataUrlToBlob, downloadBlob } from '../utils/speechAndDate';
 import {
   buildWhatsAppListMessage,
+  detectShareBatchSize,
+  directShareFilesWithText,
   openWhatsAppTextLink,
-  shareFilesWithTextOrFallback,
-  sharePosterFileOrFallback,
+  splitIntoShareBatches,
+  type DirectShareOutcome,
 } from '../utils/whatsappHelper';
 
 interface ShareListModalProps {
@@ -58,7 +60,12 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
   const [showOpenWaBtn, setShowOpenWaBtn] = useState(false);
   const [busy, setBusy] = useState(false);
   const [menuPreviewUrl, setMenuPreviewUrl] = useState<string | null>(null);
+  const [menuCardFile, setMenuCardFile] = useState<File | null>(null);
   const [menuRendering, setMenuRendering] = useState(false);
+
+  // Pre-prepared in-memory JPEG File objects so navigator.share() fires synchronously on tap
+  const [preparedFiles, setPreparedFiles] = useState<Record<string, File>>({});
+  const [sentBatchCount, setSentBatchCount] = useState(0);
 
   const availableFish = useMemo(
     () => fishList.filter((f) => dailyRecord.entries[f.id]?.available),
@@ -102,10 +109,52 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
     );
   }, [fishList, dailyRecord, settings, msgLang]);
 
+  // Eagerly pre-prepare JPEG File objects in memory as soon as modal opens
+  useEffect(() => {
+    if (fishPhotoEntries.length === 0) {
+      setPreparedFiles({});
+      return;
+    }
+    let cancelled = false;
+
+    const prepareAll = async () => {
+      const nextMap: Record<string, File> = {};
+      const chunkSize = 4;
+      for (let i = 0; i < fishPhotoEntries.length; i += chunkSize) {
+        if (cancelled) return;
+        const slice = fishPhotoEntries.slice(i, i + chunkSize);
+        const built = await Promise.all(
+          slice.map(async (item) => {
+            const file = await imageSrcToJpegFile(
+              item.src,
+              buildPosterFilename(item.fish.id, dailyRecord.dateKey)
+            );
+            return { id: item.fish.id, file };
+          })
+        );
+        if (cancelled) return;
+        for (const entry of built) {
+          if (entry.file) {
+            nextMap[entry.id] = entry.file;
+          }
+        }
+        setPreparedFiles({ ...nextMap });
+      }
+    };
+
+    void prepareAll();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [fishPhotoEntries, dailyRecord.dateKey]);
+
+  // Render preview + pre-prepare full menu card File when Menu Card mode is active
   useEffect(() => {
     if (availableFish.length === 0 || shareMode !== 'menu_card') return;
     let cancelled = false;
     setMenuRendering(true);
+    setMenuCardFile(null);
 
     renderDailyMenuPosterToDataUrl({
       fishList: availableFish,
@@ -130,6 +179,26 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
         }
       });
 
+    // Also build full-res share File quietly so tapping Share fires synchronously
+    renderDailyMenuPosterToDataUrl({
+      fishList: availableFish,
+      dailyRecord,
+      settings,
+      lang: msgLang,
+      previewScale: 1,
+    })
+      .then((hdUrl) =>
+        imageSrcToJpegFile(hdUrl, `innathe-meen-menu-${dailyRecord.dateKey}.jpg`)
+      )
+      .then((file) => {
+        if (!cancelled && file) {
+          setMenuCardFile(file);
+        }
+      })
+      .catch(() => {
+        // Handled lazily on tap if needed
+      });
+
     return () => {
       cancelled = true;
     };
@@ -139,6 +208,45 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
     () => fishPhotoEntries.filter((item) => selectedPhotoIds[item.fish.id]),
     [fishPhotoEntries, selectedPhotoIds]
   );
+
+  // Reset batch progress whenever checked photos or share mode changes
+  useEffect(() => {
+    setSentBatchCount(0);
+    setShareNote('');
+    setShowOpenWaBtn(false);
+  }, [checkedPhotoEntries.length, shareMode]);
+
+  const activeTargetEntries = useMemo(
+    () => (checkedPhotoEntries.length > 0 ? checkedPhotoEntries : fishPhotoEntries),
+    [checkedPhotoEntries, fishPhotoEntries]
+  );
+
+  const readyTargetFiles = useMemo(
+    () =>
+      activeTargetEntries
+        .map((item) => preparedFiles[item.fish.id])
+        .filter((f): f is File => Boolean(f)),
+    [activeTargetEntries, preparedFiles]
+  );
+
+  const allTargetsPrepared =
+    activeTargetEntries.length > 0 &&
+    readyTargetFiles.length === activeTargetEntries.length;
+
+  const detectedBatchSize = useMemo(() => {
+    if (readyTargetFiles.length === 0) return 10;
+    const size = detectShareBatchSize(readyTargetFiles, messageText);
+    return size > 0 ? size : 10;
+  }, [readyTargetFiles, messageText]);
+
+  const shareBatches = useMemo(() => {
+    if (readyTargetFiles.length === 0) return [] as File[][];
+    return splitIntoShareBatches(readyTargetFiles, detectedBatchSize);
+  }, [readyTargetFiles, detectedBatchSize]);
+
+  const isMultiBatch = shareMode === 'all_photos' && shareBatches.length > 1;
+  const activeBatchIndex =
+    isMultiBatch && sentBatchCount < shareBatches.length ? sentBatchCount : 0;
 
   const togglePhotoSelection = (fishId: string) => {
     setSelectedPhotoIds((prev) => ({
@@ -186,6 +294,69 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
     }
   };
 
+  const copyMessageForFallback = async () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(messageText);
+        setCopied(true);
+        return;
+      } catch {
+        // Ignore clipboard errors
+      }
+    }
+  };
+
+  const handleOutcomeFeedback = async (
+    outcome: DirectShareOutcome,
+    wasBatchIdx?: number,
+    totalBatches?: number
+  ) => {
+    if (outcome === 'shared') {
+      if (
+        typeof wasBatchIdx === 'number' &&
+        typeof totalBatches === 'number' &&
+        totalBatches > 1
+      ) {
+        const nextSent = wasBatchIdx + 1;
+        setSentBatchCount(nextSent);
+        if (nextSent >= totalBatches) {
+          setShareNote(t(lang, 'share_all_batches_done'));
+        } else {
+          setShareNote(
+            lang === 'en'
+              ? `Part ${nextSent}/${totalBatches} sent ✓ Tap Send again for Part ${nextSent + 1}/${totalBatches}.`
+              : `ഭാഗം ${nextSent}/${totalBatches} അയച്ചു ✓ അടുത്ത ഭാഗം (${nextSent + 1}/${totalBatches}) അയക്കാൻ വീണ്ടും തൊടുക.`
+          );
+        }
+      } else {
+        setShareNote('');
+      }
+      return;
+    }
+
+    if (outcome === 'shared_caption_copied') {
+      setCopied(true);
+      setShareNote(t(lang, 'share_caption_copied_note'));
+      return;
+    }
+
+    if (outcome === 'cancelled') {
+      setShareNote(t(lang, 'share_cancelled_note'));
+      return;
+    }
+
+    if (outcome === 'gesture_expired') {
+      setShareNote(t(lang, 'share_tap_again_ready'));
+      return;
+    }
+
+    if (outcome === 'unsupported') {
+      await copyMessageForFallback();
+      setShareNote(t(lang, 'share_direct_unsupported'));
+      setShowOpenWaBtn(true);
+    }
+  };
+
   const handlePrimaryShare = async () => {
     if (availableFish.length === 0 || busy) return;
     const shareTitle =
@@ -207,12 +378,23 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
       return;
     }
 
-    setBusy(true);
     setShareNote('');
     setShowOpenWaBtn(false);
 
-    try {
-      if (shareMode === 'menu_card') {
+    if (shareMode === 'menu_card') {
+      // Fast synchronous path if full menu card File is already built
+      if (menuCardFile) {
+        const outcome = await directShareFilesWithText(
+          [menuCardFile],
+          messageText,
+          shareTitle
+        );
+        await handleOutcomeFeedback(outcome);
+        return;
+      }
+
+      setBusy(true);
+      try {
         const fullPosterUrl = await renderDailyMenuPosterToDataUrl({
           fishList: availableFish,
           dailyRecord,
@@ -224,61 +406,113 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
           fullPosterUrl,
           `innathe-meen-menu-${dailyRecord.dateKey}.jpg`
         );
-        const files = file ? [file] : [];
-        const outcome = await shareFilesWithTextOrFallback(
-          files,
-          shareTitle,
-          messageText
-        );
-        if (outcome === 'fallback_downloaded') {
-          setCopied(true);
-          setShareNote(t(lang, 'share_multi_fallback'));
-          setShowOpenWaBtn(true);
+        if (!file) {
+          await copyMessageForFallback();
+          openWhatsAppTextLink(messageText);
+          return;
         }
+        setMenuCardFile(file);
+        const outcome = await directShareFilesWithText(
+          [file],
+          messageText,
+          shareTitle
+        );
+        await handleOutcomeFeedback(outcome);
+      } finally {
+        setBusy(false);
+      }
+      return;
+    }
+
+    // shareMode === 'all_photos'
+    if (activeTargetEntries.length === 0) {
+      openWhatsAppTextLink(messageText);
+      return;
+    }
+
+    // Synchronous zero-delay path when files are already prepared in memory
+    if (allTargetsPrepared && readyTargetFiles.length > 0) {
+      const batchSize = detectShareBatchSize(readyTargetFiles, messageText);
+      if (batchSize <= 0) {
+        await copyMessageForFallback();
+        setShareNote(t(lang, 'share_direct_unsupported'));
+        setShowOpenWaBtn(true);
         return;
       }
 
-      // shareMode === 'all_photos'
-      const targets =
-        checkedPhotoEntries.length > 0 ? checkedPhotoEntries : fishPhotoEntries;
-      if (targets.length === 0) {
-        if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
-          try {
-            await navigator.share({
-              title: shareTitle,
-              text: messageText,
-            });
-            return;
-          } catch (err) {
-            if (err instanceof DOMException && err.name === 'AbortError') return;
-          }
-        }
-        openWhatsAppTextLink(messageText);
+      const batches = splitIntoShareBatches(readyTargetFiles, batchSize);
+      const currentIdx = sentBatchCount < batches.length ? sentBatchCount : 0;
+      const batchFiles = batches[currentIdx];
+      const batchText =
+        currentIdx === 0
+          ? messageText
+          : `${shareTitle} (${currentIdx + 1}/${batches.length})`;
+
+      const outcome = await directShareFilesWithText(
+        batchFiles,
+        batchText,
+        shareTitle
+      );
+
+      if (outcome === 'batch_required' && batchFiles.length > 1) {
+        // Split further cleanly without downloading anything
+        const smallerBatches = splitIntoShareBatches(
+          readyTargetFiles,
+          Math.max(1, Math.floor(batchFiles.length / 2))
+        );
+        const firstOutcome = await directShareFilesWithText(
+          smallerBatches[0],
+          messageText,
+          shareTitle
+        );
+        await handleOutcomeFeedback(firstOutcome, 0, smallerBatches.length);
         return;
       }
-      const converted = await Promise.all(
-        targets.map((item) =>
-          imageSrcToJpegFile(
+
+      await handleOutcomeFeedback(outcome, currentIdx, batches.length);
+      return;
+    }
+
+    // Fallback preparation only for any files not yet finished in background
+    setBusy(true);
+    try {
+      const nextPrepared: Record<string, File> = { ...preparedFiles };
+      await Promise.all(
+        activeTargetEntries.map(async (item) => {
+          if (nextPrepared[item.fish.id]) return;
+          const file = await imageSrcToJpegFile(
             item.src,
             buildPosterFilename(item.fish.id, dailyRecord.dateKey)
-          )
-        )
+          );
+          if (file) nextPrepared[item.fish.id] = file;
+        })
       );
-      const files = converted.filter((f): f is File => f !== null);
+      setPreparedFiles(nextPrepared);
+
+      const files = activeTargetEntries
+        .map((item) => nextPrepared[item.fish.id])
+        .filter((f): f is File => Boolean(f));
+
       if (files.length === 0) {
         openWhatsAppTextLink(messageText);
         return;
       }
-      const outcome = await shareFilesWithTextOrFallback(
-        files,
-        shareTitle,
-        messageText
-      );
-      if (outcome === 'fallback_downloaded') {
-        setCopied(true);
-        setShareNote(t(lang, 'share_multi_fallback'));
+
+      const batchSize = detectShareBatchSize(files, messageText);
+      if (batchSize <= 0) {
+        await copyMessageForFallback();
+        setShareNote(t(lang, 'share_direct_unsupported'));
         setShowOpenWaBtn(true);
+        return;
       }
+
+      const batches = splitIntoShareBatches(files, batchSize);
+      const outcome = await directShareFilesWithText(
+        batches[0],
+        messageText,
+        shareTitle
+      );
+      await handleOutcomeFeedback(outcome, 0, batches.length);
     } finally {
       setBusy(false);
     }
@@ -286,32 +520,49 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
 
   const handleShareSinglePhoto = async (fish: FishItem, src: string) => {
     if (busy) return;
+    const caption = `${fish.nameMl} — ${
+      msgLang === 'en' ? settings.whatsappGroupNameEn : settings.whatsappGroupNameMl
+    }`;
+
+    const cachedFile = preparedFiles[fish.id];
+    if (cachedFile) {
+      const outcome = await directShareFilesWithText(
+        [cachedFile],
+        caption,
+        fish.nameMl
+      );
+      await handleOutcomeFeedback(outcome);
+      return;
+    }
+
     setBusy(true);
     try {
       const filename = buildPosterFilename(fish.id, dailyRecord.dateKey);
       const file = await imageSrcToJpegFile(src, filename);
       if (!file) return;
-      const readerUrl = await new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(String(reader.result));
-        reader.readAsDataURL(file);
-      });
-      const outcome = await sharePosterFileOrFallback(
-        readerUrl,
-        filename,
-        fish.nameMl,
-        `${fish.nameMl} — ${
-          msgLang === 'en' ? settings.whatsappGroupNameEn : settings.whatsappGroupNameMl
-        }`
-      );
-      if (outcome === 'fallback_downloaded') {
-        setShareNote(t(lang, 'share_fallback'));
-        setShowOpenWaBtn(true);
-      }
+      setPreparedFiles((prev) => ({ ...prev, [fish.id]: file }));
+      const outcome = await directShareFilesWithText([file], caption, fish.nameMl);
+      await handleOutcomeFeedback(outcome);
     } finally {
       setBusy(false);
     }
   };
+
+  const primaryCtaLabel = (() => {
+    if (busy) return t(lang, 'share_preparing');
+    if (shareMode === 'text_only') return t(lang, 'share_whatsapp');
+    if (shareMode === 'all_photos' && isMultiBatch) {
+      const partNo = activeBatchIndex + 1;
+      const totalParts = shareBatches.length;
+      const startNum = activeBatchIndex * detectedBatchSize + 1;
+      const endNum = Math.min(
+        readyTargetFiles.length,
+        startNum + shareBatches[activeBatchIndex].length - 1
+      );
+      return `${t(lang, 'share_send_batch_prefix')} ${partNo}/${totalParts} (${startNum}–${endNum})`;
+    }
+    return t(lang, 'share_photos_and_list');
+  })();
 
   return (
     <div
@@ -482,11 +733,31 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
               {/* Mode 2: Individual Selected Fish Photos */}
               {shareMode === 'all_photos' && fishPhotoEntries.length > 0 && (
                 <div className="space-y-2">
-                  <p className="text-xs font-bold text-slate-700 dark:text-neutral-300 leading-snug">
-                    {t(lang, 'selected_photos_to_send')} (
-                    <span className="tabular-nums">{checkedPhotoEntries.length}</span>/
-                    <span className="tabular-nums">{fishPhotoEntries.length}</span>)
-                  </p>
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <p className="text-xs font-bold text-slate-700 dark:text-neutral-300 leading-snug">
+                      {t(lang, 'selected_photos_to_send')} (
+                      <span className="tabular-nums">{checkedPhotoEntries.length}</span>/
+                      <span className="tabular-nums">{fishPhotoEntries.length}</span>)
+                    </p>
+                    <span
+                      className={`text-[11px] font-semibold px-2 py-0.5 rounded-lg tabular-nums ${
+                        allTargetsPrepared
+                          ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                          : 'bg-slate-100 dark:bg-neutral-900 text-slate-600 dark:text-neutral-400'
+                      }`}
+                    >
+                      {allTargetsPrepared
+                        ? `${t(lang, 'share_photos_ready')} ✓`
+                        : `${t(lang, 'share_preparing')} (${readyTargetFiles.length}/${activeTargetEntries.length})`}
+                    </span>
+                  </div>
+
+                  {isMultiBatch && (
+                    <div className="rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 px-3 py-2 text-xs font-medium text-amber-900 dark:text-amber-200 leading-relaxed">
+                      {t(lang, 'share_batch_notice')}
+                    </div>
+                  )}
+
                   <div className="space-y-2">
                     {fishPhotoEntries.map(({ fish, src }) => {
                       const isChecked = !!selectedPhotoIds[fish.id];
@@ -602,13 +873,7 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
               className="min-h-[48px] px-4 py-3 rounded-2xl bg-emerald-600 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 hover:bg-emerald-700 disabled:opacity-60 leading-snug text-center"
             >
               <MessageCircle className="w-5 h-5 shrink-0" />
-              <span className="break-words">
-                {busy
-                  ? t(lang, 'share_preparing')
-                  : shareMode === 'text_only'
-                    ? t(lang, 'share_whatsapp')
-                    : t(lang, 'share_photos_and_list')}
-              </span>
+              <span className="break-words">{primaryCtaLabel}</span>
             </button>
           </div>
         )}

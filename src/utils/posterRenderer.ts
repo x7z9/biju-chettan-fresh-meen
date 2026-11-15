@@ -445,17 +445,55 @@ export function resolveFishBestPhotoSrc(
   );
 }
 
+const preparedShareFileCache = new Map<string, File>();
+
 export async function imageSrcToJpegFile(
   src: string,
   filename: string
 ): Promise<File | null> {
+  const cacheKey = `${src}::${filename}`;
+  const cached = preparedShareFileCache.get(cacheKey);
+  if (cached) return cached;
+
   try {
     if (src.startsWith('data:image/jpeg')) {
       const blob = dataUrlToBlob(src);
-      return new File([blob], filename, { type: 'image/jpeg' });
+      const file = new File([blob], filename, { type: 'image/jpeg' });
+      if (preparedShareFileCache.size >= 60) {
+        const firstKey = preparedShareFileCache.keys().next().value;
+        if (firstKey) preparedShareFileCache.delete(firstKey);
+      }
+      preparedShareFileCache.set(cacheKey, file);
+      return file;
     }
+
+    // Fast path for already-compact same-origin JPEG assets (no slow canvas re-encode)
+    if (!src.startsWith('data:') && /\.jpe?g(?:[?#]|$)/i.test(src)) {
+      try {
+        const res = await fetch(src, { credentials: 'same-origin' });
+        if (res.ok) {
+          const blob = await res.blob();
+          if (blob.size > 0 && blob.size <= 1.5 * 1024 * 1024) {
+            const jpegBlob =
+              blob.type === 'image/jpeg'
+                ? blob
+                : new Blob([blob], { type: 'image/jpeg' });
+            const file = new File([jpegBlob], filename, { type: 'image/jpeg' });
+            if (preparedShareFileCache.size >= 60) {
+              const firstKey = preparedShareFileCache.keys().next().value;
+              if (firstKey) preparedShareFileCache.delete(firstKey);
+            }
+            preparedShareFileCache.set(cacheKey, file);
+            return file;
+          }
+        }
+      } catch {
+        // Fall back to Image + canvas conversion
+      }
+    }
+
     const img = await loadImage(src);
-    const maxDim = 1200;
+    const maxDim = 1080;
     const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
     const canvas = document.createElement('canvas');
     canvas.width = Math.max(1, Math.round(img.width * scale));
@@ -466,10 +504,16 @@ export async function imageSrcToJpegFile(
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob((b) => resolve(b), 'image/jpeg', 0.9)
+      canvas.toBlob((b) => resolve(b), 'image/jpeg', 0.86)
     );
     if (!blob) return null;
-    return new File([blob], filename, { type: 'image/jpeg' });
+    const file = new File([blob], filename, { type: 'image/jpeg' });
+    if (preparedShareFileCache.size >= 60) {
+      const firstKey = preparedShareFileCache.keys().next().value;
+      if (firstKey) preparedShareFileCache.delete(firstKey);
+    }
+    preparedShareFileCache.set(cacheKey, file);
+    return file;
   } catch {
     return null;
   }

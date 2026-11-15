@@ -5,7 +5,7 @@ import type {
   Language,
   PriceUnit,
 } from '../types';
-import { dataUrlToBlob, downloadBlob } from './speechAndDate';
+import { dataUrlToBlob } from './speechAndDate';
 
 function unitSuffix(unit: PriceUnit | undefined, lang: Language): string {
   if (lang === 'en') {
@@ -67,78 +67,154 @@ export function buildWhatsAppListMessage(
   return lines.join('\n');
 }
 
-export async function sharePosterFileOrFallback(
+export type DirectShareOutcome =
+  | 'shared'
+  | 'shared_caption_copied'
+  | 'cancelled'
+  | 'gesture_expired'
+  | 'batch_required'
+  | 'unsupported';
+
+const MAX_BROWSER_SHARE_FILES = 10;
+
+function canSharePayload(data: ShareData): boolean {
+  if (typeof navigator === 'undefined' || typeof navigator.share !== 'function') {
+    return false;
+  }
+  if (typeof navigator.canShare !== 'function') {
+    return true;
+  }
+  try {
+    return navigator.canShare(data);
+  } catch {
+    return false;
+  }
+}
+
+export function isSingleFileShareSupported(sampleFile?: File): boolean {
+  if (typeof navigator === 'undefined' || typeof navigator.share !== 'function') {
+    return false;
+  }
+  if (typeof navigator.canShare !== 'function') {
+    return true;
+  }
+  const probe =
+    sampleFile ||
+    new File([new Uint8Array([0xff, 0xd8, 0xff])], 'probe.jpg', {
+      type: 'image/jpeg',
+    });
+  return canSharePayload({ files: [probe] });
+}
+
+export function detectShareBatchSize(files: File[], text?: string): number {
+  if (files.length === 0) return 0;
+  const ceiling = Math.min(files.length, MAX_BROWSER_SHARE_FILES);
+  const candidates = [ceiling, 8, 5, 3, 1].filter(
+    (n, idx, arr) => n > 0 && n <= files.length && arr.indexOf(n) === idx
+  );
+  for (const size of candidates) {
+    const slice = files.slice(0, size);
+    if (
+      (text && canSharePayload({ files: slice, text })) ||
+      canSharePayload({ files: slice })
+    ) {
+      return size;
+    }
+  }
+  return 0;
+}
+
+export function splitIntoShareBatches(files: File[], maxPerBatch: number): File[][] {
+  if (files.length === 0) return [];
+  const step = Math.max(1, maxPerBatch);
+  const batches: File[][] = [];
+  for (let i = 0; i < files.length; i += step) {
+    batches.push(files.slice(i, i + step));
+  }
+  return batches;
+}
+
+async function copyTextQuietly(text: string): Promise<void> {
+  if (!text || typeof navigator === 'undefined' || !navigator.clipboard?.writeText) {
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    // Ignore clipboard rejection
+  }
+}
+
+export async function directShareFilesWithText(
+  files: File[],
+  text: string,
+  title?: string
+): Promise<DirectShareOutcome> {
+  if (
+    files.length === 0 ||
+    typeof navigator === 'undefined' ||
+    typeof navigator.share !== 'function'
+  ) {
+    return 'unsupported';
+  }
+
+  // Chromium / Android Web Share API enforces <= 10 files (and payload cap)
+  if (files.length > MAX_BROWSER_SHARE_FILES) {
+    return 'batch_required';
+  }
+
+  const supportsFilesAndText =
+    canSharePayload({ files, text }) ||
+    (title ? canSharePayload({ files, text, title }) : false);
+  const supportsFilesOnly = canSharePayload({ files });
+
+  if (!supportsFilesAndText && !supportsFilesOnly) {
+    // Could be too many files for this device even below 10 (e.g., total MB or OS cap)
+    if (files.length > 1 && isSingleFileShareSupported(files[0])) {
+      return 'batch_required';
+    }
+    return 'unsupported';
+  }
+
+  try {
+    if (supportsFilesAndText) {
+      await navigator.share({
+        files,
+        text,
+        ...(title && canSharePayload({ files, text, title }) ? { title } : {}),
+      });
+      return 'shared';
+    }
+
+    // Platform allows sharing files only without inline text; share immediately and copy caption for paste
+    await navigator.share({ files });
+    await copyTextQuietly(text);
+    return 'shared_caption_copied';
+  } catch (err) {
+    if (err instanceof DOMException) {
+      if (err.name === 'AbortError') {
+        return 'cancelled';
+      }
+      if (err.name === 'NotAllowedError') {
+        return 'gesture_expired';
+      }
+    }
+    if (files.length > 1 && isSingleFileShareSupported(files[0])) {
+      return 'batch_required';
+    }
+    return 'unsupported';
+  }
+}
+
+export async function sharePosterFileDirect(
   posterDataUrl: string,
   filename: string,
   title: string,
   text: string
-): Promise<'shared' | 'fallback_downloaded'> {
+): Promise<DirectShareOutcome> {
   const blob = dataUrlToBlob(posterDataUrl);
   const file = new File([blob], filename, { type: 'image/jpeg' });
-
-  if (
-    typeof navigator !== 'undefined' &&
-    typeof navigator.share === 'function' &&
-    typeof navigator.canShare === 'function' &&
-    navigator.canShare({ files: [file] })
-  ) {
-    try {
-      await navigator.share({
-        files: [file],
-        title,
-        text,
-      });
-      return 'shared';
-    } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') {
-        return 'shared';
-      }
-      // Fall through to download + wa.me fallback
-    }
-  }
-
-  downloadBlob(blob, filename);
-  return 'fallback_downloaded';
-}
-
-export async function shareFilesWithTextOrFallback(
-  files: File[],
-  title: string,
-  text: string
-): Promise<'shared' | 'fallback_downloaded'> {
-  if (
-    files.length > 0 &&
-    typeof navigator !== 'undefined' &&
-    typeof navigator.share === 'function' &&
-    typeof navigator.canShare === 'function' &&
-    navigator.canShare({ files })
-  ) {
-    try {
-      await navigator.share({
-        files,
-        title,
-        text,
-      });
-      return 'shared';
-    } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') {
-        return 'shared';
-      }
-      // Fall through to download + clipboard + WhatsApp fallback
-    }
-  }
-
-  for (const file of files) {
-    downloadBlob(file, file.name);
-  }
-  if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch {
-      // Ignore clipboard failure
-    }
-  }
-  return 'fallback_downloaded';
+  return directShareFilesWithText([file], text, title);
 }
 
 export function openWhatsAppTextLink(message: string): void {

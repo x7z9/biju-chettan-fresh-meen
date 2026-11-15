@@ -28,8 +28,7 @@ import {
   fileToOptimizedDataUrl,
 } from '../utils/speechAndDate';
 import {
-  openWhatsAppTextLink,
-  sharePosterFileOrFallback,
+  sharePosterFileDirect,
 } from '../utils/whatsappHelper';
 
 interface PosterStudioModalProps {
@@ -255,28 +254,47 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
 
   const handleShare = async () => {
     if (!actualPhotoSrc) return;
-    const hdUrl = await ensureFullResPosterUrl();
-    if (!hdUrl) return;
-    await onSavePosterAndPhoto({
-      fishId: fish.id,
-      actualPhotoDataUrl: actualPhotoSrc,
-      posterDataUrl: hdUrl,
-      background,
-    });
-    setStatusMessage(t(lang, 'saved'));
     const filename = buildPosterFilename(fish.id, dateKey);
     const caption = `${fish.nameMl} (${fish.pronunciationLatin}) — ${
       lang === 'en' ? settings.whatsappGroupNameEn : settings.whatsappGroupNameMl
     }`;
-    const outcome = await sharePosterFileOrFallback(
+
+    // If full poster is already rendered, trigger navigator.share immediately within the user gesture
+    const hdUrl =
+      isFullResReady && renderedPosterUrl
+        ? renderedPosterUrl
+        : await ensureFullResPosterUrl();
+    if (!hdUrl) return;
+
+    const outcome = await sharePosterFileDirect(
       hdUrl,
       filename,
       fish.nameMl,
       caption
     );
-    if (outcome === 'fallback_downloaded') {
-      setStatusMessage(t(lang, 'share_fallback'));
-      openWhatsAppTextLink(caption);
+
+    void onSavePosterAndPhoto({
+      fishId: fish.id,
+      actualPhotoDataUrl: actualPhotoSrc,
+      posterDataUrl: hdUrl,
+      background,
+    }).catch(() => {});
+
+    if (outcome === 'shared') {
+      setStatusMessage(t(lang, 'saved'));
+    } else if (outcome === 'shared_caption_copied') {
+      setStatusMessage(t(lang, 'share_caption_copied_note'));
+    } else if (outcome === 'gesture_expired') {
+      setStatusMessage(t(lang, 'share_tap_again_ready'));
+    } else if (outcome === 'cancelled') {
+      setStatusMessage(t(lang, 'share_cancelled_note'));
+    } else if (outcome === 'unsupported') {
+      try {
+        await navigator.clipboard?.writeText(caption);
+      } catch {
+        // Ignore clipboard errors
+      }
+      setStatusMessage(t(lang, 'share_direct_unsupported'));
     }
   };
 
