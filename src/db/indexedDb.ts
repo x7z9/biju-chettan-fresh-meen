@@ -403,7 +403,8 @@ export async function buildFullBackup(): Promise<BackupPayload> {
 
 const SAFE_BACKUP_DATA_URL_RE =
   /^data:image\/(jpeg|jpg|png|webp);base64,[A-Za-z0-9+/=]+$/i;
-const SAFE_LOCAL_ASSET_RE = /^\/?(?:[a-z0-9._-]+\/)*assets\/[a-z0-9._/-]+$/i;
+const SAFE_LOCAL_ASSET_RE =
+  /^\/?(?:[a-z0-9._-]+\/)*assets\/[a-z0-9._/-]+(?:\?v=[a-z0-9._~%-]+)?$/i;
 
 export function isSafeImageSrc(value: unknown): value is string {
   if (typeof value !== 'string' || !value) return false;

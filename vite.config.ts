@@ -12,9 +12,16 @@ function normalizeBase(raw?: string): string {
 
 export default defineConfig(() => {
   const base = normalizeBase(process.env.VITE_BASE_PATH);
+  const shaPart = (process.env.GITHUB_SHA || '').slice(0, 8);
+  const buildVersion = shaPart
+    ? `${shaPart}_${Date.now().toString(36)}`
+    : Date.now().toString(36);
 
   return {
     base,
+    define: {
+      __APP_ASSET_VERSION__: JSON.stringify(buildVersion),
+    },
     plugins: [
       react(),
       tailwindcss(),
@@ -62,8 +69,42 @@ export default defineConfig(() => {
           ],
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,json,woff,woff2}'],
+          // Precache lightweight app shell only (~1 MB) so SW updates never stall/fail on mobile
+          globPatterns: [
+            '**/*.{js,css,html,ico,svg,woff,woff2}',
+            'pwa-*.png',
+            'apple-touch-icon.png',
+          ],
+          globIgnores: [
+            'assets/aistudio/**',
+            'assets/catalog/**',
+            '**/*.md',
+            '**/*.txt',
+            '**/*.example',
+          ],
           maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+          cleanupOutdatedCaches: true,
+          skipWaiting: true,
+          clientsClaim: true,
+          ignoreURLParametersMatching: [/^v$/],
+          navigateFallbackDenylist: [/\/assets\//],
+          runtimeCaching: [
+            {
+              urlPattern: /\/assets\/(?:aistudio|catalog)\/.*\.(?:png|jpg|jpeg|webp)$/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'biju-fish-images-v3',
+                expiration: {
+                  maxEntries: 90,
+                  maxAgeSeconds: 60 * 60 * 24 * 90,
+                  purgeOnQuotaError: true,
+                },
+                cacheableResponse: {
+                  statuses: [0, 200],
+                },
+              },
+            },
+          ],
         },
         devOptions: {
           enabled: true,

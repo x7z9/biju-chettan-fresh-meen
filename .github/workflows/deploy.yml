@@ -53,7 +53,9 @@ jobs:
       - name: Build production PWA
         env:
           VITE_BASE_PATH: ${{ steps.pages_base.outputs.base }}
-        run: npm run build
+        run: |
+          npm run build
+          cp dist/index.html dist/404.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

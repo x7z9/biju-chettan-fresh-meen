@@ -171,6 +171,46 @@ export default function App() {
   }, [loadAllData]);
 
   useEffect(() => {
+    if (!isOnline || fishList.length === 0 || typeof window === 'undefined') return;
+    let cancelled = false;
+    const timer = window.setTimeout(async () => {
+      try {
+        const urls = Array.from(
+          new Set(
+            [
+              BUSINESS_LOGO_PATH,
+              ...fishList.map((f) => f.referenceImage),
+            ].filter(
+              (u): u is string =>
+                typeof u === 'string' &&
+                u.length > 0 &&
+                !u.startsWith('data:') &&
+                !u.startsWith('blob:')
+            )
+          )
+        );
+        const cache =
+          'caches' in window ? await caches.open('biju-fish-images-v3') : null;
+        for (const url of urls) {
+          if (cancelled || !navigator.onLine) break;
+          if (cache) {
+            const hit = await cache.match(url);
+            if (hit) continue;
+          }
+          await fetch(url, { credentials: 'same-origin' }).catch(() => {});
+        }
+      } catch {
+        // Non-critical offline cache warmup
+      }
+    }, 2500);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [fishList, isOnline]);
+
+  useEffect(() => {
     const isDark = theme === 'dark';
     document.documentElement.classList.toggle('dark', isDark);
     try {

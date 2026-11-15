@@ -5,6 +5,11 @@ const BASE_URL =
     ? import.meta.env.BASE_URL
     : '/';
 
+export const ASSET_VERSION =
+  typeof __APP_ASSET_VERSION__ !== 'undefined' && __APP_ASSET_VERSION__
+    ? __APP_ASSET_VERSION__
+    : '20261115';
+
 export function resolvePublicAsset(path: string): string {
   if (!path) return path;
   if (
@@ -15,11 +20,16 @@ export function resolvePublicAsset(path: string): string {
   ) {
     return path;
   }
-  const clean = path.replace(/^\/+/, '');
-  if (BASE_URL !== '/' && path.startsWith(BASE_URL)) {
-    return path;
-  }
-  return `${BASE_URL}${clean}`;
+  const pathname = path.split('?')[0].split('#')[0];
+  const assetsIdx = pathname.indexOf('assets/');
+  const clean =
+    assetsIdx >= 0
+      ? pathname.slice(assetsIdx)
+      : (BASE_URL !== '/' && pathname.startsWith(BASE_URL)
+          ? pathname.slice(BASE_URL.length)
+          : pathname
+        ).replace(/^\/+/, '');
+  return `${BASE_URL}${clean}?v=${encodeURIComponent(ASSET_VERSION)}`;
 }
 
 export const BUSINESS_LOGO_PATH = resolvePublicAsset(
