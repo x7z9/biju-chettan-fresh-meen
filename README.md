@@ -14,8 +14,6 @@
   <p>
     <a href="https://x7z9.github.io/biju-chettan-fresh-meen/"><strong>🌊 Open the App</strong></a>
     ·
-    <a href="https://github.com/x7z9/biju-chettan-fresh-meen/issues">Report an Issue</a>
-    ·
     <a href="#-getting-started">Get Started</a>
   </p>
 
@@ -359,15 +357,11 @@ Potential improvements for future releases:
 
 Roadmap items are ideas, not claims of currently implemented functionality.
 
-## 🤝 Contributing
+## 🔒 Ownership & Distribution
 
-Suggestions, bug reports, and improvements are welcome.
+This is a proprietary application. The source code, design, application assets, and implementation are reserved by the copyright holder. No licence is granted to copy, modify, redistribute, publish, or use the application commercially without prior written permission.
 
-1. Open an issue describing the problem or proposed improvement.
-2. Include clear reproduction steps and screenshots where useful.
-3. Keep changes focused and avoid exposing private data in examples.
-4. Validate changes with `npm run lint` and `npm run build`.
-5. Submit a pull request with a concise explanation of the change.
+The public website deployment is provided for application access only. The editable source code is maintained privately.
 
 ## 📄 License
 
@@ -382,8 +376,6 @@ No license has been specified in this repository's current project metadata. Unl
 
   <p>
     <a href="https://x7z9.github.io/biju-chettan-fresh-meen/">Launch Application</a>
-    ·
-    <a href="https://github.com/x7z9/biju-chettan-fresh-meen">Explore Source Code</a>
   </p>
 
 </div>
