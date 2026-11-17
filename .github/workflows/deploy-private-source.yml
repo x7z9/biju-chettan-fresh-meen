@@ -23,6 +23,7 @@ concurrency:
 
 jobs:
   build-and-publish:
+    if: github.repository == 'x7z9/biju-chettan-fresh-meen-private'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout private source
@@ -45,6 +46,10 @@ jobs:
         run: |
           npm run build
           cp dist/index.html dist/404.html
+          # Do not publish AI Studio prompts, authoring notes, source manifests, or examples.
+          find dist/assets/aistudio -type f \\( -iname '*.md' -o -iname '*.txt' -o -iname '*.example' -o -iname '*.json' -o -iname '*.webmanifest' \\) -delete
+          # The former custom business sticker is private branding, not a public app asset.
+          rm -f dist/assets/aistudio/a_high_quality_colorful_promotional_sticker_graphi_777412be.png
 
       - name: Publish compiled files only
         uses: peaceiris/actions-gh-pages@v4
