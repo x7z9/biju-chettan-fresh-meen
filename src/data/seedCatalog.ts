@@ -33,20 +33,18 @@ export function resolvePublicAsset(path: string): string {
   return `${BASE_URL}${clean}?v=${encodeURIComponent(ASSET_VERSION)}`;
 }
 
-export const BUSINESS_LOGO_PATH = resolvePublicAsset(
-  '/assets/aistudio/a_high_quality_colorful_promotional_sticker_graphi_777412be.png'
-);
+export const BUSINESS_LOGO_PATH = resolvePublicAsset('/icon.svg');
 
 export const DEFAULT_BUSINESS_SETTINGS: BusinessSettings = {
-  businessNameMl: 'ബിജു ചേട്ടന്റെ ഫ്രെഷ് മീൻ',
-  businessNameEn: 'Biju Chettante Fresh Fish',
-  whatsappGroupNameMl: 'ബിജു ചേട്ടന്റെ ഫ്രെഷ് മീൻ വണ്ടി',
-  whatsappGroupNameEn: 'Biju Chettante Fresh Meen Vandi',
-  ownerName: 'ബിജു R',
-  locationMl: 'ഒച്ചിറ – തെക്കു കൊച്ചുമുറി, കൃഷ്ണപുരം',
-  locationEn: 'Oachira – Thekku Kochumuri, Krishnapuram, Kerala, India',
-  phoneDisplay: '+91 95444 33018',
-  phoneDigits: '919544433018',
+  businessNameMl: 'മത്സ്യവിൽപ്പന കേന്ദ്രം',
+  businessNameEn: 'Fish & Seafood Seller',
+  whatsappGroupNameMl: '',
+  whatsappGroupNameEn: '',
+  ownerName: '',
+  locationMl: '',
+  locationEn: '',
+  phoneDisplay: '',
+  phoneDigits: '',
   posterHeadingMl: 'ഇന്നത്തെ മീൻ',
   posterHeadingEn: "Today's Fish",
   disclaimerMl: 'സൂചന: പരസ്യത്തിനായുള്ള സൃഷ്ടിപരമായ ദൃശ്യാവിഷ്കാരം.',
@@ -54,11 +52,11 @@ export const DEFAULT_BUSINESS_SETTINGS: BusinessSettings = {
   showDisclaimerOnPoster: true,
   posterLanguage: 'ml',
   defaultBackground: 'banana-leaf',
-  showPhoneToCustomers: true,
+  showPhoneToCustomers: false,
   showDirectionsLink: false,
   mapsQueryUrl: '',
   snapshotDefaults: {
-    includePhone: true,
+    includePhone: false,
     includePrices: true,
     includeQuantity: true,
     includeNotes: true,
