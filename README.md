@@ -34,6 +34,14 @@
 
 </div>
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/x7z9/biju-chettan-fresh-meen/main/public/assets/catalog/chemmeen.jpg" width="30%" alt="Prawn catalogue image" />
+  <img src="https://raw.githubusercontent.com/x7z9/biju-chettan-fresh-meen/main/public/assets/catalog/njandu.jpg" width="30%" alt="Crab catalogue image" />
+  <img src="https://raw.githubusercontent.com/x7z9/biju-chettan-fresh-meen/main/public/assets/catalog/neymeen.jpg" width="30%" alt="Fish catalogue image" />
+</p>
+
+<p align="center"><em>A visual-first fish and seafood catalogue with reusable photos and daily sharing tools.</em></p>
+
 ---
 
 ## 🌅 About the Project
