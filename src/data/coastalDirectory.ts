@@ -45,7 +45,7 @@ export const COASTAL_DIRECTORY_ENTRIES: CoastalDirectoryEntry[] = [
     placeEn: 'Kollam – Alappuzha District border',
     typeMl: 'കായൽ / പ്രാദേശിക വിപണന മേഖല',
     typeEn: 'Backwater & local neighbourhood catch area',
-    contactOrSource: 'Seller service area (Biju Chettante Fresh Fish)',
+    contactOrSource: 'Local seller service area',
     notesMl: 'കായൽ കരിമീൻ, കായൽ കൂരി, ചെമ്മീൻ, പ്രാദേശിക കടൽ മീനുകൾ എന്നിവയുടെ പ്രധാന വിതരണ മേഖല.',
     notesEn: 'Service zone known for backwater Pearlspot, catfish, prawns, and coastal landings.',
     verifiedAt: '2026-11-17',
