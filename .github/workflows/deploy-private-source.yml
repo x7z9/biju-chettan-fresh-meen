@@ -1,0 +1,57 @@
+name: Build privately and publish GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'package.json'
+      - 'bun.lock'
+      - 'tsconfig.json'
+      - 'vite.config.ts'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: private-build-public-pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout private source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Type-check
+        run: npm run lint
+
+      - name: Build for the existing GitHub Pages URL
+        env:
+          VITE_BASE_PATH: /biju-chettan-fresh-meen/
+        run: |
+          npm run build
+          cp dist/index.html dist/404.html
+
+      - name: Publish compiled files only
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+          external_repository: x7z9/biju-chettan-fresh-meen
+          publish_branch: main
+          publish_dir: ./dist
+          force_orphan: true
+          commit_message: 'Deploy ${{ github.sha }}'
