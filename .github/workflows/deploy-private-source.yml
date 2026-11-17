@@ -50,6 +50,10 @@ jobs:
           find dist/assets/aistudio -type f \\( -iname '*.md' -o -iname '*.txt' -o -iname '*.example' -o -iname '*.json' -o -iname '*.webmanifest' \\) -delete
           # The former custom business sticker is private branding, not a public app asset.
           rm -f dist/assets/aistudio/a_high_quality_colorful_promotional_sticker_graphi_777412be.png
+          # Remove unreferenced private/uploaded example photos from the authoring workspace.
+          rm -f dist/assets/aistudio/802e626a-9700-4120-ae87-f8f4e6465b33_53a6a824.jpg
+          rm -f dist/assets/aistudio/85e7c938-82fb-4006-816d-98b26711c9b3_65a25555.jpg
+          rm -f dist/assets/aistudio/9e88a73e-4fc3-499a-8f6f-44cc4de7c070_b5e5a836.jpg
 
       - name: Publish compiled files only
         uses: peaceiris/actions-gh-pages@v4
