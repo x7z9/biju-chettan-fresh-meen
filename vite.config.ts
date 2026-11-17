@@ -86,7 +86,7 @@ export default defineConfig(() => {
           cleanupOutdatedCaches: true,
           skipWaiting: true,
           clientsClaim: true,
-          ignoreURLParametersMatching: [/^v$/],
+          ignoreURLParametersMatching: [/^v$/, /^view$/],
           navigateFallbackDenylist: [/\/assets\//],
           runtimeCaching: [
             {

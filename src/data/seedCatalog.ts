@@ -1,3 +1,4 @@
+import { DEFAULT_MESSAGE_TEMPLATES } from './coastalDirectory';
 import type { BusinessSettings, FishItem } from '../types';
 
 const BASE_URL =
@@ -8,7 +9,7 @@ const BASE_URL =
 export const ASSET_VERSION =
   typeof __APP_ASSET_VERSION__ !== 'undefined' && __APP_ASSET_VERSION__
     ? __APP_ASSET_VERSION__
-    : '20261115';
+    : '20261117';
 
 export function resolvePublicAsset(path: string): string {
   if (!path) return path;
@@ -39,11 +40,11 @@ export const BUSINESS_LOGO_PATH = resolvePublicAsset(
 export const DEFAULT_BUSINESS_SETTINGS: BusinessSettings = {
   businessNameMl: 'ബിജു ചേട്ടന്റെ ഫ്രെഷ് മീൻ',
   businessNameEn: 'Biju Chettante Fresh Fish',
-  whatsappGroupNameMl: 'ബിജുചേട്ടന്റെ ഫ്രഷ് മീൻ വണ്ടി',
+  whatsappGroupNameMl: 'ബിജു ചേട്ടന്റെ ഫ്രെഷ് മീൻ വണ്ടി',
   whatsappGroupNameEn: 'Biju Chettante Fresh Meen Vandi',
-  ownerName: 'Biju',
-  locationMl: 'ഒച്ചിറ – കൃഷ്ണപുരം',
-  locationEn: 'Oachira – Krishnapuram, Kerala, India',
+  ownerName: 'ബിജു R',
+  locationMl: 'ഒച്ചിറ – തെക്കു കൊച്ചുമുറി, കൃഷ്ണപുരം',
+  locationEn: 'Oachira – Thekku Kochumuri, Krishnapuram, Kerala, India',
   phoneDisplay: '+91 95444 33018',
   phoneDigits: '919544433018',
   posterHeadingMl: 'ഇന്നത്തെ മീൻ',
@@ -52,7 +53,19 @@ export const DEFAULT_BUSINESS_SETTINGS: BusinessSettings = {
   disclaimerEn: 'Note: Creative visual representation for advertising.',
   showDisclaimerOnPoster: true,
   posterLanguage: 'ml',
-  defaultBackground: 'blue-tray',
+  defaultBackground: 'banana-leaf',
+  showPhoneToCustomers: true,
+  showDirectionsLink: false,
+  mapsQueryUrl: '',
+  snapshotDefaults: {
+    includePhone: true,
+    includePrices: true,
+    includeQuantity: true,
+    includeNotes: true,
+    includeDirections: false,
+    customerLang: 'ml',
+  },
+  messageTemplates: DEFAULT_MESSAGE_TEMPLATES,
 };
 
 export const REFERENCE_SHEET_PATH = resolvePublicAsset(
@@ -207,7 +220,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'karimeen',
-    referenceNumber: null,
+    referenceNumber: 11,
     nameMl: 'കരിമീൻ',
     pronunciationLatin: 'Karimeen',
     aliasesMl: ['പൊള്ളക്കരിമീൻ'],
@@ -245,7 +258,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'neymeen',
-    referenceNumber: null,
+    referenceNumber: 12,
     nameMl: 'നെയ്മീൻ',
     pronunciationLatin: 'Neymeen / Ayakkoora',
     aliasesMl: ['അയക്കൂറ'],
@@ -284,7 +297,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'vella_avoli',
-    referenceNumber: null,
+    referenceNumber: 13,
     nameMl: 'വെള്ള ആവോലി',
     pronunciationLatin: 'Vella Avoli',
     aliasesMl: ['ആവോലി'],
@@ -317,7 +330,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'karutha_avoli',
-    referenceNumber: null,
+    referenceNumber: 14,
     nameMl: 'കറുത്ത ആവോലി',
     pronunciationLatin: 'Karutha Avoli',
     aliasesMl: ['ആവോലി'],
@@ -350,7 +363,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'kaalanchi',
-    referenceNumber: null,
+    referenceNumber: 15,
     nameMl: 'കാളാഞ്ചി',
     pronunciationLatin: 'Kaalanchi',
     aliasesMl: ['നരിമീൻ'],
@@ -383,7 +396,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'kilimeen',
-    referenceNumber: null,
+    referenceNumber: 16,
     nameMl: 'കിളിമീൻ',
     pronunciationLatin: 'Kilimeen',
     aliasesMl: ['ചെമ്പൻ കിളിമീൻ'],
@@ -417,7 +430,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'natholi',
-    referenceNumber: null,
+    referenceNumber: 17,
     nameMl: 'നത്തോലി',
     pronunciationLatin: 'Natholi / Kozhuva',
     aliasesMl: ['കൊഴുവ', 'നെത്തോലി'],
@@ -451,7 +464,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'chempalli',
-    referenceNumber: null,
+    referenceNumber: 18,
     nameMl: 'ചെമ്പല്ലി',
     pronunciationLatin: 'Chempalli',
     aliasesMl: ['ചെമ്പൻ'],
@@ -485,7 +498,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'maanthal',
-    referenceNumber: null,
+    referenceNumber: 19,
     nameMl: 'മാന്തൾ',
     pronunciationLatin: 'Maanthal / Nangu',
     aliasesMl: ['നങ്ങ്'],
@@ -519,7 +532,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'poomeen',
-    referenceNumber: null,
+    referenceNumber: 20,
     nameMl: 'പൂമീൻ',
     pronunciationLatin: 'Poomeen',
     nameEn: 'Milkfish',
@@ -551,7 +564,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'sheelavu',
-    referenceNumber: null,
+    referenceNumber: 21,
     nameMl: 'ശീലാവ്',
     pronunciationLatin: 'Sheelavu',
     nameEn: 'Barracuda (Pickhandle barracuda group)',
@@ -584,7 +597,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'karikkadi_chemmeen',
-    referenceNumber: null,
+    referenceNumber: 22,
     catalogueGroup: 'seafood_other',
     seafoodClass: 'crustacean',
     nameMl: 'കരിക്കാടി ചെമ്മീൻ',
@@ -630,7 +643,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'chemmeen',
-    referenceNumber: null,
+    referenceNumber: 23,
     catalogueGroup: 'seafood_other',
     seafoodClass: 'crustacean',
     nameMl: 'ചെമ്മീൻ',
@@ -666,7 +679,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'njandu',
-    referenceNumber: null,
+    referenceNumber: 24,
     catalogueGroup: 'seafood_other',
     seafoodClass: 'crustacean',
     nameMl: 'ഞണ്ട്',
@@ -708,7 +721,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'kakka',
-    referenceNumber: null,
+    referenceNumber: 25,
     catalogueGroup: 'seafood_other',
     seafoodClass: 'bivalve_mollusc',
     nameMl: 'കക്ക',
@@ -754,7 +767,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'kanava',
-    referenceNumber: null,
+    referenceNumber: 26,
     catalogueGroup: 'seafood_other',
     seafoodClass: 'cephalopod',
     nameMl: 'കണവ',
@@ -795,7 +808,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'neeraali',
-    referenceNumber: null,
+    referenceNumber: 27,
     catalogueGroup: 'seafood_other',
     seafoodClass: 'cephalopod',
     nameMl: 'നീരാളി',
@@ -836,7 +849,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'vatta',
-    referenceNumber: null,
+    referenceNumber: 28,
     catalogueGroup: 'finfish',
     seafoodClass: 'finfish',
     nameMl: 'വറ്റ',
@@ -873,7 +886,7 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
   },
   {
     id: 'kora',
-    referenceNumber: null,
+    referenceNumber: 29,
     catalogueGroup: 'finfish',
     seafoodClass: 'finfish',
     nameMl: 'കോര',
@@ -906,5 +919,117 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
     preferredBackground: 'banana-leaf',
     createdAt: BASE_TIMESTAMP + 82,
     updatedAt: BASE_TIMESTAMP + 82,
+  },
+  {
+    id: 'njandu_three_spot',
+    referenceNumber: 30,
+    catalogueGroup: 'seafood_other',
+    seafoodClass: 'crustacean',
+    nameMl: 'ഞണ്ട്',
+    pronunciationLatin: 'Njandu (Three-spot Crab)',
+    aliasesMl: ['പുള്ളി ഞണ്ട്', 'മുക്കണ്ണൻ ഞണ്ട്', 'കടൽ ഞണ്ട്'],
+    nameEn: 'Three-spot swimming crab',
+    scientificName: 'Portunus sanguinolentus',
+    family: 'Portunidae',
+    speciesNote: 'Three-spot marine swimming crab (Portunus sanguinolentus) landed along the Kerala–Oachira coast and sold locally under ഞണ്ട്.',
+    identificationFeatures: 'Olive-brown to greenish speckled carapace marked by three prominent maroon-red spots edged with pale white rings on the posterior half, sharp lateral carapace spines, and pale-tipped claws with blue swimming paddles.',
+    habitatSummary: 'Sandy and muddy nearshore coastal waters and estuaries across Kerala.',
+    imageMethod: 'Seller-supplied banana-leaf showcase photo preserving exact Malayalam name ഞണ്ട്.',
+    sourceReferences: [
+      {
+        title: 'ICAR-CMFRI: Training Manual on Marine Commercial Crabs of India (Eprint 11869)',
+        url: 'https://eprints.cmfri.org.in/11869/1/Training%20Manual%20on%20Species%20Identification_2017_Josileen%20Jose_Crab.pdf',
+        accessedAt: '2026-11-17',
+      },
+      {
+        title: 'MPEDA: Crustaceans — Swimming crabs',
+        url: 'https://mpeda.gov.in/?page_id=1263',
+        accessedAt: '2026-11-17',
+      },
+      {
+        title: 'WoRMS: Portunus sanguinolentus',
+        url: 'https://www.marinespecies.org/',
+        accessedAt: '2026-11-17',
+      },
+    ],
+    identificationConfidence: 'confirmed',
+    referenceImage: '/assets/aistudio/85e7c938-82fb-4006-816d-98b26711c9b3_65a25555.jpg',
+    isReferenceArtworkOnly: true,
+    customActualPhotos: [],
+    preferredBackground: 'banana-leaf',
+    createdAt: BASE_TIMESTAMP + 81,
+    updatedAt: BASE_TIMESTAMP + 81,
+  },
+  {
+    id: 'chemkalava_meen',
+    referenceNumber: 31,
+    catalogueGroup: 'finfish',
+    seafoodClass: 'finfish',
+    nameMl: 'ചെങ്കലവ മീൻ',
+    pronunciationLatin: 'Chemkalava Meen',
+    aliasesMl: ['ചെങ്കലവ', 'കിളിമീൻ'],
+    nameEn: 'Threadfin bream / Pink perch (Chemkalava)',
+    scientificName: 'Nemipterus japonicus',
+    family: 'Nemipteridae',
+    speciesNote: 'Widely called ചെങ്കലവ മീൻ in southern Kerala / Kollam–Oachira coastal fish markets for pink perch / threadfin bream (Nemipterus spp.).',
+    identificationFeatures: 'Rosy pink-reddish upper flanks shading to a silvery-white belly with bright golden-yellow horizontal body bands, yellow chin tint, red iris eyes, and forked pink tail fin.',
+    habitatSummary: 'Demersal coastal shelf grounds over sand and mud along Kerala.',
+    imageMethod: 'Seller-supplied banana-leaf showcase photo preserving exact Malayalam name ചെങ്കലവ മീൻ.',
+    sourceReferences: [
+      {
+        title: 'FishBase: Nemipterus japonicus',
+        url: 'https://www.fishbase.org/summary/4559',
+        accessedAt: '2026-11-17',
+      },
+      {
+        title: 'ICAR-CMFRI: Vernacular names of Kerala fishes (Eprint 3635)',
+        url: 'https://eprints.cmfri.org.in/3635/',
+        accessedAt: '2026-11-17',
+      },
+    ],
+    identificationConfidence: 'probable',
+    ambiguityNote: 'ചെങ്കലവ മീൻ / കിളിമീൻ is applied across Nemipterus threadfin bream species in Kerala trawl landings; photo depicts N. japonicus.',
+    referenceImage: '/assets/aistudio/802e626a-9700-4120-ae87-f8f4e6465b33_53a6a824.jpg',
+    isReferenceArtworkOnly: true,
+    customActualPhotos: [],
+    preferredBackground: 'banana-leaf',
+    createdAt: BASE_TIMESTAMP + 80,
+    updatedAt: BASE_TIMESTAMP + 80,
+  },
+  {
+    id: 'cheelavu',
+    referenceNumber: 32,
+    catalogueGroup: 'finfish',
+    seafoodClass: 'finfish',
+    nameMl: 'ചീലാവ്',
+    pronunciationLatin: 'Cheelavu',
+    aliasesMl: ['ശീലാവ്', 'കോലാൻ ചീലാവ്'],
+    nameEn: 'Barracuda (Cheelavu)',
+    scientificName: 'Sphyraena spp.',
+    family: 'Sphyraenidae',
+    speciesNote: 'Traditional local Kerala market name ചീലാവ് for coastal barracudas (Sphyraena obtusata / Sphyraena jello group).',
+    identificationFeatures: 'Slender cylindrical silvery-bronze fish with elongated pointed snout, jutting lower jaw, prominent round eyes, small pectoral fins, and deeply forked dark-edged tail.',
+    habitatSummary: 'Inshore coastal pelagic waters, rocky reefs, and nearshore bays along Kerala.',
+    imageMethod: 'Seller-supplied banana-leaf showcase photo preserving exact Malayalam name ചീലാവ്.',
+    sourceReferences: [
+      {
+        title: 'FishBase: Sphyraena obtusata',
+        url: 'https://www.fishbase.org/summary/Sphyraena-obtusata',
+        accessedAt: '2026-11-17',
+      },
+      {
+        title: 'ICAR-CMFRI: Vernacular names of Kerala fishes (Eprint 3635)',
+        url: 'https://eprints.cmfri.org.in/3635/',
+        accessedAt: '2026-11-17',
+      },
+    ],
+    identificationConfidence: 'probable',
+    ambiguityNote: 'ചീലാവ് / ശീലാവ് covers multiple coastal Sphyraena barracuda species landed in Kerala.',
+    referenceImage: '/assets/aistudio/9e88a73e-4fc3-499a-8f6f-44cc4de7c070_b5e5a836.jpg',
+    isReferenceArtworkOnly: true,
+    customActualPhotos: [],
+    preferredBackground: 'banana-leaf',
+    createdAt: BASE_TIMESTAMP + 79,
+    updatedAt: BASE_TIMESTAMP + 79,
   },
 ];

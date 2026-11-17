@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { BUSINESS_LOGO_PATH } from '../data/seedCatalog';
 import { t } from '../data/translations';
+import { resolveEntryStatus } from '../db/indexedDb';
 import type {
   BusinessSettings,
   DailyRecord,
@@ -79,7 +80,11 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
   const [overrideBatchSize, setOverrideBatchSize] = useState<number | null>(null);
 
   const availableFish = useMemo(
-    () => fishList.filter((f) => dailyRecord.entries[f.id]?.available),
+    () =>
+      fishList.filter((f) => {
+        const st = resolveEntryStatus(dailyRecord.entries[f.id]);
+        return st === 'available' || st === 'limited';
+      }),
     [fishList, dailyRecord.entries]
   );
 
@@ -610,8 +615,19 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
     if (busy) return;
     const entry = dailyRecord.entries[fish.id];
     const parts = [fish.nameMl];
-    if (entry?.note?.trim()) parts.push(`(${entry.note.trim()})`);
-    if (dailyRecord.includePrices && entry?.priceAmount?.trim()) {
+    const publicNote = (entry?.publicNote ?? entry?.note)?.trim();
+    if (entry?.status === 'limited') {
+      parts.push(msgLang === 'en' ? '[Limited Stock]' : '[കുറച്ചു മാത്രം]');
+    }
+    if (entry?.quantityNote?.trim()) parts.push(`(${entry.quantityNote.trim()})`);
+    if (publicNote) parts.push(`(${publicNote})`);
+    if (entry?.priceOnCall) {
+      parts.push(`— ${msgLang === 'en' ? 'Call for price' : 'വില വിളിച്ചു ചോദിക്കുക'}`);
+    } else if (
+      dailyRecord.includePrices &&
+      entry?.sharePrice !== false &&
+      entry?.priceAmount?.trim()
+    ) {
       parts.push(`— ₹${entry.priceAmount.trim()}`);
     }
     const caption = `${parts.join(' ')} • ${

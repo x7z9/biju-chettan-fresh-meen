@@ -17,6 +17,7 @@ import type {
   Language,
   PosterBackground,
   PosterLanguageMode,
+  PosterTemplateStyle,
 } from '../types';
 import {
   buildPosterFilename,
@@ -67,6 +68,10 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
   const [posterLanguage, setPosterLanguage] = useState<PosterLanguageMode>(
     settings.posterLanguage
   );
+  const [templateStyle, setTemplateStyle] = useState<PosterTemplateStyle>('standard');
+  const [headingOverrideMl, setHeadingOverrideMl] = useState<string>(
+    settings.posterHeadingMl
+  );
   const [showNote, setShowNote] = useState<boolean>(settings.showDisclaimerOnPoster);
   const [zoom, setZoom] = useState(1);
   const [offsetX, setOffsetX] = useState(0);
@@ -82,11 +87,17 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
   const [statusMessage, setStatusMessage] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
+  const effectivePublicNote = entry?.publicNote ?? entry?.note;
+  const effectiveIncludePrice =
+    includePrices && entry?.sharePrice !== false && !entry?.priceOnCall;
+
   const buildRenderOptions = (previewScale: number) => ({
     fish,
     photoSrc: actualPhotoSrc,
     background,
     posterLanguage,
+    templateStyle,
+    headingOverrideMl,
     settings: { ...settings, showDisclaimerOnPoster: showNote },
     zoom,
     offsetX,
@@ -95,8 +106,8 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
     contrast,
     priceAmount: entry?.priceAmount,
     priceUnit: entry?.priceUnit,
-    includePrice: includePrices,
-    noteText: entry?.note,
+    includePrice: effectiveIncludePrice,
+    noteText: effectivePublicNote,
     previewScale,
   });
 
@@ -117,6 +128,8 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
         photoSrc: actualPhotoSrc,
         background,
         posterLanguage,
+        templateStyle,
+        headingOverrideMl,
         settings: { ...settings, showDisclaimerOnPoster: showNote },
         zoom,
         offsetX,
@@ -125,8 +138,8 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
         contrast,
         priceAmount: entry?.priceAmount,
         priceUnit: entry?.priceUnit,
-        includePrice: includePrices,
-        noteText: entry?.note,
+        includePrice: effectiveIncludePrice,
+        noteText: effectivePublicNote,
         previewScale: 0.5,
       })
         .then((fastUrl) => {
@@ -141,6 +154,8 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
               photoSrc: actualPhotoSrc,
               background,
               posterLanguage,
+              templateStyle,
+              headingOverrideMl,
               settings: { ...settings, showDisclaimerOnPoster: showNote },
               zoom,
               offsetX,
@@ -149,8 +164,8 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
               contrast,
               priceAmount: entry?.priceAmount,
               priceUnit: entry?.priceUnit,
-              includePrice: includePrices,
-              noteText: entry?.note,
+              includePrice: effectiveIncludePrice,
+              noteText: effectivePublicNote,
               previewScale: 1,
             })
               .then((hdUrl) => {
@@ -181,6 +196,8 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
     actualPhotoSrc,
     background,
     posterLanguage,
+    templateStyle,
+    headingOverrideMl,
     showNote,
     zoom,
     offsetX,
@@ -191,8 +208,8 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
     settings,
     entry?.priceAmount,
     entry?.priceUnit,
-    entry?.note,
-    includePrices,
+    effectivePublicNote,
+    effectiveIncludePrice,
     lang,
   ]);
 
@@ -494,6 +511,44 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
 
               {showControls && (
                 <div className="rounded-2xl bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-3.5 space-y-3 text-xs sm:text-sm">
+                  <div className="space-y-1.5">
+                    <span className="block font-semibold text-slate-700 dark:text-neutral-200">
+                      {t(lang, 'poster_template_label')}
+                    </span>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {(['standard', 'minimal'] as const).map((tpl) => (
+                        <button
+                          key={tpl}
+                          type="button"
+                          onClick={() => setTemplateStyle(tpl)}
+                          className={`min-h-[42px] px-2.5 py-1.5 rounded-lg text-xs font-semibold border leading-snug text-center break-words ${
+                            templateStyle === tpl
+                              ? 'bg-[#082d59] dark:bg-[#0879d9] text-white border-[#082d59] dark:border-[#0879d9]'
+                              : 'bg-white dark:bg-neutral-900 text-slate-700 dark:text-neutral-300 border-slate-200 dark:border-neutral-800'
+                          }`}
+                        >
+                          {t(lang, `poster_template_${tpl}` as const)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="poster-heading-override"
+                      className="block font-semibold text-slate-700 dark:text-neutral-200"
+                    >
+                      {t(lang, 'poster_heading_override')}
+                    </label>
+                    <input
+                      id="poster-heading-override"
+                      type="text"
+                      value={headingOverrideMl}
+                      onChange={(e) => setHeadingOverrideMl(e.target.value)}
+                      className="w-full min-h-[40px] px-3 py-1.5 rounded-lg border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-slate-900 dark:text-white text-xs sm:text-sm"
+                    />
+                  </div>
+
                   <div className="space-y-1.5">
                     <span className="block font-semibold text-slate-700 dark:text-neutral-200">
                       {t(lang, 'poster_lang_label')}

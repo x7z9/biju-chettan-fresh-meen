@@ -4,9 +4,13 @@ export type PosterBackground = 'blue-tray' | 'banana-leaf';
 
 export type PosterLanguageMode = 'ml' | 'en' | 'bilingual';
 
+export type PosterTemplateStyle = 'standard' | 'minimal';
+
 export type PriceUnit = 'per_kg' | 'per_piece' | 'per_packet';
 
-export type ActiveTab = 'today' | 'fish' | 'add' | 'more';
+export type AvailabilityStatus = 'available' | 'limited' | 'sold_out' | 'not_listed';
+
+export type EnquiryStatus = 'new' | 'replied' | 'confirmed' | 'fulfilled' | 'cancelled';
 
 export interface FishPhoto {
   id: string;
@@ -15,11 +19,16 @@ export interface FishPhoto {
   label?: string;
 }
 
-export interface FishSourceReference {
+export interface FishSourceRef {
   title: string;
   url: string;
   accessedAt: string;
 }
+
+export type IdentificationConfidence =
+  | 'confirmed'
+  | 'probable'
+  | 'needs_local_confirmation';
 
 export type CatalogueGroup = 'finfish' | 'seafood_other';
 
@@ -28,11 +37,6 @@ export type SeafoodClass =
   | 'crustacean'
   | 'bivalve_mollusc'
   | 'cephalopod';
-
-export type IdentificationConfidence =
-  | 'confirmed'
-  | 'probable'
-  | 'needs_local_confirmation';
 
 export interface FishItem {
   id: string;
@@ -50,7 +54,7 @@ export interface FishItem {
   habitatSummary?: string;
   imageMethod?: string;
   imageLicenseNote?: string;
-  sourceReferences?: FishSourceReference[];
+  sourceReferences?: FishSourceRef[];
   identificationConfidence?: IdentificationConfidence;
   ambiguityNote?: string;
   referenceImage: string | null;
@@ -64,19 +68,74 @@ export interface FishItem {
 export interface DailyFishEntry {
   fishId: string;
   available: boolean;
+  status?: AvailabilityStatus;
   note?: string;
+  publicNote?: string;
+  privateNote?: string;
+  quantityNote?: string;
+  sizeGrade?: string;
+  sourcePlace?: string;
   priceAmount?: string;
   priceUnit?: PriceUnit;
+  sharePrice?: boolean;
+  priceOnCall?: boolean;
   todayPhotoDataUrl?: string;
   todayPosterDataUrl?: string;
   updatedAt: number;
 }
 
 export interface DailyRecord {
-  dateKey: string; // YYYY-MM-DD in device local time
+  dateKey: string;
   includePrices: boolean;
   entries: Record<string, DailyFishEntry>;
   updatedAt: number;
+}
+
+export interface PosterHistoryItem {
+  id: string;
+  dateKey: string;
+  fishId: string;
+  fishNameMl: string;
+  background: PosterBackground;
+  posterDataUrl: string;
+  createdAt: number;
+}
+
+export interface TrashFishItem {
+  id: string;
+  fish: FishItem;
+  deletedAt: number;
+}
+
+export interface CustomerEnquiry {
+  id: string;
+  createdAt: number;
+  updatedAt: number;
+  dateKey: string;
+  customerName?: string;
+  customerPhone?: string;
+  fishId?: string;
+  fishNameMl: string;
+  quantityNote?: string;
+  status: EnquiryStatus;
+  note?: string;
+}
+
+export interface SnapshotDefaultPreferences {
+  includePhone: boolean;
+  includePrices: boolean;
+  includeQuantity: boolean;
+  includeNotes: boolean;
+  includeDirections: boolean;
+  customerLang: Language;
+}
+
+export interface MessageTemplateItem {
+  id: string;
+  labelMl: string;
+  labelEn: string;
+  bodyMl: string;
+  bodyEn: string;
 }
 
 export interface BusinessSettings {
@@ -96,22 +155,12 @@ export interface BusinessSettings {
   showDisclaimerOnPoster: boolean;
   posterLanguage: PosterLanguageMode;
   defaultBackground: PosterBackground;
-}
-
-export interface PosterHistoryItem {
-  id: string;
-  dateKey: string;
-  fishId: string;
-  fishNameMl: string;
-  background: PosterBackground;
-  posterDataUrl: string;
-  createdAt: number;
-}
-
-export interface TrashFishItem {
-  id: string;
-  fish: FishItem;
-  deletedAt: number;
+  showPhoneToCustomers?: boolean;
+  showDirectionsLink?: boolean;
+  mapsQueryUrl?: string;
+  lastBackupAt?: number;
+  snapshotDefaults?: SnapshotDefaultPreferences;
+  messageTemplates?: MessageTemplateItem[];
 }
 
 export interface BackupPayload {
@@ -123,4 +172,40 @@ export interface BackupPayload {
   dailyRecords: DailyRecord[];
   posterHistory: PosterHistoryItem[];
   trash?: TrashFishItem[];
+  enquiries?: CustomerEnquiry[];
 }
+
+export interface SnapshotFishItemV1 {
+  id: string;
+  refNum: number | null;
+  nameMl: string;
+  pron: string;
+  nameEn?: string;
+  status: 'available' | 'limited' | 'sold_out';
+  price?: string;
+  unit?: PriceUnit;
+  priceOnCall?: boolean;
+  qty?: string;
+  size?: string;
+  source?: string;
+  note?: string;
+  img?: string | null;
+}
+
+export interface CustomerSnapshotV1 {
+  v: 1;
+  createdAt: number;
+  dateKey: string;
+  lang: Language;
+  businessMl: string;
+  businessEn: string;
+  owner: string;
+  locMl: string;
+  locEn: string;
+  phone?: string;
+  phoneDigits?: string;
+  mapsUrl?: string;
+  items: SnapshotFishItemV1[];
+}
+
+export type ActiveTab = 'today' | 'fish' | 'add' | 'more';

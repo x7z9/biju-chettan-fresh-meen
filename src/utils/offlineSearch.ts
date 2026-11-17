@@ -315,7 +315,9 @@ function buildAppIndex(
         fish.habitatSummary || '',
         entry?.note || '',
         entry?.priceAmount || '',
-        fish.referenceNumber !== null ? `#${fish.referenceNumber}` : '',
+        fish.referenceNumber !== null
+          ? `#${String(fish.referenceNumber).padStart(2, '0')} #${fish.referenceNumber}`
+          : '',
       ].filter(Boolean),
       target: { type: 'poster', fish },
     });
@@ -507,7 +509,7 @@ function buildAppIndex(
         lang === 'en'
           ? 'Business & Poster Settings'
           : 'സ്ഥാപനവും പോസ്റ്റർ ക്രമീകരണങ്ങളും',
-      subtitle: `${settings.whatsappGroupNameMl} · ${settings.locationMl} · ${settings.phoneDisplay}`,
+      subtitle: `${settings.whatsappGroupNameMl} · ${settings.locationMl} · ${settings.ownerName} (${settings.phoneDisplay})`,
       searchTexts: [
         'settings',
         'business',
@@ -521,6 +523,7 @@ function buildAppIndex(
         settings.businessNameMl,
         settings.businessNameEn,
         settings.whatsappGroupNameMl,
+        settings.ownerName,
         settings.locationMl,
         settings.locationEn,
         settings.phoneDisplay,
@@ -599,6 +602,119 @@ function buildAppIndex(
           : 'ആപ്പ് ഭാഷ English ആക്കുക',
       searchTexts: ['language', 'malayalam', 'english', 'ഭാഷ', 'മലയാളം', 'ഇംഗ്ലീഷ്'],
       target: { type: 'switch_lang', lang: lang === 'en' ? 'ml' : 'en' },
+    },
+    {
+      id: 'act_share_customer',
+      kind: 'action',
+      title:
+        lang === 'en'
+          ? 'Share Customer View Link & Offline HTML'
+          : 'കസ്റ്റമർ പേജ് ലിങ്ക് & ഓഫ്‌ലൈൻ HTML പങ്കിടുക',
+      subtitle:
+        lang === 'en'
+          ? 'Zero-backend customer menu snapshot, QR code & standalone HTML'
+          : 'കസ്റ്റമർ പേജ്, QR കോഡ്, ഓഫ്‌ലൈൻ HTML ഫയൽ',
+      searchTexts: [
+        'customer view',
+        'snapshot',
+        'link',
+        'html',
+        'qr',
+        'qr code',
+        'കസ്റ്റമർ പേജ്',
+        'ലിങ്ക്',
+        'ക്യുആർ',
+      ],
+      target: { type: 'tab', tab: 'more', moreSection: 'qr' },
+    },
+    {
+      id: 'sec_enquiries',
+      kind: 'section',
+      title:
+        lang === 'en'
+          ? 'Local Customer Enquiries Notebook'
+          : 'ഓർഡർ / അന്വേഷണ നോട്ട്ബുക്ക്',
+      subtitle:
+        lang === 'en'
+          ? 'Record customer calls & enquiries locally on phone'
+          : 'കസ്റ്റമർ വിളിച്ച വിവരങ്ങൾ ഫോണിൽ കുറിച്ചുവയ്ക്കുക',
+      searchTexts: [
+        'enquiry',
+        'enquiries',
+        'order',
+        'orders',
+        'notebook',
+        'csv',
+        'അന്വേഷണം',
+        'ഓർഡർ',
+        'നോട്ട്ബുക്ക്',
+      ],
+      target: { type: 'tab', tab: 'more', moreSection: 'enquiries' },
+    },
+    {
+      id: 'sec_templates',
+      kind: 'section',
+      title:
+        lang === 'en'
+          ? 'Malayalam Customer Message Templates'
+          : 'മലയാളം സന്ദേശ മാതൃകകൾ (Templates)',
+      subtitle:
+        lang === 'en'
+          ? 'Quick morning catch, limited stock, sold out updates'
+          : 'രാവിലെ വരവ്, കുറച്ചു മാത്രം, തീർന്നു സന്ദേശങ്ങൾ',
+      searchTexts: [
+        'templates',
+        'message templates',
+        'quick reply',
+        'സന്ദേശ മാതൃക',
+        'ടെംപ്ലേറ്റ്',
+      ],
+      target: { type: 'tab', tab: 'more', moreSection: 'templates' },
+    },
+    {
+      id: 'sec_glossary',
+      kind: 'section',
+      title:
+        lang === 'en'
+          ? 'Fish Name Glossary (Malayalam ↔ English)'
+          : 'മീൻ പേരുകളുടെ പട്ടിക (Glossary)',
+      subtitle:
+        lang === 'en'
+          ? 'Bilingual fish names, aliases & identification confidence'
+          : 'മലയാളം, ഉച്ചാരണം, ശാസ്ത്രീയ നാമം എന്നിവ തിരയുക',
+      searchTexts: [
+        'glossary',
+        'scientific name',
+        'names',
+        'alias',
+        'ഉച്ചാരണം',
+        'ശാസ്ത്രീയ നാമം',
+      ],
+      target: { type: 'tab', tab: 'more', moreSection: 'glossary' },
+    },
+    {
+      id: 'sec_coastal_dir',
+      kind: 'section',
+      title:
+        lang === 'en'
+          ? 'Coastal Landing & Seller Directory'
+          : 'തീരദേശ മത്സ്യ കേന്ദ്രങ്ങൾ (ഒച്ചിറ – കൊല്ലം)',
+      subtitle:
+        lang === 'en'
+          ? 'Kayamkulam, Azhikkal, Neendakara, Thottappally reference'
+          : 'അഴീക്കൽ, കായംകുളം, നീണ്ടകര, തോട്ടപ്പള്ളി വിവരങ്ങൾ',
+      searchTexts: [
+        'directory',
+        'harbour',
+        'azhikkal',
+        'kayamkulam',
+        'neendakara',
+        'thottappally',
+        'ഹാർബർ',
+        'അഴീക്കൽ',
+        'കായംകുളം',
+      ],
+      target: { type: 'tab', tab: 'more', moreSection: 'directory' },
     },
   ];
 

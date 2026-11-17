@@ -1,19 +1,25 @@
+import { DEFAULT_MESSAGE_TEMPLATES } from '../data/coastalDirectory';
 import {
   DEFAULT_BUSINESS_SETTINGS,
   resolvePublicAsset,
   SEEDED_FISH_CATALOG,
 } from '../data/seedCatalog';
 import type {
+  AvailabilityStatus,
   BackupPayload,
   BusinessSettings,
+  CustomerEnquiry,
+  DailyFishEntry,
   DailyRecord,
   FishItem,
+  MessageTemplateItem,
   PosterHistoryItem,
+  SnapshotDefaultPreferences,
   TrashFishItem,
 } from '../types';
 
 const DB_NAME = 'biju_fresh_meen_db';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 const STORES = {
   FISH: 'fish',
@@ -21,6 +27,7 @@ const STORES = {
   POSTERS: 'posterHistory',
   SETTINGS: 'settings',
   TRASH: 'trash',
+  ENQUIRIES: 'enquiries',
 } as const;
 
 export class StorageQuotaError extends Error {
@@ -63,6 +70,9 @@ function openDB(): Promise<IDBDatabase> {
       }
       if (!db.objectStoreNames.contains(STORES.TRASH)) {
         db.createObjectStore(STORES.TRASH, { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains(STORES.ENQUIRIES)) {
+        db.createObjectStore(STORES.ENQUIRIES, { keyPath: 'id' });
       }
     };
 
@@ -143,6 +153,56 @@ const LEGACY_INITIAL_SEED_IDS = [
   'valiya_mathi',
 ];
 
+export function resolveEntryStatus(entry?: Partial<DailyFishEntry> | null): AvailabilityStatus {
+  if (!entry) return 'not_listed';
+  if (
+    entry.status === 'available' ||
+    entry.status === 'limited' ||
+    entry.status === 'sold_out' ||
+    entry.status === 'not_listed'
+  ) {
+    return entry.status;
+  }
+  return entry.available ? 'available' : 'not_listed';
+}
+
+export function normalizeDailyEntry(
+  fishId: string,
+  raw?: Partial<DailyFishEntry> | null
+): DailyFishEntry {
+  const status = resolveEntryStatus(raw);
+  const available = status === 'available' || status === 'limited';
+  const publicNote = raw?.publicNote !== undefined ? raw.publicNote : raw?.note;
+  return {
+    fishId: raw?.fishId || fishId,
+    available,
+    status,
+    ...(publicNote !== undefined ? { note: publicNote, publicNote } : {}),
+    ...(raw?.privateNote !== undefined ? { privateNote: raw.privateNote } : {}),
+    ...(raw?.quantityNote !== undefined ? { quantityNote: raw.quantityNote } : {}),
+    ...(raw?.sizeGrade !== undefined ? { sizeGrade: raw.sizeGrade } : {}),
+    ...(raw?.sourcePlace !== undefined ? { sourcePlace: raw.sourcePlace } : {}),
+    ...(raw?.priceAmount !== undefined ? { priceAmount: raw.priceAmount } : {}),
+    ...(raw?.priceUnit ? { priceUnit: raw.priceUnit } : {}),
+    sharePrice: raw?.sharePrice !== undefined ? Boolean(raw.sharePrice) : true,
+    priceOnCall: Boolean(raw?.priceOnCall),
+    ...(raw?.todayPhotoDataUrl ? { todayPhotoDataUrl: raw.todayPhotoDataUrl } : {}),
+    ...(raw?.todayPosterDataUrl ? { todayPosterDataUrl: raw.todayPosterDataUrl } : {}),
+    updatedAt: typeof raw?.updatedAt === 'number' ? raw.updatedAt : Date.now(),
+  };
+}
+
+export function normalizeDailyRecord(record: DailyRecord): DailyRecord {
+  const entries: Record<string, DailyFishEntry> = {};
+  for (const [k, v] of Object.entries(record.entries || {})) {
+    entries[k] = normalizeDailyEntry(k, v);
+  }
+  return {
+    ...record,
+    entries,
+  };
+}
+
 export async function initializeAndLoadCatalog(): Promise<FishItem[]> {
   const [existing, trashItems, seededRec, ackRec] = await Promise.all([
     getAllFromStore<FishItem>(STORES.FISH),
@@ -203,16 +263,58 @@ export async function initializeAndLoadCatalog(): Promise<FishItem[]> {
     acknowledged.add(seedItem.id);
   }
 
+  const seedById = new Map(SEEDED_FISH_CATALOG.map((item) => [item.id, item]));
+  let maxNumber = 0;
+  for (const s of SEEDED_FISH_CATALOG) {
+    if (s.referenceNumber !== null && s.referenceNumber > maxNumber) {
+      maxNumber = s.referenceNumber;
+    }
+  }
+  for (const item of existing) {
+    if (item.referenceNumber !== null && item.referenceNumber > maxNumber) {
+      maxNumber = item.referenceNumber;
+    }
+  }
+  for (const tItem of trashItems) {
+    if (tItem.fish.referenceNumber !== null && tItem.fish.referenceNumber > maxNumber) {
+      maxNumber = tItem.fish.referenceNumber;
+    }
+  }
+
+  const existingWithNumbers: FishItem[] = [];
+  const backfilledExisting: FishItem[] = [];
+  for (const item of existing) {
+    if (item.referenceNumber !== null) {
+      existingWithNumbers.push(item);
+      continue;
+    }
+    const seedMatch = seedById.get(item.id);
+    const assignedNumber =
+      seedMatch && seedMatch.referenceNumber !== null
+        ? seedMatch.referenceNumber
+        : ++maxNumber;
+    const updatedItem: FishItem = {
+      ...item,
+      referenceNumber: assignedNumber,
+    };
+    existingWithNumbers.push(updatedItem);
+    backfilledExisting.push(updatedItem);
+  }
+
   const needsSettingsUpdate =
     !seededRec?.value ||
     !Array.isArray(ackRec?.value) ||
-    newlyAdded.length > 0;
+    newlyAdded.length > 0 ||
+    backfilledExisting.length > 0;
 
   if (needsSettingsUpdate) {
     const db = await openDB();
     await new Promise<void>((resolve, reject) => {
       const tx = db.transaction([STORES.FISH, STORES.SETTINGS], 'readwrite');
       const fishStore = tx.objectStore(STORES.FISH);
+      for (const item of backfilledExisting) {
+        fishStore.put(item);
+      }
       for (const item of newlyAdded) {
         fishStore.put(item);
       }
@@ -226,7 +328,7 @@ export async function initializeAndLoadCatalog(): Promise<FishItem[]> {
     });
   }
 
-  const merged = [...existing, ...newlyAdded];
+  const merged = [...existingWithNumbers, ...newlyAdded];
 
   return merged
     .map((item) => ({
@@ -284,8 +386,13 @@ export async function loadTrashItems(): Promise<TrashFishItem[]> {
 
 export async function restoreFishFromTrash(trashItem: TrashFishItem): Promise<void> {
   const db = await openDB();
+  const seedMatch = SEEDED_FISH_CATALOG.find((s) => s.id === trashItem.fish.id);
   const restored: FishItem = {
     ...trashItem.fish,
+    referenceNumber:
+      trashItem.fish.referenceNumber !== null
+        ? trashItem.fish.referenceNumber
+        : (seedMatch?.referenceNumber ?? null),
     updatedAt: Date.now(),
   };
   await new Promise<void>((resolve, reject) => {
@@ -301,12 +408,21 @@ export async function restoreAllFishFromTrash(items: TrashFishItem[]): Promise<v
   if (items.length === 0) return;
   const db = await openDB();
   const now = Date.now();
+  const seedById = new Map(SEEDED_FISH_CATALOG.map((s) => [s.id, s]));
   await new Promise<void>((resolve, reject) => {
     const tx = db.transaction([STORES.FISH, STORES.TRASH], 'readwrite');
     const fishStore = tx.objectStore(STORES.FISH);
     const trashStore = tx.objectStore(STORES.TRASH);
     for (const item of items) {
-      fishStore.put({ ...item.fish, updatedAt: now });
+      const seedMatch = seedById.get(item.fish.id);
+      fishStore.put({
+        ...item.fish,
+        referenceNumber:
+          item.fish.referenceNumber !== null
+            ? item.fish.referenceNumber
+            : (seedMatch?.referenceNumber ?? null),
+        updatedAt: now,
+      });
       trashStore.delete(item.id);
     }
     tx.oncomplete = () => resolve();
@@ -337,9 +453,45 @@ export async function loadSettings(): Promise<BusinessSettings> {
     await putInStore(STORES.SETTINGS, { key: 'business', value: DEFAULT_BUSINESS_SETTINGS });
     return { ...DEFAULT_BUSINESS_SETTINGS };
   }
-  const merged = { ...DEFAULT_BUSINESS_SETTINGS, ...rec.value };
-  if (merged.whatsappGroupNameMl === 'ബിജു ചേട്ടന്റെ ഫ്രെഷ് മീൻ വണ്ടി') {
+
+  // Strictly preserve existing user-customized values (location, defaultBackground, ownerName, etc.);
+  // only populate newly introduced optional keys if absent.
+  const existing = rec.value;
+  const merged: BusinessSettings = {
+    ...DEFAULT_BUSINESS_SETTINGS,
+    ...existing,
+    snapshotDefaults: {
+      ...DEFAULT_BUSINESS_SETTINGS.snapshotDefaults!,
+      ...(existing.snapshotDefaults || {}),
+    },
+    messageTemplates:
+      Array.isArray(existing.messageTemplates) && existing.messageTemplates.length > 0
+        ? existing.messageTemplates
+        : DEFAULT_MESSAGE_TEMPLATES,
+  };
+
+  let changed = false;
+  if (merged.whatsappGroupNameMl === 'ബിജുചേട്ടന്റെ ഫ്രെഷ് മീൻ വണ്ടി') {
     merged.whatsappGroupNameMl = DEFAULT_BUSINESS_SETTINGS.whatsappGroupNameMl;
+    changed = true;
+  }
+  if (!merged.ownerName || merged.ownerName === 'Biju') {
+    merged.ownerName = DEFAULT_BUSINESS_SETTINGS.ownerName;
+    changed = true;
+  }
+  if (existing.showPhoneToCustomers === undefined) {
+    merged.showPhoneToCustomers = true;
+    changed = true;
+  }
+  if (existing.showDirectionsLink === undefined) {
+    merged.showDirectionsLink = false;
+    changed = true;
+  }
+  if (!existing.snapshotDefaults || !existing.messageTemplates) {
+    changed = true;
+  }
+
+  if (changed) {
     await putInStore(STORES.SETTINGS, { key: 'business', value: merged });
   }
   return merged;
@@ -351,7 +503,7 @@ export async function saveSettings(settings: BusinessSettings): Promise<void> {
 
 export async function loadDailyRecord(dateKey: string): Promise<DailyRecord> {
   const existing = await getFromStore<DailyRecord>(STORES.DAILY, dateKey);
-  if (existing) return existing;
+  if (existing) return normalizeDailyRecord(existing);
   const fresh: DailyRecord = {
     dateKey,
     includePrices: false,
@@ -363,12 +515,15 @@ export async function loadDailyRecord(dateKey: string): Promise<DailyRecord> {
 }
 
 export async function saveDailyRecord(record: DailyRecord): Promise<void> {
-  await putInStore(STORES.DAILY, { ...record, updatedAt: Date.now() });
+  const normalized = normalizeDailyRecord(record);
+  await putInStore(STORES.DAILY, { ...normalized, updatedAt: Date.now() });
 }
 
 export async function loadAllDailyRecords(): Promise<DailyRecord[]> {
   const records = await getAllFromStore<DailyRecord>(STORES.DAILY);
-  return records.sort((a, b) => b.dateKey.localeCompare(a.dateKey));
+  return records
+    .map(normalizeDailyRecord)
+    .sort((a, b) => b.dateKey.localeCompare(a.dateKey));
 }
 
 export async function savePosterHistoryItem(item: PosterHistoryItem): Promise<void> {
@@ -380,17 +535,32 @@ export async function loadPosterHistory(): Promise<PosterHistoryItem[]> {
   return items.sort((a, b) => b.createdAt - a.createdAt);
 }
 
+export async function loadEnquiries(): Promise<CustomerEnquiry[]> {
+  const items = await getAllFromStore<CustomerEnquiry>(STORES.ENQUIRIES);
+  return items.sort((a, b) => b.createdAt - a.createdAt);
+}
+
+export async function saveEnquiry(item: CustomerEnquiry): Promise<void> {
+  await putInStore(STORES.ENQUIRIES, item);
+}
+
+export async function deleteEnquiry(id: string): Promise<void> {
+  await deleteFromStore(STORES.ENQUIRIES, id);
+}
+
 export async function buildFullBackup(): Promise<BackupPayload> {
-  const [settings, fish, dailyRecords, posterHistory, trash] = await Promise.all([
-    loadSettings(),
-    initializeAndLoadCatalog(),
-    loadAllDailyRecords(),
-    loadPosterHistory(),
-    loadTrashItems(),
-  ]);
+  const [settings, fish, dailyRecords, posterHistory, trash, enquiries] =
+    await Promise.all([
+      loadSettings(),
+      initializeAndLoadCatalog(),
+      loadAllDailyRecords(),
+      loadPosterHistory(),
+      loadTrashItems(),
+      loadEnquiries(),
+    ]);
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     exportedAt: new Date().toISOString(),
     app: 'biju-chettante-fresh-meen',
     settings,
@@ -398,6 +568,7 @@ export async function buildFullBackup(): Promise<BackupPayload> {
     dailyRecords,
     posterHistory,
     trash,
+    enquiries,
   };
 }
 
@@ -561,11 +732,40 @@ function sanitizeDailyRecord(raw: unknown): DailyRecord | null {
       const entry = v as Record<string, unknown>;
       const safeKey = asSafeString(k, '', 120);
       if (!safeKey) continue;
+
+      const status: AvailabilityStatus =
+        entry.status === 'available' ||
+        entry.status === 'limited' ||
+        entry.status === 'sold_out' ||
+        entry.status === 'not_listed'
+          ? entry.status
+          : entry.available
+            ? 'available'
+            : 'not_listed';
+      const available = status === 'available' || status === 'limited';
+      const publicNote =
+        typeof entry.publicNote === 'string'
+          ? asSafeString(entry.publicNote, '', 200)
+          : typeof entry.note === 'string'
+            ? asSafeString(entry.note, '', 200)
+            : '';
+
       cleanEntries[safeKey] = {
         fishId: asSafeString(entry.fishId, safeKey, 120) || safeKey,
-        available: Boolean(entry.available),
-        ...(typeof entry.note === 'string' && entry.note
-          ? { note: asSafeString(entry.note, '', 200) }
+        available,
+        status,
+        ...(publicNote ? { note: publicNote, publicNote } : {}),
+        ...(typeof entry.privateNote === 'string' && entry.privateNote
+          ? { privateNote: asSafeString(entry.privateNote, '', 300) }
+          : {}),
+        ...(typeof entry.quantityNote === 'string' && entry.quantityNote
+          ? { quantityNote: asSafeString(entry.quantityNote, '', 120) }
+          : {}),
+        ...(typeof entry.sizeGrade === 'string' && entry.sizeGrade
+          ? { sizeGrade: asSafeString(entry.sizeGrade, '', 120) }
+          : {}),
+        ...(typeof entry.sourcePlace === 'string' && entry.sourcePlace
+          ? { sourcePlace: asSafeString(entry.sourcePlace, '', 120) }
           : {}),
         ...(typeof entry.priceAmount === 'string' && entry.priceAmount
           ? { priceAmount: asSafeString(entry.priceAmount, '', 30) }
@@ -575,6 +775,9 @@ function sanitizeDailyRecord(raw: unknown): DailyRecord | null {
         entry.priceUnit === 'per_packet'
           ? { priceUnit: entry.priceUnit }
           : {}),
+        sharePrice:
+          typeof entry.sharePrice === 'boolean' ? entry.sharePrice : true,
+        priceOnCall: Boolean(entry.priceOnCall),
         ...(isSafeImageSrc(entry.todayPhotoDataUrl)
           ? { todayPhotoDataUrl: entry.todayPhotoDataUrl }
           : {}),
@@ -594,6 +797,48 @@ function sanitizeDailyRecord(raw: unknown): DailyRecord | null {
   };
 }
 
+function sanitizeEnquiry(raw: unknown): CustomerEnquiry | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const e = raw as Record<string, unknown>;
+  const id = asSafeString(e.id, '', 120).trim();
+  const fishNameMl = asSafeString(e.fishNameMl, '', 160).trim();
+  const dateKey = asSafeString(e.dateKey, '', 20).trim();
+  if (!id || !fishNameMl || !/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) return null;
+
+  const status =
+    e.status === 'new' ||
+    e.status === 'replied' ||
+    e.status === 'confirmed' ||
+    e.status === 'fulfilled' ||
+    e.status === 'cancelled'
+      ? e.status
+      : 'new';
+
+  return {
+    id,
+    createdAt: asSafeNumber(e.createdAt, Date.now()),
+    updatedAt: asSafeNumber(e.updatedAt, Date.now()),
+    dateKey,
+    ...(typeof e.customerName === 'string' && e.customerName.trim()
+      ? { customerName: asSafeString(e.customerName.trim(), '', 120) }
+      : {}),
+    ...(typeof e.customerPhone === 'string' && e.customerPhone.trim()
+      ? { customerPhone: asSafeString(e.customerPhone.trim(), '', 40) }
+      : {}),
+    ...(typeof e.fishId === 'string' && e.fishId.trim()
+      ? { fishId: asSafeString(e.fishId.trim(), '', 120) }
+      : {}),
+    fishNameMl,
+    ...(typeof e.quantityNote === 'string' && e.quantityNote.trim()
+      ? { quantityNote: asSafeString(e.quantityNote.trim(), '', 120) }
+      : {}),
+    status,
+    ...(typeof e.note === 'string' && e.note.trim()
+      ? { note: asSafeString(e.note.trim(), '', 300) }
+      : {}),
+  };
+}
+
 export function validateBackupPayload(raw: unknown): BackupPayload | null {
   if (!raw || typeof raw !== 'object') return null;
   const obj = raw as Record<string, unknown>;
@@ -601,6 +846,63 @@ export function validateBackupPayload(raw: unknown): BackupPayload | null {
   if (!obj.settings || typeof obj.settings !== 'object') return null;
 
   const rawSettings = obj.settings as Record<string, unknown>;
+  const rawSnapDefaults =
+    rawSettings.snapshotDefaults && typeof rawSettings.snapshotDefaults === 'object'
+      ? (rawSettings.snapshotDefaults as Record<string, unknown>)
+      : {};
+
+  const snapshotDefaults: SnapshotDefaultPreferences = {
+    includePhone:
+      typeof rawSnapDefaults.includePhone === 'boolean'
+        ? rawSnapDefaults.includePhone
+        : true,
+    includePrices:
+      typeof rawSnapDefaults.includePrices === 'boolean'
+        ? rawSnapDefaults.includePrices
+        : true,
+    includeQuantity:
+      typeof rawSnapDefaults.includeQuantity === 'boolean'
+        ? rawSnapDefaults.includeQuantity
+        : true,
+    includeNotes:
+      typeof rawSnapDefaults.includeNotes === 'boolean'
+        ? rawSnapDefaults.includeNotes
+        : true,
+    includeDirections:
+      typeof rawSnapDefaults.includeDirections === 'boolean'
+        ? rawSnapDefaults.includeDirections
+        : false,
+    customerLang: rawSnapDefaults.customerLang === 'en' ? 'en' : 'ml',
+  };
+
+  const rawTemplates = Array.isArray(rawSettings.messageTemplates)
+    ? rawSettings.messageTemplates
+    : DEFAULT_MESSAGE_TEMPLATES;
+  const messageTemplates: MessageTemplateItem[] = rawTemplates
+    .map((tpl) => {
+      if (!tpl || typeof tpl !== 'object') return null;
+      const r = tpl as Record<string, unknown>;
+      const id = asSafeString(r.id, '', 80).trim();
+      const bodyMl = asSafeString(r.bodyMl, '', 800).trim();
+      if (!id || !bodyMl) return null;
+      return {
+        id,
+        labelMl: asSafeString(r.labelMl, id, 120),
+        labelEn: asSafeString(r.labelEn, id, 120),
+        bodyMl,
+        bodyEn: asSafeString(r.bodyEn, bodyMl, 800),
+      };
+    })
+    .filter((tpl): tpl is MessageTemplateItem => tpl !== null);
+
+  const rawMapsUrl = asSafeString(rawSettings.mapsQueryUrl, '', 400).trim();
+  const safeMapsUrl =
+    /^https:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps|(?:www\.)?google\.com\/maps)/i.test(
+      rawMapsUrl
+    )
+      ? rawMapsUrl
+      : '';
+
   const settings: BusinessSettings = {
     businessNameMl: asSafeString(
       rawSettings.businessNameMl,
@@ -679,6 +981,21 @@ export function validateBackupPayload(raw: unknown): BackupPayload | null {
         : DEFAULT_BUSINESS_SETTINGS.posterLanguage,
     defaultBackground:
       rawSettings.defaultBackground === 'banana-leaf' ? 'banana-leaf' : 'blue-tray',
+    showPhoneToCustomers:
+      typeof rawSettings.showPhoneToCustomers === 'boolean'
+        ? rawSettings.showPhoneToCustomers
+        : true,
+    showDirectionsLink:
+      typeof rawSettings.showDirectionsLink === 'boolean'
+        ? rawSettings.showDirectionsLink
+        : false,
+    mapsQueryUrl: safeMapsUrl,
+    ...(typeof rawSettings.lastBackupAt === 'number'
+      ? { lastBackupAt: rawSettings.lastBackupAt }
+      : {}),
+    snapshotDefaults,
+    messageTemplates:
+      messageTemplates.length > 0 ? messageTemplates : DEFAULT_MESSAGE_TEMPLATES,
   };
 
   const fish = obj.fish
@@ -731,6 +1048,12 @@ export function validateBackupPayload(raw: unknown): BackupPayload | null {
         .filter((tr): tr is TrashFishItem => tr !== null)
     : [];
 
+  const enquiries: CustomerEnquiry[] = Array.isArray(obj.enquiries)
+    ? obj.enquiries
+        .map(sanitizeEnquiry)
+        .filter((e): e is CustomerEnquiry => e !== null)
+    : [];
+
   return {
     schemaVersion: asSafeNumber(obj.schemaVersion, 1),
     exportedAt: asSafeString(obj.exportedAt, new Date().toISOString(), 60),
@@ -740,6 +1063,7 @@ export function validateBackupPayload(raw: unknown): BackupPayload | null {
     dailyRecords,
     posterHistory,
     trash,
+    enquiries,
   };
 }
 
@@ -747,7 +1071,14 @@ export async function restoreFullBackup(payload: BackupPayload): Promise<void> {
   const db = await openDB();
   await new Promise<void>((resolve, reject) => {
     const tx = db.transaction(
-      [STORES.FISH, STORES.DAILY, STORES.POSTERS, STORES.SETTINGS, STORES.TRASH],
+      [
+        STORES.FISH,
+        STORES.DAILY,
+        STORES.POSTERS,
+        STORES.SETTINGS,
+        STORES.TRASH,
+        STORES.ENQUIRIES,
+      ],
       'readwrite'
     );
     const fishStore = tx.objectStore(STORES.FISH);
@@ -755,16 +1086,19 @@ export async function restoreFullBackup(payload: BackupPayload): Promise<void> {
     const posterStore = tx.objectStore(STORES.POSTERS);
     const settingsStore = tx.objectStore(STORES.SETTINGS);
     const trashStore = tx.objectStore(STORES.TRASH);
+    const enquiriesStore = tx.objectStore(STORES.ENQUIRIES);
 
     fishStore.clear();
     dailyStore.clear();
     posterStore.clear();
     trashStore.clear();
+    enquiriesStore.clear();
 
     for (const f of payload.fish) fishStore.put(f);
-    for (const d of payload.dailyRecords) dailyStore.put(d);
+    for (const d of payload.dailyRecords) dailyStore.put(normalizeDailyRecord(d));
     for (const p of payload.posterHistory) posterStore.put(p);
     for (const tr of payload.trash || []) trashStore.put(tr);
+    for (const enq of payload.enquiries || []) enquiriesStore.put(enq);
     settingsStore.put({ key: 'business', value: payload.settings });
     settingsStore.put({ key: 'catalogSeeded', value: true });
     settingsStore.put({

@@ -7,6 +7,7 @@ import type {
   Language,
   PosterBackground,
   PosterLanguageMode,
+  PosterTemplateStyle,
   PriceUnit,
 } from '../types';
 import { dataUrlToBlob, formatDisplayDate } from './speechAndDate';
@@ -16,6 +17,8 @@ export interface PosterRenderOptions {
   photoSrc: string;
   background: PosterBackground;
   posterLanguage: PosterLanguageMode;
+  templateStyle?: PosterTemplateStyle;
+  headingOverrideMl?: string;
   settings: BusinessSettings;
   zoom: number;
   offsetX: number; // -1 to 1
@@ -183,6 +186,8 @@ export async function renderFishPosterToDataUrl(
     photoSrc,
     background,
     posterLanguage,
+    templateStyle = 'standard',
+    headingOverrideMl,
     settings,
     zoom,
     offsetX,
@@ -218,8 +223,54 @@ export async function renderFishPosterToDataUrl(
   const cleanNote = noteText?.trim();
   const hasBadge = Boolean((includePrice && cleanPrice) || cleanNote);
 
-  // 2. Photo Frame (strictly bounded between header and badge/footer)
   const img = await loadImage(photoSrc);
+
+  // Minimal fish-focused template: clean title banner at top + generous unobstructed photo + small bottom note
+  if (templateStyle === 'minimal') {
+    const frameX = 64;
+    const frameY = 178;
+    const frameW = POSTER_W - frameX * 2;
+    const frameH = POSTER_H - frameY - (settings.showDisclaimerOnPoster ? 110 : 64);
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.roundRect(frameX, frameY, frameW, frameH, 32);
+    ctx.clip();
+    ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
+    const containScale = Math.min(frameW / img.width, frameH / img.height);
+    const drawW = img.width * containScale * zoom;
+    const drawH = img.height * containScale * zoom;
+    const centerX = frameX + frameW / 2 + offsetX * (frameW * 0.25);
+    const centerY = frameY + frameH / 2 + offsetY * (frameH * 0.25);
+    ctx.drawImage(img, centerX - drawW / 2, centerY - drawH / 2, drawW, drawH);
+    ctx.restore();
+
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const titleLabel =
+      posterLanguage === 'en' ? fish.pronunciationLatin : fish.nameMl;
+    ctx.fillStyle = '#facc15';
+    ctx.shadowColor = 'rgba(0,0,0,0.65)';
+    ctx.shadowBlur = 12;
+    fitFontAndDrawCentered(ctx, titleLabel, POSTER_W / 2, 102, POSTER_W - 140, 74, 38, 800);
+    ctx.restore();
+
+    if (settings.showDisclaimerOnPoster) {
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'rgba(255,255,255,0.92)';
+      const note =
+        posterLanguage === 'en' ? settings.disclaimerEn : settings.disclaimerMl;
+      fitFontAndDrawCentered(ctx, note, POSTER_W / 2, POSTER_H - 54, POSTER_W - 140, 24, 16, 600);
+      ctx.restore();
+    }
+
+    return canvas.toDataURL('image/jpeg', safeScale < 1 ? 0.85 : 0.92);
+  }
+
+  // 2. Photo Frame (strictly bounded between header and badge/footer)
   const headerBottom = 302;
   const footerTop = 1422;
   const badgeHeight = hasBadge ? 98 : 0;
@@ -256,9 +307,9 @@ export async function renderFishPosterToDataUrl(
   const maxHeaderTextW = POSTER_W - 200;
 
   const isSeafoodOther = fish.catalogueGroup === 'seafood_other';
-  const defaultMlHeading = isSeafoodOther
-    ? 'ഇന്നത്തെ കടൽവിഭവം'
-    : settings.posterHeadingMl;
+  const defaultMlHeading =
+    headingOverrideMl?.trim() ||
+    (isSeafoodOther ? 'ഇന്നത്തെ കടൽവിഭവം' : settings.posterHeadingMl);
   const defaultEnHeading = isSeafoodOther
     ? "Today's Seafood"
     : settings.posterHeadingEn;

@@ -34,16 +34,22 @@ export const FishCatalogueScreen: React.FC<FishCatalogueScreenProps> = ({
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return fishList;
-    return fishList.filter(
-      (f) =>
+    return fishList.filter((f) => {
+      const refNum =
+        f.referenceNumber !== null
+          ? `#${String(f.referenceNumber).padStart(2, '0')} #${f.referenceNumber}`
+          : '';
+      return (
         f.nameMl.toLowerCase().includes(q) ||
         f.pronunciationLatin.toLowerCase().includes(q) ||
         (f.nameEn && f.nameEn.toLowerCase().includes(q)) ||
         (f.scientificName && f.scientificName.toLowerCase().includes(q)) ||
         (f.family && f.family.toLowerCase().includes(q)) ||
         (f.seafoodClass && f.seafoodClass.toLowerCase().includes(q)) ||
-        (f.aliasesMl && f.aliasesMl.some((a) => a.toLowerCase().includes(q)))
-    );
+        (f.aliasesMl && f.aliasesMl.some((a) => a.toLowerCase().includes(q))) ||
+        (refNum && refNum.includes(q))
+      );
+    });
   }, [fishList, query]);
 
   return (
@@ -107,7 +113,21 @@ export const FishCatalogueScreen: React.FC<FishCatalogueScreenProps> = ({
                     )}
                   </div>
 
-                  <div className="mt-2 sm:mt-2.5 flex items-start justify-between gap-1">
+                  <div className="mt-2 flex flex-wrap items-center justify-between gap-x-1.5 gap-y-0.5 text-[11px] sm:text-xs text-slate-500 dark:text-neutral-400">
+                    <span>
+                      {t(lang, 'saved_photos_count')}:{' '}
+                      <strong className="tabular-nums text-slate-700 dark:text-neutral-200">
+                        {fish.customActualPhotos.length}
+                      </strong>
+                    </span>
+                    {fish.referenceNumber !== null && (
+                      <span className="tabular-nums font-medium shrink-0 text-slate-600 dark:text-neutral-300">
+                        #{String(fish.referenceNumber).padStart(2, '0')}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-1 sm:mt-1.5 flex items-start justify-between gap-1">
                     <div className="min-w-0 flex-1">
                       <h3 className="text-[15px] sm:text-lg font-bold text-slate-900 dark:text-white leading-snug break-words">
                         {fish.nameMl}
@@ -142,17 +162,11 @@ export const FishCatalogueScreen: React.FC<FishCatalogueScreenProps> = ({
                     </button>
                   </div>
 
-                  <div className="mt-1.5 text-[11px] sm:text-xs text-slate-500 dark:text-neutral-400 flex flex-wrap gap-x-1.5 gap-y-0.5 leading-snug">
-                    <span>
-                      {t(lang, 'saved_photos_count')}:{' '}
-                      <strong className="tabular-nums text-slate-700 dark:text-neutral-200">
-                        {fish.customActualPhotos.length}
-                      </strong>
-                    </span>
-                    {fish.speciesNote && (
-                      <span className="break-words">· {fish.speciesNote}</span>
-                    )}
-                  </div>
+                  {fish.speciesNote && (
+                    <p className="mt-1.5 text-[11px] sm:text-xs text-slate-500 dark:text-neutral-400 leading-snug break-words">
+                      {fish.speciesNote}
+                    </p>
+                  )}
                 </div>
 
                 <div className="mt-2.5 sm:mt-3 space-y-1.5 sm:space-y-2">

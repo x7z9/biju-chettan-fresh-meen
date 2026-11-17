@@ -1,8 +1,11 @@
+import { resolveEntryStatus } from '../db/indexedDb';
 import type {
   BusinessSettings,
+  DailyFishEntry,
   DailyRecord,
   FishItem,
   Language,
+  MessageTemplateItem,
   PriceUnit,
 } from '../types';
 import { dataUrlToBlob } from './speechAndDate';
@@ -18,13 +21,58 @@ function unitSuffix(unit: PriceUnit | undefined, lang: Language): string {
   return '/കിലോ';
 }
 
+function formatPhoneWithOwner(settings: BusinessSettings): string {
+  const owner = settings.ownerName?.trim();
+  return owner ? `${owner} — ${settings.phoneDisplay}` : settings.phoneDisplay;
+}
+
+export function formatFishLineForWhatsApp(
+  fish: FishItem,
+  entry: DailyFishEntry | undefined,
+  includePrices: boolean,
+  lang: Language
+): string {
+  const status = resolveEntryStatus(entry);
+  const publicNote = (entry?.publicNote ?? entry?.note ?? '').trim();
+  const detailParts = [
+    entry?.sizeGrade?.trim(),
+    entry?.quantityNote?.trim(),
+    entry?.sourcePlace?.trim(),
+    publicNote,
+  ].filter(Boolean);
+
+  let line =
+    lang === 'en'
+      ? `• ${fish.nameMl} (${fish.pronunciationLatin})`
+      : `• ${fish.nameMl}`;
+
+  if (status === 'limited') {
+    line += lang === 'en' ? ' [Limited]' : ' [കുറച്ചു മാത്രം]';
+  }
+  if (detailParts.length > 0) {
+    line += lang === 'en' ? ` — ${detailParts.join(', ')}` : ` (${detailParts.join(', ')})`;
+  }
+  const allowFishPrice = includePrices && entry?.sharePrice !== false;
+  if (allowFishPrice) {
+    if (entry?.priceOnCall) {
+      line += lang === 'en' ? ' — Call for rate' : ' — വില വിളിച്ചു ചോദിക്കുക';
+    } else if (entry?.priceAmount?.trim()) {
+      line += ` — ₹${entry.priceAmount.trim()}${unitSuffix(entry.priceUnit, lang)}`;
+    }
+  }
+  return line;
+}
+
 export function buildWhatsAppListMessage(
   fishList: FishItem[],
   dailyRecord: DailyRecord,
   settings: BusinessSettings,
   lang: Language
 ): string {
-  const availableFish = fishList.filter((f) => dailyRecord.entries[f.id]?.available);
+  const availableFish = fishList.filter((f) => {
+    const st = resolveEntryStatus(dailyRecord.entries[f.id]);
+    return st === 'available' || st === 'limited';
+  });
 
   if (lang === 'en') {
     const lines: string[] = [
@@ -32,17 +80,16 @@ export function buildWhatsAppListMessage(
       `📍 ${settings.locationEn}`,
     ];
     for (const fish of availableFish) {
-      const entry = dailyRecord.entries[fish.id];
-      let line = `• ${fish.nameMl} (${fish.pronunciationLatin})`;
-      if (entry?.note?.trim()) {
-        line += ` — ${entry.note.trim()}`;
-      }
-      if (dailyRecord.includePrices && entry?.priceAmount?.trim()) {
-        line += ` — ₹${entry.priceAmount.trim()}${unitSuffix(entry.priceUnit, 'en')}`;
-      }
-      lines.push(line);
+      lines.push(
+        formatFishLineForWhatsApp(
+          fish,
+          dailyRecord.entries[fish.id],
+          dailyRecord.includePrices,
+          'en'
+        )
+      );
     }
-    lines.push(`Call for price: ${settings.phoneDisplay}`);
+    lines.push(`Call for price: ${formatPhoneWithOwner(settings)}`);
     lines.push(`— ${settings.whatsappGroupNameEn}`);
     return lines.join('\n');
   }
@@ -52,17 +99,16 @@ export function buildWhatsAppListMessage(
     `📍 ${settings.locationMl}`,
   ];
   for (const fish of availableFish) {
-    const entry = dailyRecord.entries[fish.id];
-    let line = `• ${fish.nameMl}`;
-    if (entry?.note?.trim()) {
-      line += ` (${entry.note.trim()})`;
-    }
-    if (dailyRecord.includePrices && entry?.priceAmount?.trim()) {
-      line += ` — ₹${entry.priceAmount.trim()}${unitSuffix(entry.priceUnit, 'ml')}`;
-    }
-    lines.push(line);
+    lines.push(
+      formatFishLineForWhatsApp(
+        fish,
+        dailyRecord.entries[fish.id],
+        dailyRecord.includePrices,
+        'ml'
+      )
+    );
   }
-  lines.push(`വില അറിയാൻ വിളിക്കുക: ${settings.phoneDisplay}`);
+  lines.push(`വില അറിയാൻ വിളിക്കുക: ${formatPhoneWithOwner(settings)}`);
   lines.push(`— ${settings.whatsappGroupNameMl}`);
   return lines.join('\n');
 }
@@ -92,18 +138,17 @@ export function buildWhatsAppBatchMessage(
       lines.push(`📍 ${settings.locationEn}`);
     }
     for (const fish of batchFish) {
-      const entry = dailyRecord.entries[fish.id];
-      let line = `• ${fish.nameMl} (${fish.pronunciationLatin})`;
-      if (entry?.note?.trim()) {
-        line += ` — ${entry.note.trim()}`;
-      }
-      if (dailyRecord.includePrices && entry?.priceAmount?.trim()) {
-        line += ` — ₹${entry.priceAmount.trim()}${unitSuffix(entry.priceUnit, 'en')}`;
-      }
-      lines.push(line);
+      lines.push(
+        formatFishLineForWhatsApp(
+          fish,
+          dailyRecord.entries[fish.id],
+          dailyRecord.includePrices,
+          'en'
+        )
+      );
     }
     if (isLast) {
-      lines.push(`📞 Call for price: ${settings.phoneDisplay}`);
+      lines.push(`📞 Call for price: ${formatPhoneWithOwner(settings)}`);
     }
     lines.push(`— ${settings.whatsappGroupNameEn}`);
     return lines.join('\n');
@@ -116,21 +161,54 @@ export function buildWhatsAppBatchMessage(
     lines.push(`📍 ${settings.locationMl}`);
   }
   for (const fish of batchFish) {
-    const entry = dailyRecord.entries[fish.id];
-    let line = `• ${fish.nameMl}`;
-    if (entry?.note?.trim()) {
-      line += ` (${entry.note.trim()})`;
-    }
-    if (dailyRecord.includePrices && entry?.priceAmount?.trim()) {
-      line += ` — ₹${entry.priceAmount.trim()}${unitSuffix(entry.priceUnit, 'ml')}`;
-    }
-    lines.push(line);
+    lines.push(
+      formatFishLineForWhatsApp(
+        fish,
+        dailyRecord.entries[fish.id],
+        dailyRecord.includePrices,
+        'ml'
+      )
+    );
   }
   if (isLast) {
-    lines.push(`📞 വില അറിയാൻ വിളിക്കുക: ${settings.phoneDisplay}`);
+    lines.push(`📞 വില അറിയാൻ വിളിക്കുക: ${formatPhoneWithOwner(settings)}`);
   }
   lines.push(`— ${settings.whatsappGroupNameMl}`);
   return lines.join('\n');
+}
+
+export function applyMessageTemplate(
+  template: MessageTemplateItem,
+  fishList: FishItem[],
+  dailyRecord: DailyRecord,
+  settings: BusinessSettings,
+  lang: Language
+): string {
+  const activeNames = fishList
+    .filter((f) => {
+      const st = resolveEntryStatus(dailyRecord.entries[f.id]);
+      return st === 'available' || st === 'limited';
+    })
+    .map((f) => `• ${f.nameMl}`)
+    .slice(0, 12);
+
+  const summary =
+    activeNames.length > 0
+      ? activeNames.join('\n')
+      : lang === 'en'
+        ? '(See today catch updates)'
+        : '(ഇന്നത്തെ മീൻ വിവരങ്ങൾക്ക് വിളിക്കൂ)';
+
+  const rawBody = lang === 'en' ? template.bodyEn : template.bodyMl;
+  return rawBody
+    .replace(/\{location\}/g, lang === 'en' ? settings.locationEn : settings.locationMl)
+    .replace(/\{fish_summary\}/g, summary)
+    .replace(/\{owner\}/g, settings.ownerName || 'ബിജു R')
+    .replace(/\{phone\}/g, settings.phoneDisplay)
+    .replace(
+      /\{business\}/g,
+      lang === 'en' ? settings.whatsappGroupNameEn : settings.whatsappGroupNameMl
+    );
 }
 
 export type DirectShareOutcome =
@@ -248,14 +326,12 @@ export async function directShareFilesWithText(
         text,
         ...(title && canSharePayload({ files, text, title }) ? { title } : {}),
       });
-      // Keep caption handy on clipboard in case iOS/OEM WhatsApp omits text on multi-image shares
       if (files.length > 1 && text) {
         void copyTextQuietly(text);
       }
       return 'shared';
     }
 
-    // Platform allows sharing files only without inline text; share immediately and copy caption for paste
     await navigator.share({ files });
     await copyTextQuietly(text);
     return 'shared_caption_copied';
@@ -286,8 +362,10 @@ export async function sharePosterFileDirect(
   return directShareFilesWithText([file], text, title);
 }
 
-export function openWhatsAppTextLink(message: string): void {
-  const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+export function openWhatsAppTextLink(message: string, targetPhoneDigits?: string): void {
+  const cleanDigits = targetPhoneDigits?.replace(/[^0-9]/g, '');
+  const base = cleanDigits ? `https://wa.me/${cleanDigits}` : 'https://wa.me/';
+  const url = `${base}?text=${encodeURIComponent(message)}`;
   const a = document.createElement('a');
   a.href = url;
   a.target = '_blank';

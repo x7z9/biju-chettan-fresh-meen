@@ -5,6 +5,7 @@ import {
   Moon,
   MoreHorizontal,
   PlusCircle,
+  RotateCcw,
   Sun,
   WifiOff,
 } from 'lucide-react';
@@ -36,23 +37,39 @@ const ShareListModal = lazy(() =>
     default: m.ShareListModal,
   }))
 );
+const CustomerSnapshotModal = lazy(() =>
+  import('./components/CustomerSnapshotModal').then((m) => ({
+    default: m.CustomerSnapshotModal,
+  }))
+);
+const CustomerViewScreen = lazy(() =>
+  import('./components/CustomerViewScreen').then((m) => ({
+    default: m.CustomerViewScreen,
+  }))
+);
+
 import {
   BUSINESS_LOGO_PATH,
   DEFAULT_BUSINESS_SETTINGS,
+  SEEDED_FISH_CATALOG,
 } from './data/seedCatalog';
 import { t } from './data/translations';
 import {
+  deleteEnquiry as dbDeleteEnquiry,
   emptyTrashBin,
   initializeAndLoadCatalog,
   loadAllDailyRecords,
   loadDailyRecord,
+  loadEnquiries,
   loadSettings,
   loadTrashItems,
   moveFishToTrash,
   permanentlyDeleteFromTrash,
+  resolveEntryStatus,
   restoreAllFishFromTrash,
   restoreFishFromTrash,
   saveDailyRecord,
+  saveEnquiry as dbSaveEnquiry,
   saveFishItem,
   savePosterHistoryItem,
   saveSettings,
@@ -62,6 +79,8 @@ import { useOnlineStatus } from './hooks/useOnlineStatus';
 import type {
   ActiveTab,
   BusinessSettings,
+  CustomerEnquiry,
+  CustomerSnapshotV1,
   DailyFishEntry,
   DailyRecord,
   FishItem,
@@ -69,6 +88,7 @@ import type {
   PosterBackground,
   TrashFishItem,
 } from './types';
+import { decodeCustomerSnapshotToken } from './utils/customerSnapshot';
 import type { SearchActionTarget } from './utils/offlineSearch';
 import {
   formatDisplayDate,
@@ -79,7 +99,28 @@ import {
 const LANG_STORAGE_KEY = 'biju_meen_lang';
 const THEME_STORAGE_KEY = 'biju_meen_theme';
 
+function checkIsCustomerViewUrl(): { isCustomer: boolean; token: string } {
+  if (typeof window === 'undefined') return { isCustomer: false, token: '' };
+  const params = new URLSearchParams(window.location.search);
+  const isCustomer = params.get('view') === 'customer';
+  const hash = window.location.hash || '';
+  const match = hash.match(/(?:^#|&)market=([^&]+)/);
+  const token = match ? decodeURIComponent(match[1]) : '';
+  return { isCustomer, token };
+}
+
 export default function App() {
+  const [urlViewState, setUrlViewState] = useState<{
+    isCustomer: boolean;
+    token: string;
+  }>(() => checkIsCustomerViewUrl());
+  const [decodedSnapshot, setDecodedSnapshot] = useState<CustomerSnapshotV1 | null>(
+    null
+  );
+  const [snapshotReady, setSnapshotReady] = useState(
+    () => !checkIsCustomerViewUrl().isCustomer
+  );
+
   const [lang, setLang] = useState<Language>(() => {
     try {
       const stored = localStorage.getItem(LANG_STORAGE_KEY);
@@ -119,6 +160,7 @@ export default function App() {
   });
   const [allDailyRecords, setAllDailyRecords] = useState<DailyRecord[]>([]);
   const [trashList, setTrashList] = useState<TrashFishItem[]>([]);
+  const [enquiries, setEnquiries] = useState<CustomerEnquiry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [saveNotice, setSaveNotice] = useState('');
   const [quotaError, setQuotaError] = useState(false);
@@ -126,9 +168,66 @@ export default function App() {
   const [editingFish, setEditingFish] = useState<FishItem | null>(null);
   const [posterTargetFish, setPosterTargetFish] = useState<FishItem | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showCustomerSnapshot, setShowCustomerSnapshot] = useState(false);
   const [moreFocusSection, setMoreFocusSection] = useState<string | null>(null);
 
+  const [undoState, setUndoState] = useState<{
+    fishId: string;
+    prevEntry: DailyFishEntry | undefined;
+    message: string;
+  } | null>(null);
+
   const isOnline = useOnlineStatus();
+
+  useEffect(() => {
+    const syncFromUrl = () => {
+      setUrlViewState(checkIsCustomerViewUrl());
+    };
+    window.addEventListener('hashchange', syncFromUrl);
+    window.addEventListener('popstate', syncFromUrl);
+    return () => {
+      window.removeEventListener('hashchange', syncFromUrl);
+      window.removeEventListener('popstate', syncFromUrl);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!urlViewState.isCustomer) {
+      setDecodedSnapshot(null);
+      setSnapshotReady(true);
+      return;
+    }
+    if (!urlViewState.token) {
+      setDecodedSnapshot(null);
+      setSnapshotReady(true);
+      return;
+    }
+    setSnapshotReady(false);
+    decodeCustomerSnapshotToken(urlViewState.token)
+      .then((snap) => {
+        if (!cancelled) {
+          setDecodedSnapshot(snap);
+          setSnapshotReady(true);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setDecodedSnapshot(null);
+          setSnapshotReady(true);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [urlViewState]);
+
+  const handleExitCustomerMode = () => {
+    if (typeof window === 'undefined') return;
+    const base = import.meta.env.BASE_URL || '/';
+    window.history.pushState(null, '', base);
+    setUrlViewState({ isCustomer: false, token: '' });
+  };
 
   const handleLanguageChange = (next: Language) => {
     setLang(next);
@@ -144,19 +243,27 @@ export default function App() {
     const currentKey = getLocalDateKey();
     setTodayKey(currentKey);
     try {
-      const [catalog, loadedSettings, todayRec, allRecords, loadedTrash] =
-        await Promise.all([
-          initializeAndLoadCatalog(),
-          loadSettings(),
-          loadDailyRecord(currentKey),
-          loadAllDailyRecords(),
-          loadTrashItems(),
-        ]);
+      const [
+        catalog,
+        loadedSettings,
+        todayRec,
+        allRecords,
+        loadedTrash,
+        loadedEnquiries,
+      ] = await Promise.all([
+        initializeAndLoadCatalog(),
+        loadSettings(),
+        loadDailyRecord(currentKey),
+        loadAllDailyRecords(),
+        loadTrashItems(),
+        loadEnquiries(),
+      ]);
       setFishList(catalog);
       setSettings(loadedSettings);
       setDailyRecord(todayRec);
       setAllDailyRecords(allRecords);
       setTrashList(loadedTrash);
+      setEnquiries(loadedEnquiries);
     } finally {
       setIsLoading(false);
     }
@@ -167,11 +274,22 @@ export default function App() {
   }, [lang]);
 
   useEffect(() => {
+    if (urlViewState.isCustomer) {
+      setIsLoading(false);
+      return;
+    }
     loadAllData();
-  }, [loadAllData]);
+  }, [urlViewState.isCustomer, loadAllData]);
 
   useEffect(() => {
-    if (!isOnline || fishList.length === 0 || typeof window === 'undefined') return;
+    if (
+      urlViewState.isCustomer ||
+      !isOnline ||
+      fishList.length === 0 ||
+      typeof window === 'undefined'
+    ) {
+      return;
+    }
     let cancelled = false;
     const timer = window.setTimeout(async () => {
       try {
@@ -208,7 +326,7 @@ export default function App() {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [fishList, isOnline]);
+  }, [urlViewState.isCustomer, fishList, isOnline]);
 
   useEffect(() => {
     const isDark = theme === 'dark';
@@ -231,6 +349,7 @@ export default function App() {
 
   // Check if local date rolled over when returning to app
   useEffect(() => {
+    if (urlViewState.isCustomer) return;
     const checkDateRollover = () => {
       const latestKey = getLocalDateKey();
       if (latestKey !== todayKey) {
@@ -239,10 +358,11 @@ export default function App() {
     };
     window.addEventListener('focus', checkDateRollover);
     return () => window.removeEventListener('focus', checkDateRollover);
-  }, [todayKey, loadAllData]);
+  }, [urlViewState.isCustomer, todayKey, loadAllData]);
 
   const saveNoticeTimerRef = useRef<number | undefined>(undefined);
   const entryDebounceTimerRef = useRef<number | undefined>(undefined);
+  const undoTimerRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     return () => {
@@ -252,18 +372,24 @@ export default function App() {
       if (entryDebounceTimerRef.current !== undefined) {
         window.clearTimeout(entryDebounceTimerRef.current);
       }
+      if (undoTimerRef.current !== undefined) {
+        window.clearTimeout(undoTimerRef.current);
+      }
     };
   }, []);
 
-  const flashSaved = useCallback((msg?: string) => {
-    setSaveNotice(msg || t(lang, 'saved'));
-    if (saveNoticeTimerRef.current !== undefined) {
-      window.clearTimeout(saveNoticeTimerRef.current);
-    }
-    saveNoticeTimerRef.current = window.setTimeout(() => {
-      setSaveNotice('');
-    }, 2000);
-  }, [lang]);
+  const flashSaved = useCallback(
+    (msg?: string) => {
+      setSaveNotice(msg || t(lang, 'saved'));
+      if (saveNoticeTimerRef.current !== undefined) {
+        window.clearTimeout(saveNoticeTimerRef.current);
+      }
+      saveNoticeTimerRef.current = window.setTimeout(() => {
+        setSaveNotice('');
+      }, 2000);
+    },
+    [lang]
+  );
 
   const upsertDailyRecordInState = useCallback((record: DailyRecord) => {
     setAllDailyRecords((prev) => {
@@ -299,10 +425,54 @@ export default function App() {
     });
   };
 
+  const showUndoToast = (
+    fishId: string,
+    prevEntry: DailyFishEntry | undefined,
+    fishName: string,
+    nextStatusLabel: string
+  ) => {
+    setUndoState({
+      fishId,
+      prevEntry,
+      message: `${fishName}: ${nextStatusLabel}`,
+    });
+    if (undoTimerRef.current !== undefined) {
+      window.clearTimeout(undoTimerRef.current);
+    }
+    undoTimerRef.current = window.setTimeout(() => {
+      setUndoState(null);
+    }, 5500);
+  };
+
+  const handleUndoLastToggle = () => {
+    if (!undoState) return;
+    triggerHaptic();
+    const { fishId, prevEntry } = undoState;
+    setUndoState(null);
+    if (undoTimerRef.current !== undefined) {
+      window.clearTimeout(undoTimerRef.current);
+    }
+    const nextEntries = { ...dailyRecord.entries };
+    if (prevEntry) {
+      nextEntries[fishId] = prevEntry;
+    } else {
+      delete nextEntries[fishId];
+    }
+    const nextRecord: DailyRecord = {
+      ...dailyRecord,
+      entries: nextEntries,
+      updatedAt: Date.now(),
+    };
+    persistDailyRecord(nextRecord);
+  };
+
   const handleToggleAvailability = (fishId: string) => {
     triggerHaptic();
     const prevEntry = dailyRecord.entries[fishId];
-    const nextAvailable = !prevEntry?.available;
+    const currentStatus = resolveEntryStatus(prevEntry);
+    const nextAvailable =
+      currentStatus === 'not_listed' || currentStatus === 'sold_out';
+    const nextStatus = nextAvailable ? 'available' : 'not_listed';
     const nextRecord: DailyRecord = {
       ...dailyRecord,
       entries: {
@@ -311,12 +481,23 @@ export default function App() {
           ...prevEntry,
           fishId,
           available: nextAvailable,
+          status: nextStatus,
           updatedAt: Date.now(),
         },
       },
       updatedAt: Date.now(),
     };
     persistDailyRecord(nextRecord);
+
+    const matchedFish = fishList.find((f) => f.id === fishId);
+    if (matchedFish) {
+      showUndoToast(
+        fishId,
+        prevEntry,
+        matchedFish.nameMl,
+        t(lang, `status_${nextStatus}` as const)
+      );
+    }
   };
 
   const handleToggleIncludePrices = (include: boolean) => {
@@ -335,18 +516,27 @@ export default function App() {
     const prevEntry = dailyRecord.entries[fishId] || {
       fishId,
       available: true,
+      status: 'available' as const,
       updatedAt: Date.now(),
     };
+    const merged: DailyFishEntry = {
+      ...prevEntry,
+      ...patch,
+      fishId,
+      updatedAt: Date.now(),
+    };
+    if (patch.status) {
+      merged.available =
+        patch.status === 'available' || patch.status === 'limited';
+    } else if (typeof patch.available === 'boolean') {
+      merged.status = patch.available ? 'available' : 'not_listed';
+    }
+
     const nextRecord: DailyRecord = {
       ...dailyRecord,
       entries: {
         ...dailyRecord.entries,
-        [fishId]: {
-          ...prevEntry,
-          ...patch,
-          fishId,
-          updatedAt: Date.now(),
-        },
+        [fishId]: merged,
       },
       updatedAt: Date.now(),
     };
@@ -365,8 +555,24 @@ export default function App() {
   };
 
   const handleSaveFish = async (fish: FishItem) => {
+    let nextRefNumber = fish.referenceNumber;
+    if (nextRefNumber === null) {
+      let maxNum = 32;
+      for (const f of fishList) {
+        if (f.referenceNumber !== null && f.referenceNumber > maxNum) {
+          maxNum = f.referenceNumber;
+        }
+      }
+      for (const tr of trashList) {
+        if (tr.fish.referenceNumber !== null && tr.fish.referenceNumber > maxNum) {
+          maxNum = tr.fish.referenceNumber;
+        }
+      }
+      nextRefNumber = maxNum + 1;
+    }
+
     await handleDbOperation(async () => {
-      await saveFishItem(fish);
+      await saveFishItem({ ...fish, referenceNumber: nextRefNumber });
       const refreshed = await initializeAndLoadCatalog();
       setFishList(refreshed);
       setEditingFish(null);
@@ -434,6 +640,32 @@ export default function App() {
     });
   };
 
+  const handleSaveEnquiry = async (enquiry: CustomerEnquiry) => {
+    await handleDbOperation(async () => {
+      await dbSaveEnquiry(enquiry);
+      const refreshed = await loadEnquiries();
+      setEnquiries(refreshed);
+      flashSaved();
+    });
+  };
+
+  const handleDeleteEnquiry = async (id: string) => {
+    await handleDbOperation(async () => {
+      await dbDeleteEnquiry(id);
+      const refreshed = await loadEnquiries();
+      setEnquiries(refreshed);
+      flashSaved();
+    });
+  };
+
+  const handleMarkBackupCompleted = async (ts: number) => {
+    const nextSettings = { ...settings, lastBackupAt: ts };
+    await handleDbOperation(async () => {
+      await saveSettings(nextSettings);
+      setSettings(nextSettings);
+    });
+  };
+
   const handleSavePosterAndPhoto = async ({
     fishId,
     actualPhotoDataUrl,
@@ -491,6 +723,7 @@ export default function App() {
             ...prevEntry,
             fishId,
             available: true,
+            status: 'available',
             todayPhotoDataUrl: actualPhotoDataUrl,
             todayPosterDataUrl: posterDataUrl,
             updatedAt: Date.now(),
@@ -531,6 +764,32 @@ export default function App() {
       setActiveTab(target.tab);
     }
   };
+
+  // Strict Customer Read-Only Mode (?view=customer#market=...)
+  if (urlViewState.isCustomer) {
+    if (!snapshotReady) {
+      return (
+        <div className="min-h-dvh flex items-center justify-center bg-[#f5f8fc] dark:bg-black text-slate-700 dark:text-neutral-200 p-6">
+          <div className="w-8 h-8 rounded-full border-2 border-[#0879d9] border-t-transparent animate-spin" />
+        </div>
+      );
+    }
+    return (
+      <Suspense
+        fallback={
+          <div className="min-h-dvh flex items-center justify-center bg-[#f5f8fc] dark:bg-black" />
+        }
+      >
+        <CustomerViewScreen
+          snapshot={decodedSnapshot}
+          fallbackPhoneDisplay={DEFAULT_BUSINESS_SETTINGS.phoneDisplay}
+          fallbackPhoneDigits={DEFAULT_BUSINESS_SETTINGS.phoneDigits}
+          catalogForGlossary={SEEDED_FISH_CATALOG}
+          onExitToSeller={handleExitCustomerMode}
+        />
+      </Suspense>
+    );
+  }
 
   const navItems: { id: ActiveTab; label: string; icon: React.ReactNode }[] = [
     {
@@ -719,6 +978,7 @@ export default function App() {
               onUpdateEntry={handleUpdateEntry}
               onOpenPosterStudio={(fish) => setPosterTargetFish(fish)}
               onOpenShareList={() => setShowShareModal(true)}
+              onOpenCustomerSnapshot={() => setShowCustomerSnapshot(true)}
               onNavigateFromSearch={handleNavigateFromSearch}
             />
           ) : (
@@ -768,8 +1028,14 @@ export default function App() {
                   settings={settings}
                   onSaveSettings={handleSaveSettings}
                   fishList={fishList}
+                  dailyRecord={dailyRecord}
                   allDailyRecords={allDailyRecords}
                   trashList={trashList}
+                  enquiries={enquiries}
+                  onSaveEnquiry={handleSaveEnquiry}
+                  onDeleteEnquiry={handleDeleteEnquiry}
+                  onOpenCustomerSnapshot={() => setShowCustomerSnapshot(true)}
+                  onMarkBackupCompleted={handleMarkBackupCompleted}
                   onRestoreFromTrash={handleRestoreFromTrash}
                   onRestoreAllTrash={handleRestoreAllTrash}
                   onPermanentDeleteTrash={handlePermanentDeleteTrash}
@@ -782,6 +1048,27 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {/* Non-blocking 1-Tap Undo Toast for Availability Changes */}
+      {undoState && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-18 md:bottom-5 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-1.5rem)] max-w-md rounded-2xl bg-slate-900 dark:bg-neutral-900 text-white border border-slate-700 px-3.5 py-2.5 shadow-xl flex items-center justify-between gap-3"
+        >
+          <span className="text-xs sm:text-sm font-semibold truncate">
+            {undoState.message}
+          </span>
+          <button
+            type="button"
+            onClick={handleUndoLastToggle}
+            className="min-h-[36px] px-3 py-1 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs flex items-center gap-1 shrink-0"
+          >
+            <RotateCcw className="w-3.5 h-3.5 shrink-0" />
+            <span>{t(lang, 'undo_action')}</span>
+          </button>
+        </div>
+      )}
 
       {/* Mobile Fixed Bottom Navigation Bar */}
       <nav
@@ -847,6 +1134,20 @@ export default function App() {
             dailyRecord={dailyRecord}
             settings={settings}
             onClose={() => setShowShareModal(false)}
+          />
+        </Suspense>
+      )}
+
+      {/* Customer Snapshot Share & Offline HTML Export Modal */}
+      {showCustomerSnapshot && (
+        <Suspense fallback={null}>
+          <CustomerSnapshotModal
+            lang={lang}
+            fishList={fishList}
+            dailyRecord={dailyRecord}
+            settings={settings}
+            onSaveDefaults={handleSaveSettings}
+            onClose={() => setShowCustomerSnapshot(false)}
           />
         </Suspense>
       )}
