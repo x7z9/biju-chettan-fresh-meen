@@ -36,9 +36,9 @@ export default defineConfig(() => {
         ],
         manifest: {
           id: base,
-          name: 'ബിജു ചേട്ടന്റെ ഫ്രെഷ് മീൻ',
-          short_name: 'ബിജു മീൻ',
-          description: 'ഇന്നത്തെ മീൻ ലഭ്യതയും ഫോട്ടോകളും WhatsApp-ൽ പങ്കിടാൻ',
+          name: 'Coastal Fish Availability',
+          short_name: 'മീൻ ലഭ്യത',
+          description: 'Manage daily fish availability and share seafood updates.',
           lang: 'ml-IN',
           start_url: base,
           scope: base,
