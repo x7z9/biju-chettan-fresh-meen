@@ -46,6 +46,13 @@ jobs:
         run: |
           npm run build
           cp dist/index.html dist/404.html
+          cat > dist/README.md <<'EOF'
+          # Public Website Deployment
+          
+          This repository contains the compiled static files used to publish the application through GitHub Pages.
+          
+          The editable application source code and development history are maintained separately in a private repository. This deployment repository is not an open-source distribution of the application.
+          EOF
           # Do not publish AI Studio prompts, authoring notes, source manifests, or examples.
           find dist/assets/aistudio -type f \\( -iname '*.md' -o -iname '*.txt' -o -iname '*.example' -o -iname '*.json' -o -iname '*.webmanifest' \\) -delete
           # The former custom business sticker is private branding, not a public app asset.
