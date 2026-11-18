@@ -1031,3 +1031,39 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
     updatedAt: BASE_TIMESTAMP + 79,
   },
 ];
+
+export type FishCategoryFilter = 'sea' | 'backwater' | 'shellfish';
+
+const BACKWATER_IDS = new Set([
+  'kayal_koori',
+  'karimeen',
+  'kaalanchi',
+  'poomeen',
+]);
+
+export function getFishCategory(fish: FishItem): FishCategoryFilter {
+  if (
+    fish.catalogueGroup === 'seafood_other' ||
+    fish.seafoodClass === 'crustacean' ||
+    fish.seafoodClass === 'bivalve_mollusc' ||
+    fish.seafoodClass === 'cephalopod'
+  ) {
+    return 'shellfish';
+  }
+  if (BACKWATER_IDS.has(fish.id)) {
+    return 'backwater';
+  }
+  const haystack = `${fish.nameMl} ${fish.pronunciationLatin} ${fish.nameEn || ''} ${fish.speciesNote || ''}`.toLowerCase();
+  if (
+    /prawn|shrimp|crab|squid|cuttle|clam|mussel|octopus|ചെമ്മീൻ|കൊഞ്ച്|ഞണ്ട്|കക്ക|കണവ|കൂന്തൽ|നീരാളി/.test(
+      haystack
+    )
+  ) {
+    return 'shellfish';
+  }
+  if (/കായൽ|പുഴ|backwater|river|pearlspot|karimeen|milkfish|seabass/.test(haystack)) {
+    return 'backwater';
+  }
+  return 'sea';
+}
+

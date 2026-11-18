@@ -179,6 +179,13 @@ export default function App() {
 
   const isOnline = useOnlineStatus();
 
+  const dailyRecordRef = useRef(dailyRecord);
+  dailyRecordRef.current = dailyRecord;
+  const fishListRef = useRef(fishList);
+  fishListRef.current = fishList;
+  const langRef = useRef(lang);
+  langRef.current = lang;
+
   useEffect(() => {
     const syncFromUrl = () => {
       setUrlViewState(checkIsCustomerViewUrl());
@@ -403,7 +410,7 @@ export default function App() {
     });
   }, []);
 
-  const handleDbOperation = async (fn: () => Promise<void>) => {
+  const handleDbOperation = useCallback(async (fn: () => Promise<void>) => {
     try {
       setQuotaError(false);
       await fn();
@@ -414,37 +421,44 @@ export default function App() {
         throw err;
       }
     }
-  };
+  }, []);
 
-  const persistDailyRecord = async (next: DailyRecord) => {
-    setDailyRecord(next);
-    upsertDailyRecordInState(next);
-    await handleDbOperation(async () => {
-      await saveDailyRecord(next);
-      flashSaved();
-    });
-  };
+  const persistDailyRecord = useCallback(
+    async (next: DailyRecord) => {
+      dailyRecordRef.current = next;
+      setDailyRecord(next);
+      upsertDailyRecordInState(next);
+      await handleDbOperation(async () => {
+        await saveDailyRecord(next);
+        flashSaved();
+      });
+    },
+    [flashSaved, handleDbOperation, upsertDailyRecordInState]
+  );
 
-  const showUndoToast = (
-    fishId: string,
-    prevEntry: DailyFishEntry | undefined,
-    fishName: string,
-    nextStatusLabel: string
-  ) => {
-    setUndoState({
-      fishId,
-      prevEntry,
-      message: `${fishName}: ${nextStatusLabel}`,
-    });
-    if (undoTimerRef.current !== undefined) {
-      window.clearTimeout(undoTimerRef.current);
-    }
-    undoTimerRef.current = window.setTimeout(() => {
-      setUndoState(null);
-    }, 5500);
-  };
+  const showUndoToast = useCallback(
+    (
+      fishId: string,
+      prevEntry: DailyFishEntry | undefined,
+      fishName: string,
+      nextStatusLabel: string
+    ) => {
+      setUndoState({
+        fishId,
+        prevEntry,
+        message: `${fishName}: ${nextStatusLabel}`,
+      });
+      if (undoTimerRef.current !== undefined) {
+        window.clearTimeout(undoTimerRef.current);
+      }
+      undoTimerRef.current = window.setTimeout(() => {
+        setUndoState(null);
+      }, 5500);
+    },
+    []
+  );
 
-  const handleUndoLastToggle = () => {
+  const handleUndoLastToggle = useCallback(() => {
     if (!undoState) return;
     triggerHaptic();
     const { fishId, prevEntry } = undoState;
@@ -452,107 +466,132 @@ export default function App() {
     if (undoTimerRef.current !== undefined) {
       window.clearTimeout(undoTimerRef.current);
     }
-    const nextEntries = { ...dailyRecord.entries };
+    const latest = dailyRecordRef.current;
+    const nextEntries = { ...latest.entries };
     if (prevEntry) {
       nextEntries[fishId] = prevEntry;
     } else {
       delete nextEntries[fishId];
     }
     const nextRecord: DailyRecord = {
-      ...dailyRecord,
+      ...latest,
       entries: nextEntries,
       updatedAt: Date.now(),
     };
-    persistDailyRecord(nextRecord);
-  };
+    void persistDailyRecord(nextRecord);
+  }, [persistDailyRecord, undoState]);
 
-  const handleToggleAvailability = (fishId: string) => {
-    triggerHaptic();
-    const prevEntry = dailyRecord.entries[fishId];
-    const currentStatus = resolveEntryStatus(prevEntry);
-    const nextAvailable =
-      currentStatus === 'not_listed' || currentStatus === 'sold_out';
-    const nextStatus = nextAvailable ? 'available' : 'not_listed';
-    const nextRecord: DailyRecord = {
-      ...dailyRecord,
-      entries: {
-        ...dailyRecord.entries,
-        [fishId]: {
-          ...prevEntry,
-          fishId,
-          available: nextAvailable,
-          status: nextStatus,
-          updatedAt: Date.now(),
+  const handleToggleAvailability = useCallback(
+    (fishId: string) => {
+      triggerHaptic();
+      const latest = dailyRecordRef.current;
+      const prevEntry = latest.entries[fishId];
+      const currentStatus = resolveEntryStatus(prevEntry);
+      const nextAvailable =
+        currentStatus === 'not_listed' || currentStatus === 'sold_out';
+      const nextStatus = nextAvailable ? 'available' : 'not_listed';
+      const now = Date.now();
+      const nextRecord: DailyRecord = {
+        ...latest,
+        entries: {
+          ...latest.entries,
+          [fishId]: {
+            ...prevEntry,
+            fishId,
+            available: nextAvailable,
+            status: nextStatus,
+            updatedAt: now,
+          },
         },
-      },
-      updatedAt: Date.now(),
-    };
-    persistDailyRecord(nextRecord);
+        updatedAt: now,
+      };
+      void persistDailyRecord(nextRecord);
 
-    const matchedFish = fishList.find((f) => f.id === fishId);
-    if (matchedFish) {
-      showUndoToast(
+      const matchedFish = fishListRef.current.find((f) => f.id === fishId);
+      if (matchedFish) {
+        showUndoToast(
+          fishId,
+          prevEntry,
+          matchedFish.nameMl,
+          t(langRef.current, `status_${nextStatus}` as const)
+        );
+      }
+    },
+    [persistDailyRecord, showUndoToast]
+  );
+
+  const handleToggleIncludePrices = useCallback(
+    (include: boolean) => {
+      const latest = dailyRecordRef.current;
+      const nextRecord: DailyRecord = {
+        ...latest,
+        includePrices: include,
+        updatedAt: Date.now(),
+      };
+      void persistDailyRecord(nextRecord);
+    },
+    [persistDailyRecord]
+  );
+
+  const handleUpdateEntry = useCallback(
+    (fishId: string, patch: Partial<DailyFishEntry>) => {
+      const latest = dailyRecordRef.current;
+      const now = Date.now();
+      const prevEntry = latest.entries[fishId] || {
         fishId,
-        prevEntry,
-        matchedFish.nameMl,
-        t(lang, `status_${nextStatus}` as const)
-      );
-    }
-  };
+        available: true,
+        status: 'available' as const,
+        updatedAt: now,
+      };
+      const merged: DailyFishEntry = {
+        ...prevEntry,
+        ...patch,
+        fishId,
+        updatedAt: now,
+      };
+      if (patch.status) {
+        merged.available =
+          patch.status === 'available' || patch.status === 'limited';
+      } else if (typeof patch.available === 'boolean') {
+        merged.status = patch.available ? 'available' : 'not_listed';
+      }
 
-  const handleToggleIncludePrices = (include: boolean) => {
-    const nextRecord: DailyRecord = {
-      ...dailyRecord,
-      includePrices: include,
-      updatedAt: Date.now(),
-    };
-    persistDailyRecord(nextRecord);
-  };
+      const nextRecord: DailyRecord = {
+        ...latest,
+        entries: {
+          ...latest.entries,
+          [fishId]: merged,
+        },
+        updatedAt: now,
+      };
+      dailyRecordRef.current = nextRecord;
+      setDailyRecord(nextRecord);
+      upsertDailyRecordInState(nextRecord);
 
-  const handleUpdateEntry = (
-    fishId: string,
-    patch: Partial<DailyFishEntry>
-  ) => {
-    const prevEntry = dailyRecord.entries[fishId] || {
-      fishId,
-      available: true,
-      status: 'available' as const,
-      updatedAt: Date.now(),
-    };
-    const merged: DailyFishEntry = {
-      ...prevEntry,
-      ...patch,
-      fishId,
-      updatedAt: Date.now(),
-    };
-    if (patch.status) {
-      merged.available =
-        patch.status === 'available' || patch.status === 'limited';
-    } else if (typeof patch.available === 'boolean') {
-      merged.status = patch.available ? 'available' : 'not_listed';
-    }
+      if (entryDebounceTimerRef.current !== undefined) {
+        window.clearTimeout(entryDebounceTimerRef.current);
+      }
+      entryDebounceTimerRef.current = window.setTimeout(() => {
+        void handleDbOperation(async () => {
+          await saveDailyRecord(nextRecord);
+          flashSaved();
+        });
+      }, 300);
+    },
+    [flashSaved, handleDbOperation, upsertDailyRecordInState]
+  );
 
-    const nextRecord: DailyRecord = {
-      ...dailyRecord,
-      entries: {
-        ...dailyRecord.entries,
-        [fishId]: merged,
-      },
-      updatedAt: Date.now(),
-    };
-    setDailyRecord(nextRecord);
-    upsertDailyRecordInState(nextRecord);
+  const handleOpenPosterStudio = useCallback((fish: FishItem) => {
+    setPosterTargetFish(fish);
+  }, []);
 
-    if (entryDebounceTimerRef.current !== undefined) {
-      window.clearTimeout(entryDebounceTimerRef.current);
-    }
-    entryDebounceTimerRef.current = window.setTimeout(() => {
-      handleDbOperation(async () => {
-        await saveDailyRecord(nextRecord);
-        flashSaved();
-      });
-    }, 300);
-  };
+  const handleOpenShareList = useCallback(() => {
+    setShowShareModal(true);
+  }, []);
+
+  const handleOpenCustomerSnapshot = useCallback(() => {
+    setShowCustomerSnapshot(true);
+  }, []);
 
   const handleSaveFish = async (fish: FishItem) => {
     let nextRefNumber = fish.referenceNumber;
@@ -820,21 +859,21 @@ export default function App() {
 
   return (
     <div className="min-h-dvh flex flex-col bg-[#f5f8fc] dark:bg-black text-slate-900 dark:text-white transition-colors">
-      {/* Compact Top App Bar */}
-      <header className="sticky top-0 z-30 bg-[#082d59] dark:bg-black text-white shadow-sm border-b border-transparent dark:border-neutral-800 pt-safe">
+      {/* Compact Frosted Coastal Top App Bar */}
+      <header className="sticky top-0 z-30 bg-white/92 dark:bg-black/95 backdrop-blur-xl text-[#0b1c30] dark:text-white shadow-[0_4px_20px_-4px_rgba(8,45,89,0.08)] border-b border-slate-200/70 dark:border-neutral-800 pt-safe">
         <div className="max-w-6xl mx-auto px-2.5 sm:px-5 h-14 flex items-center justify-between gap-1.5 sm:gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <img
               src={BUSINESS_LOGO_PATH}
               alt={brandName}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover shrink-0 bg-white ring-1 ring-white/30"
+              className="w-9 h-9 rounded-full object-cover shrink-0 bg-white ring-2 ring-[#082d59]/15 dark:ring-sky-400/30 shadow-xs"
             />
             <div className="min-w-0">
-              <h1 className="text-xs sm:text-base font-bold leading-tight truncate">
+              <h1 className="text-xs sm:text-base font-extrabold text-[#082d59] dark:text-sky-300 leading-tight truncate">
                 <span className="hidden min-[420px]:inline">{brandName}</span>
                 <span className="min-[420px]:hidden">{brandShort}</span>
               </h1>
-              <p className="text-[10px] sm:text-[11px] text-sky-200 dark:text-sky-300 leading-tight truncate">
+              <p className="text-[10px] sm:text-[11px] font-semibold text-[#0d9488] dark:text-teal-300 leading-tight truncate">
                 {formatDisplayDate(todayKey, lang)}
               </p>
             </div>
@@ -843,7 +882,7 @@ export default function App() {
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <PWAInstallButton lang={lang} variant="header" />
 
-            {/* Light / Dark Theme Toggle Button in Navigation Bar */}
+            {/* Light / Dark Theme Toggle Button */}
             <button
               type="button"
               onClick={handleToggleTheme}
@@ -854,12 +893,12 @@ export default function App() {
                 theme === 'dark' ? t(lang, 'theme_light') : t(lang, 'theme_dark')
               }
               aria-pressed={theme === 'dark'}
-              className="min-w-[38px] min-h-[38px] px-2 sm:px-2.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 dark:bg-neutral-900 dark:border dark:border-neutral-700 dark:hover:bg-neutral-800 text-white flex items-center justify-center gap-1.5 text-xs font-bold transition shrink-0"
+              className="min-w-[38px] min-h-[38px] px-2 sm:px-2.5 py-1.5 rounded-full bg-[#eff4ff] hover:bg-[#dce9ff] dark:bg-neutral-900 dark:border dark:border-neutral-700 dark:hover:bg-neutral-800 text-[#082d59] dark:text-white flex items-center justify-center gap-1.5 text-xs font-bold transition shrink-0"
             >
               {theme === 'dark' ? (
                 <Sun className="w-4 h-4 text-[#facc15] shrink-0" />
               ) : (
-                <Moon className="w-4 h-4 text-sky-200 shrink-0" />
+                <Moon className="w-4 h-4 text-[#082d59] shrink-0" />
               )}
               <span className="hidden md:inline">
                 {theme === 'dark' ? 'Light' : 'Dark'}
@@ -868,31 +907,33 @@ export default function App() {
 
             {/* Clear Bilingual Toggle */}
             <div
-              className="flex items-center p-0.5 bg-white/15 dark:bg-neutral-900 dark:border dark:border-neutral-800 rounded-xl"
+              className="flex items-center p-0.5 bg-[#eff4ff] dark:bg-neutral-900 dark:border dark:border-neutral-800 rounded-full"
               role="group"
               aria-label={t(lang, 'language')}
             >
               <button
                 type="button"
                 onClick={() => handleLanguageChange('ml')}
-                className={`min-h-[34px] px-2 sm:px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-bold transition whitespace-nowrap ${
+                className={`min-h-[34px] px-2 sm:px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-bold transition whitespace-nowrap ${
                   lang === 'ml'
-                    ? 'bg-white text-[#082d59] dark:text-black'
-                    : 'text-white/90 hover:text-white'
+                    ? 'bg-[#082d59] dark:bg-[#0879d9] text-white shadow-xs'
+                    : 'text-slate-600 dark:text-neutral-300 hover:text-[#082d59] dark:hover:text-white'
                 }`}
               >
-                മലയാളം
+                <span className="hidden min-[380px]:inline">മലയാളം</span>
+                <span className="min-[380px]:hidden">മ</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleLanguageChange('en')}
-                className={`min-h-[34px] px-2 sm:px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-bold transition whitespace-nowrap ${
+                className={`min-h-[34px] px-2 sm:px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-bold transition whitespace-nowrap ${
                   lang === 'en'
-                    ? 'bg-white text-[#082d59] dark:text-black'
-                    : 'text-white/90 hover:text-white'
+                    ? 'bg-[#082d59] dark:bg-[#0879d9] text-white shadow-xs'
+                    : 'text-slate-600 dark:text-neutral-300 hover:text-[#082d59] dark:hover:text-white'
                 }`}
               >
-                English
+                <span className="hidden min-[380px]:inline">English</span>
+                <span className="min-[380px]:hidden">EN</span>
               </button>
             </div>
           </div>
@@ -905,7 +946,7 @@ export default function App() {
         <aside className="hidden md:flex md:flex-col md:w-52 shrink-0 gap-1.5">
           <nav
             aria-label="Primary"
-            className="sticky top-20 rounded-3xl bg-white dark:bg-[#0a0a0a] p-2.5 border border-slate-200/80 dark:border-neutral-800 shadow-xs space-y-1"
+            className="sticky top-20 rounded-3xl bg-white dark:bg-[#0a0a0a] p-2.5 border border-slate-200/70 dark:border-neutral-800 shadow-[0_4px_20px_-4px_rgba(8,45,89,0.06)] space-y-1"
           >
             {navItems.map((item) => {
               const active = activeTab === item.id;
@@ -920,8 +961,8 @@ export default function App() {
                   }}
                   className={`w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl font-bold text-sm flex items-center gap-3 transition ${
                     active
-                      ? 'bg-[#082d59] dark:bg-[#0879d9] text-white'
-                      : 'text-slate-700 dark:text-neutral-300 hover:bg-slate-100 dark:hover:bg-neutral-900'
+                      ? 'bg-[#082d59] dark:bg-[#0879d9] text-white shadow-xs'
+                      : 'text-slate-700 dark:text-neutral-300 hover:bg-[#eff4ff] dark:hover:bg-neutral-900'
                   }`}
                 >
                   {item.icon}
@@ -950,9 +991,34 @@ export default function App() {
             </div>
           )}
 
-          {saveNotice && (
-            <div className="fixed top-16 right-4 z-40 rounded-xl bg-[#082d59] dark:bg-[#0879d9] text-white px-3.5 py-2 text-xs font-semibold shadow-lg">
-              {saveNotice}
+          {(saveNotice || undoState) && (
+            <div className="fixed top-[62px] left-1/2 -translate-x-1/2 md:left-auto md:right-5 md:translate-x-0 z-40 w-[calc(100%-1.5rem)] max-w-md pointer-events-none flex flex-col items-stretch gap-1.5">
+              {undoState ? (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  data-testid="undo-toast"
+                  className="pointer-events-auto rounded-2xl bg-slate-900 dark:bg-neutral-900 text-white border border-slate-700 px-3.5 py-2 shadow-xl flex items-center justify-between gap-3"
+                >
+                  <span className="text-xs sm:text-sm font-semibold truncate">
+                    {undoState.message}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleUndoLastToggle}
+                    className="min-h-[36px] px-3 py-1 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs flex items-center gap-1 shrink-0"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 shrink-0" />
+                    <span>{t(lang, 'undo_action')}</span>
+                  </button>
+                </div>
+              ) : (
+                saveNotice && (
+                  <div className="self-end rounded-xl bg-[#082d59] dark:bg-[#0879d9] text-white px-3.5 py-2 text-xs font-semibold shadow-lg">
+                    {saveNotice}
+                  </div>
+                )
+              )}
             </div>
           )}
 
@@ -976,9 +1042,9 @@ export default function App() {
               onToggleAvailability={handleToggleAvailability}
               onToggleIncludePrices={handleToggleIncludePrices}
               onUpdateEntry={handleUpdateEntry}
-              onOpenPosterStudio={(fish) => setPosterTargetFish(fish)}
-              onOpenShareList={() => setShowShareModal(true)}
-              onOpenCustomerSnapshot={() => setShowCustomerSnapshot(true)}
+              onOpenPosterStudio={handleOpenPosterStudio}
+              onOpenShareList={handleOpenShareList}
+              onOpenCustomerSnapshot={handleOpenCustomerSnapshot}
               onNavigateFromSearch={handleNavigateFromSearch}
             />
           ) : (
@@ -1049,31 +1115,10 @@ export default function App() {
         </main>
       </div>
 
-      {/* Non-blocking 1-Tap Undo Toast for Availability Changes */}
-      {undoState && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="fixed bottom-18 md:bottom-5 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-1.5rem)] max-w-md rounded-2xl bg-slate-900 dark:bg-neutral-900 text-white border border-slate-700 px-3.5 py-2.5 shadow-xl flex items-center justify-between gap-3"
-        >
-          <span className="text-xs sm:text-sm font-semibold truncate">
-            {undoState.message}
-          </span>
-          <button
-            type="button"
-            onClick={handleUndoLastToggle}
-            className="min-h-[36px] px-3 py-1 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs flex items-center gap-1 shrink-0"
-          >
-            <RotateCcw className="w-3.5 h-3.5 shrink-0" />
-            <span>{t(lang, 'undo_action')}</span>
-          </button>
-        </div>
-      )}
-
-      {/* Mobile Fixed Bottom Navigation Bar */}
+      {/* Mobile Fixed Frosted Bottom Navigation Bar */}
       <nav
         aria-label="Mobile Navigation"
-        className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-black/95 backdrop-blur-md border-t border-slate-200 dark:border-neutral-800 pb-safe"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-black/95 backdrop-blur-xl shadow-[0_-4px_20px_-4px_rgba(8,45,89,0.08)] border-t border-slate-200/70 dark:border-neutral-800 pb-safe"
       >
         <div className="grid grid-cols-4 h-15">
           {navItems.map((item) => {
@@ -1090,13 +1135,13 @@ export default function App() {
                 className={`flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold transition ${
                   active
                     ? 'text-[#082d59] dark:text-sky-300'
-                    : 'text-slate-500 dark:text-neutral-400 hover:text-slate-800 dark:hover:text-white'
+                    : 'text-[#43474f] dark:text-neutral-400 hover:text-[#082d59] dark:hover:text-white'
                 }`}
               >
                 <span
-                  className={`p-1 rounded-xl ${
+                  className={`px-3 py-1 rounded-full transition-colors ${
                     active
-                      ? 'bg-sky-100 dark:bg-sky-950 text-[#0879d9] dark:text-sky-300'
+                      ? 'bg-[#eff4ff] dark:bg-sky-950 text-[#082d59] dark:text-sky-300'
                       : ''
                   }`}
                 >

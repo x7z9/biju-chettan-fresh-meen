@@ -293,6 +293,13 @@ export const translations = {
     enquiries_word: 'അന്വേഷണങ്ങൾ',
     local_only_privacy_title: 'ഈ ഫോണിൽ മാത്രം സൂക്ഷിക്കുന്നു',
     local_only_privacy_body: 'സെർവറോ അക്കൗണ്ടോ പണമടച്ചുള്ള ക്ലൗഡോ ഇല്ല. ഫോൺ നഷ്ടപ്പെട്ടാൽ ഡാറ്റ നഷ്ടപ്പെടാതിരിക്കാൻ Backup (JSON) ഉപയോഗിക്കുക.',
+    cat_all: 'എല്ലാം',
+    cat_sea: 'കടൽമീൻ',
+    cat_backwater: 'കായൽ / പുഴ',
+    cat_shellfish: 'കൊഞ്ചും ഞണ്ടും',
+    harbor_fresh_badge: 'ഹാർബർ ഫ്രഷ് • 100% കെമിക്കൽ ഫ്രീ',
+    cleaning_service_banner: 'സൗജന്യ ക്ലീനിങ് & കട്ടിങ് സൗകര്യം ലഭ്യമാണ്',
+    natural_fresh_tag: '100% ഫ്രഷ്',
   },
   en: {
     app_title: 'Biju Chettante Fresh Fish',
@@ -586,6 +593,13 @@ export const translations = {
     enquiries_word: 'enquiries',
     local_only_privacy_title: 'Stored locally on this phone only',
     local_only_privacy_body: 'No backend server, login, or paid database is used. Keep periodic JSON backups safe on your phone or Drive.',
+    cat_all: 'All Varieties',
+    cat_sea: 'Sea Fish',
+    cat_backwater: 'Backwater / River',
+    cat_shellfish: 'Prawns, Crab & Squid',
+    harbor_fresh_badge: 'Harbor Fresh • 100% Chemical-Free',
+    cleaning_service_banner: 'Free cleaning & custom cutting available',
+    natural_fresh_tag: '100% Fresh',
   },
 } as const;
 

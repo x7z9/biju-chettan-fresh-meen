@@ -347,7 +347,7 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 min-h-0 overflow-y-auto p-3.5 sm:p-4 space-y-3 sm:space-y-4">
           {errorMsg && (
             <div className="rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 p-3 text-sm text-rose-800 dark:text-rose-200">
               {errorMsg}
@@ -362,8 +362,8 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
           )}
 
           {/* Take / Choose Real Catch Photo */}
-          <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-2.5">
-            <label className="min-h-[48px] px-3 py-2.5 rounded-2xl bg-[#0879d9] text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer hover:bg-[#0667ba] text-center leading-snug">
+          <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-2">
+            <label className="min-h-[44px] px-3 py-2 rounded-2xl bg-[#0879d9] text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer hover:bg-[#0667ba] text-center leading-snug">
               <Camera className="w-4 h-4 shrink-0" />
               <span>{t(lang, 'take_photo')}</span>
               <input
@@ -374,7 +374,7 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
                 className="sr-only"
               />
             </label>
-            <label className="min-h-[48px] px-3 py-2.5 rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-[#082d59] dark:text-sky-200 border border-sky-200 dark:border-sky-800 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer hover:bg-sky-100 dark:hover:bg-sky-900/60 text-center leading-snug">
+            <label className="min-h-[44px] px-3 py-2 rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-[#082d59] dark:text-sky-200 border border-sky-200 dark:border-sky-800 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer hover:bg-sky-100 dark:hover:bg-sky-900/60 text-center leading-snug">
               <ImagePlus className="w-4 h-4 shrink-0 text-[#0879d9] dark:text-sky-400" />
               <span>{t(lang, 'choose_photo')}</span>
               <input
@@ -421,7 +421,7 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
               </p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2.5 sm:space-y-3">
               {/* Before / After toggle */}
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-neutral-900 rounded-xl border border-transparent dark:border-neutral-800">
@@ -452,7 +452,7 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowControls((v) => !v)}
-                  className="min-h-[40px] px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-transparent dark:border-neutral-800 text-slate-700 dark:text-neutral-200 text-xs font-semibold flex items-center gap-1.5"
+                  className="min-h-[38px] px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-transparent dark:border-neutral-800 text-slate-700 dark:text-neutral-200 text-xs font-semibold flex items-center gap-1.5"
                 >
                   <SlidersHorizontal className="w-4 h-4 shrink-0" />
                   <span>{t(lang, 'app_settings')}</span>
@@ -460,7 +460,7 @@ export const PosterStudioModal: React.FC<PosterStudioModalProps> = ({
               </div>
 
               {/* 3:4 Container */}
-              <div className="w-full max-w-[320px] mx-auto aspect-[3/4] rounded-2xl bg-slate-100 dark:bg-black overflow-hidden shadow-md border border-slate-200 dark:border-neutral-800 flex items-center justify-center relative">
+              <div className="w-full max-w-[230px] sm:max-w-[300px] mx-auto aspect-[3/4] rounded-2xl bg-slate-100 dark:bg-black overflow-hidden shadow-md border border-slate-200 dark:border-neutral-800 flex items-center justify-center relative">
                 {viewMode === 'original' ? (
                   <img
                     src={actualPhotoSrc}

@@ -38,7 +38,7 @@ export const GlossaryModal: React.FC<GlossaryModalProps> = ({
       aria-labelledby="glossary-modal-title"
     >
       <div className="w-full sm:max-w-xl max-h-[90dvh] flex flex-col rounded-t-3xl sm:rounded-3xl bg-white dark:bg-[#0a0a0a] border border-transparent dark:border-neutral-800 shadow-2xl overflow-hidden">
-        <div className="px-4 py-3.5 border-b border-slate-200 dark:border-neutral-800 flex items-center justify-between gap-2">
+        <div className="px-4 py-3.5 border-b border-slate-200 dark:border-neutral-800 flex items-center justify-between gap-2 shrink-0">
           <h2
             id="glossary-modal-title"
             className="text-base sm:text-lg font-bold text-[#082d59] dark:text-sky-300 leading-snug"
@@ -55,20 +55,31 @@ export const GlossaryModal: React.FC<GlossaryModalProps> = ({
           </button>
         </div>
 
-        <div className="p-4 border-b border-slate-100 dark:border-neutral-800">
-          <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="p-4 border-b border-slate-100 dark:border-neutral-800 shrink-0">
+          <div className="flex items-center w-full rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 pl-3 pr-1.5 gap-2">
+            <Search className="w-4 h-4 text-slate-400 shrink-0 pointer-events-none" />
             <input
               type="search"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder={t(lang, 'search')}
-              className="w-full h-10 pl-9 pr-4 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-sm text-slate-900 dark:text-white"
+              aria-label={t(lang, 'search')}
+              className="flex-1 min-w-0 h-10 bg-transparent text-sm text-slate-900 dark:text-white focus:outline-none [&::-webkit-search-cancel-button]:hidden"
             />
+            {q && (
+              <button
+                type="button"
+                onClick={() => setQ('')}
+                aria-label={t(lang, 'clear_search')}
+                className="w-8 h-8 rounded-lg text-slate-500 dark:text-neutral-400 hover:bg-slate-200 dark:hover:bg-neutral-800 flex items-center justify-center shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 
-        <div className="overflow-y-auto p-4 space-y-2.5">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-2.5">
           {filtered.map((fish) => (
             <div
               key={fish.id}

@@ -4,16 +4,25 @@
 @layer base {
   :root {
     --brand-navy: #082d59;
+    --brand-midnight: #0a1f3d;
     --brand-tray: #0879d9;
+    --brand-teal: #0d9488;
+    --brand-teal-light: #ccfbf1;
+    --brand-emerald: #059669;
+    --brand-coral: #ea580c;
+    --brand-amber: #f59e0b;
     --brand-surface: #f5f8fc;
+    --brand-surface-low: #eff4ff;
+    --brand-surface-high: #dce9ff;
+    --brand-sky-tint: #f0f9ff;
     --brand-highlight: #facc15;
   }
 
   html {
-    font-family: "Noto Sans Malayalam", "Manjari", "Kartika", "Nirmala UI", system-ui, -apple-system, sans-serif;
+    font-family: "Plus Jakarta Sans", "Noto Sans Malayalam", "Manjari", "Kartika", "Nirmala UI", system-ui, -apple-system, sans-serif;
     -webkit-tap-highlight-color: transparent;
     background-color: #f5f8fc;
-    color: #0f172a;
+    color: #0b1c30;
   }
 
   html.dark {
@@ -58,4 +67,13 @@
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

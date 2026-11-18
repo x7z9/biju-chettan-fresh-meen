@@ -50,10 +50,10 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
         <button
           type="button"
           onClick={handleTap}
-          className="min-h-[38px] px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#facc15] text-[#082d59] font-semibold text-xs sm:text-sm flex items-center gap-1.5 shadow-sm hover:bg-yellow-300 active:scale-[0.98] transition whitespace-nowrap shrink-0"
+          className="min-h-[38px] px-2.5 sm:px-3 py-1.5 rounded-full bg-[#082d59] dark:bg-[#facc15] text-white dark:text-[#082d59] font-bold text-xs flex items-center gap-1.5 shadow-sm hover:opacity-95 active:scale-[0.98] transition whitespace-nowrap shrink-0"
           aria-label={t(lang, 'install')}
         >
-          <Download className="w-4 h-4 shrink-0" />
+          <Download className="w-3.5 h-3.5 shrink-0" />
           <span className="hidden sm:inline">{t(lang, 'install')}</span>
           <span className="sm:hidden">{t(lang, 'install_app')}</span>
         </button>

@@ -1,0 +1,2023 @@
+<!-- ഇന്നത്തെ മീൻ - Biju Chettan Fresh Meen -->
+<!DOCTYPE html><html lang="ml"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-container": "#082d59", "surface-tint": "#425f8e", "border-subtle": "#E2E8F0", "tertiary-container": "#551a00", "primary-fixed-dim": "#aac7fc", "on-background": "#0b1c30", "secondary": "#006a61", "sea-teal": "#0D9488", "fresh-emerald": "#059669", "amber-sun": "#F59E0B", "surface-card": "#FFFFFF", "surface-dim": "#cbdbf5", "sea-teal-light": "#CCFBF1", "surface-container-low": "#eff4ff", "sky-tint": "#F0F9FF", "outline": "#747780", "surface-bright": "#f8f9ff", "secondary-fixed": "#89f5e7", "on-secondary-container": "#006f66", "secondary-container": "#86f2e4", "surface-container-highest": "#d3e4fe", "on-tertiary-fixed-variant": "#7f2b00", "on-secondary-fixed-variant": "#005049", "on-tertiary": "#ffffff", "on-secondary": "#ffffff", "inverse-surface": "#213145", "error-container": "#ffdad6", "background": "#f8f9ff", "surface-bg": "#F5F8FC", "on-surface": "#0b1c30", "error": "#ba1a1a", "outline-variant": "#c4c6d0", "inverse-on-surface": "#eaf1ff", "on-primary-fixed": "#001b3d", "on-error": "#ffffff", "primary-fixed": "#d6e3ff", "tertiary": "#330c00", "on-error-container": "#93000a", "on-secondary-fixed": "#00201d", "coral-catch": "#EA580C", "on-surface-variant": "#43474f", "on-tertiary-container": "#fc651d", "surface-container": "#e5eeff", "on-tertiary-fixed": "#370e00", "on-primary-container": "#7996c8", "surface-variant": "#d3e4fe", "ocean-midnight": "#0A1F3D", "secondary-fixed-dim": "#6bd8cb", "ocean-deep": "#082D59", "inverse-primary": "#aac7fc", "surface-container-high": "#dce9ff", "on-primary": "#ffffff", "on-primary-fixed-variant": "#294774", "primary": "#001838", "surface": "#f8f9ff", "tertiary-fixed": "#ffdbce", "surface-container-lowest": "#ffffff", "tertiary-fixed-dim": "#ffb599" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin-desktop": "2rem", "space-sm": "0.5rem", "space-2xl": "2rem", "margin": "1rem", "space-2xs": "0.125rem", "space-md": "0.75rem", "gutter": "0.75rem", "space-xs": "0.25rem", "space-lg": "1rem", "gutter-desktop": "1.25rem", "space-xl": "1.5rem" }, "fontFamily": { "body-sm": ["Noto Sans"], "label-xs": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-md": ["Noto Sans"], "headline-xl": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "title-sm": ["Noto Sans"], "body-lg": ["Noto Sans"], "headline-lg": ["Plus Jakarta Sans"], "body-md": ["Noto Sans"] }, "fontSize": { "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "label-xs": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700"}], "headline-xl-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "800"}], "headline-md": ["17px", {"lineHeight": "24px", "fontWeight": "700"}], "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}], "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}], "label-lg": ["14px", {"lineHeight": "18px", "fontWeight": "600"}], "headline-lg-mobile": ["18px", {"lineHeight": "24px", "fontWeight": "700"}], "title-sm": ["15px", {"lineHeight": "20px", "fontWeight": "600"}], "body-lg": ["15px", {"lineHeight": "22px", "fontWeight": "400"}], "headline-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}], "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "400"}] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior:none;background-color:#F5F8FC;}.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style></head><body class="bg-surface text-on-surface font-body-md flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl shadow-[0_4px_20px_-4px_rgba(8,45,89,0.08)] pt-safe"><div class="h-28 px-margin flex flex-col justify-center gap-space-xs"><div class="flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><div class="w-10 h-10 rounded-full bg-ocean-deep flex items-center justify-center text-white shadow-sm shrink-0"><span class="material-symbols-outlined text-[22px]">sailing</span></div><div class="flex flex-col min-w-0"><h1 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ബിജു ചേട്ടൻ ഫ്രഷ് മീൻ</h1><span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Daily Fresh Catch • Neendakara Harbor</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Voice Assist" class="h-9 px-space-sm rounded-full bg-surface-container flex items-center gap-space-2xs text-ocean-deep hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[18px] text-sea-teal">volume_up</span><span class="font-label-xs text-label-xs font-bold">ശബ്ദം</span></button><div class="flex items-center bg-surface-container p-0.5 rounded-full"><button class="px-2 py-1 rounded-full bg-ocean-deep text-white font-label-xs text-label-xs shadow-sm">മ</button><button class="px-2 py-1 rounded-full text-on-surface-variant font-label-xs text-label-xs">EN</button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div><div class="flex items-center justify-between pt-space-2xs"><div class="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-amber-sun/15 text-tertiary-container"><span class="w-2 h-2 rounded-full bg-coral-catch animate-pulse"></span><span class="font-label-xs text-label-xs text-coral-catch font-bold">ഇന്നത്തെ മീൻ (Today's Catch) • ലൈവ് സ്റ്റോക്ക്</span></div><span class="font-label-xs text-label-xs text-sea-teal font-semibold">100% കെമിക്കൽ ഫ്രീ</span></div></div></header><main class="flex flex-col relative w-full pt-28 pb-36 px-margin bg-surface"><div class="flex flex-col w-full gap-space-lg">
+<!-- Catch Freshness & Harbor Broadcast Strip -->
+<section class="flex flex-col gap-space-xs bg-surface-card p-space-md rounded-xl shadow-sm">
+<div class="flex items-center justify-between gap-space-sm flex-wrap">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-sea-teal-light text-sea-teal">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-2xs">
+<span class="w-2 h-2 rounded-full bg-fresh-emerald animate-pulse"></span>
+<span class="font-label-xs text-label-xs text-fresh-emerald uppercase">ഹാർബർ ഫ്രഷ് • നേരിട്ട് എത്തിച്ചത്</span>
+</div>
+<span class="font-label-md text-label-md text-ocean-deep">മെയ് 17, വ്യാഴം • നീണ്ടകര &amp; തോട്ടപ്പള്ളി</span>
+</div>
+</div>
+<!-- Live Sync & Voice Prompt Button -->
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-xs text-label-xs">
+          7:15 PM പുതുക്കിയത്
+        </span>
+<button aria-label="Audio Guide Toggle" class="flex items-center gap-space-2xs px-space-sm py-1 rounded-full bg-sky-tint text-sea-teal active:scale-95 transition-transform" id="voiceGuideBtn">
+<span class="material-symbols-outlined text-[16px]">record_voice_over</span>
+<span class="font-label-xs text-label-xs font-bold" id="voiceStatusText">ശബ്ദം ON</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Interactive Search & Dynamic Voice Input -->
+<section class="flex flex-col gap-space-sm">
+<div class="relative flex items-center w-full bg-surface-card rounded-full shadow-sm">
+<span class="material-symbols-outlined absolute left-4 text-outline text-[20px]">search</span>
+<input class="w-full h-12 pl-11 pr-24 rounded-full bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none" id="fishSearchInput" placeholder="മീൻ, കക്ക, കൊഞ്ച് തിരയുക... (Search fish, crab)" type="search">
+<div class="absolute right-2 flex items-center gap-space-2xs">
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-ocean-deep hover:bg-surface-container transition-colors" title="Voice Search">
+<span class="material-symbols-outlined text-[18px]">mic</span>
+</button>
+</div>
+</div>
+<!-- Category Filter Segmented Chips -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 no-scrollbar -mx-margin px-margin">
+<button class="category-chip active shrink-0 px-space-md py-1.5 rounded-full bg-ocean-deep text-on-primary font-label-md text-label-md shadow-sm flex items-center gap-1.5" data-filter="all">
+<span>എല്ലാം</span>
+<span class="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px]">32</span>
+</button>
+<button class="category-chip shrink-0 px-space-md py-1.5 rounded-full bg-surface-card text-on-surface-variant font-label-md text-label-md shadow-sm flex items-center gap-1.5 hover:bg-surface-container" data-filter="sea">
+<span>കടൽമീൻ</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant text-[10px]">18</span>
+</button>
+<button class="category-chip shrink-0 px-space-md py-1.5 rounded-full bg-surface-card text-on-surface-variant font-label-md text-label-md shadow-sm flex items-center gap-1.5 hover:bg-surface-container" data-filter="lake">
+<span>കായൽ / പുഴ</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant text-[10px]">8</span>
+</button>
+<button class="category-chip shrink-0 px-space-md py-1.5 rounded-full bg-surface-card text-on-surface-variant font-label-md text-label-md shadow-sm flex items-center gap-1.5 hover:bg-surface-container" data-filter="shellfish">
+<span>കൊഞ്ചും ഞണ്ടും</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant text-[10px]">6</span>
+</button>
+</div>
+</section>
+<!-- Banner Note on Cutting Services -->
+<section class="flex items-center justify-between bg-sea-teal-light text-secondary rounded-xl p-space-sm px-space-md shadow-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-sea-teal">restaurant</span>
+<span class="font-label-md text-label-md text-secondary">സൗജന്യ ക്ലീനിങ് &amp; കട്ടിങ് സൗകര്യം ലഭ്യമാണ്</span>
+</div>
+<span class="font-label-xs text-label-xs text-fresh-emerald font-bold">100% ഫ്രഷ്</span>
+</section>
+<!-- Fish Product 2-Column Catalog Grid -->
+<section class="grid grid-cols-2 gap-gutter w-full" id="productGrid">
+<!-- Item 01: Ayala / Mackerel -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="sea">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #01
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-sea-teal/90 text-white font-label-xs text-label-xs">
+          കടൽമീൻ
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">അയല</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="അയല, Mackerel">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Ayala (Mackerel)</p>
+<div class="mt-1 flex items-center gap-1 text-fresh-emerald">
+<span class="material-symbols-outlined text-[14px]">local_shipping</span>
+<span class="font-label-xs text-label-xs">രാവിലത്തെ ക്യാച്ച്</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>മുറിച്ചത് / മുഴുവനോടെ</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 02: Karimeen / Pearl Spot -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="lake">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #02
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-amber-sun text-tertiary font-label-xs text-label-xs font-bold">
+          കായൽ സ്പെഷ്യൽ
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">കരിമീൻ</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="കരിമീൻ, Pearl Spot">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Karimeen (Pearl Spot)</p>
+<div class="mt-1 flex items-center gap-1 text-sea-teal">
+<span class="material-symbols-outlined text-[14px]">water</span>
+<span class="font-label-xs text-label-xs">കുമരകം കായൽമീൻ</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>പൊള്ളിക്കാൻ പാകത്തിൽ</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 03: Neymeen / Seer Fish -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="sea">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #03
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-coral-catch text-white font-label-xs text-label-xs">
+          പ്രീമിയം
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">നെയ്മീൻ</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="നെയ്മീൻ, Seer fish">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Neymeen / Seer Fish</p>
+<div class="mt-1 flex items-center gap-1 text-fresh-emerald">
+<span class="material-symbols-outlined text-[14px]">star</span>
+<span class="font-label-xs text-label-xs">വലിയ കഷണങ്ങൾ</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>സ്റ്റേക്ക് / ഫ്രൈ കട്ട്</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 04: Choora / Tuna -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="sea">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #04
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-sea-teal/90 text-white font-label-xs text-label-xs">
+          കടൽമീൻ
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ചൂര / വെളിച്ചൂര</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="ചൂര, Tuna">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Choora (Tuna Fish)</p>
+<div class="mt-1 flex items-center gap-1 text-fresh-emerald">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span class="font-label-xs text-label-xs">ഡീപ് സീ ക്യാച്ച്</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>കറി കട്ട് / തൊലി കളഞ്ഞ്</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 05: Mathi / Sardine -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="sea">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #05
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-fresh-emerald text-white font-label-xs text-label-xs">
+          ഡെയ്‌ലി ഫ്രഷ്
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">മത്തി / ചാള</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="മത്തി, Sardine">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Mathi / Sardines</p>
+<div class="mt-1 flex items-center gap-1 text-fresh-emerald">
+<span class="material-symbols-outlined text-[14px]">local_fire_department</span>
+<span class="font-label-xs text-label-xs">നല്ല കൊഴുപ്പുള്ളത്</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>തല കളഞ്ഞ് വൃത്തിയാക്കി</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 06: Vatta / Trevally -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="sea">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #06
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-sea-teal/90 text-white font-label-xs text-label-xs">
+          കടൽമീൻ
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">വറ്റ</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="വറ്റ, Trevally">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Vatta (Trevally)</p>
+<div class="mt-1 flex items-center gap-1 text-fresh-emerald">
+<span class="material-symbols-outlined text-[14px]">set_meal</span>
+<span class="font-label-xs text-label-xs">മീൻകറിക്ക് അനുയോജ്യം</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>കഷ്ണങ്ങൾ ആക്കി തരും</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 07: Aavoli / Pomfret -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="sea">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #07
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-coral-catch text-white font-label-xs text-label-xs">
+          സ്പെഷ്യൽ
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ആവോലി (വെള്ള)</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="വെള്ള ആവോലി, White Pomfret">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">White Pomfret (Aavoli)</p>
+<div class="mt-1 flex items-center gap-1 text-fresh-emerald">
+<span class="material-symbols-outlined text-[14px]">award_star</span>
+<span class="font-label-xs text-label-xs">ഉയർന്ന ഗുണനിലവാരം</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>ഫ്രൈ കട്ട് / വരഞ്ഞത്</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 08: Kaalanji / Barramundi -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="lake">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #08
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-sea-teal/90 text-white font-label-xs text-label-xs">
+          കായൽ / പുഴ
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">കാളാഞ്ചി</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="കാളാഞ്ചി, Barramundi">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Kaalanji / Barramundi</p>
+<div class="mt-1 flex items-center gap-1 text-sea-teal">
+<span class="material-symbols-outlined text-[14px]">water_drop</span>
+<span class="font-label-xs text-label-xs">വേമ്പനാട് കായൽ</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>ഫില്ലറ്റ് / കറി കഷണങ്ങൾ</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 09: Chemmeen / Prawns -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="shellfish">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #09
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-coral-catch text-white font-label-xs text-label-xs">
+          കൊഞ്ചു വർഗ്ഗം
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ചെമ്മീൻ</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="ചെമ്മീൻ, Tiger Prawns">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Chemmeen (Prawns)</p>
+<div class="mt-1 flex items-center gap-1 text-fresh-emerald">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span class="font-label-xs text-label-xs">കരവല കൊഞ്ച്</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>തോട് കളഞ്ഞു തരും (Deveined)</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 10: Njandu / Crab -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="shellfish">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #10
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-amber-sun text-tertiary font-label-xs text-label-xs font-bold">
+          ലൈവ് സ്റ്റോക്ക്
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ഞണ്ട്</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="ഞണ്ട്, Sea Crab">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Njandu (Sea / Mud Crab)</p>
+<div class="mt-1 flex items-center gap-1 text-fresh-emerald">
+<span class="material-symbols-outlined text-[14px]">pest_control_rodent</span>
+<span class="font-label-xs text-label-xs">നല്ല മാംസളമായത്</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>വൃത്തിയാക്കി പൊട്ടിച്ചു തരും</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 11: Kanava / Squid -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="sea">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #11
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-sea-teal/90 text-white font-label-xs text-label-xs">
+          കടൽമീൻ
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">കണവ / കൂന്തൽ</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="കണവ, Squid">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Kanava / Squid</p>
+<div class="mt-1 flex items-center gap-1 text-fresh-emerald">
+<span class="material-symbols-outlined text-[14px]">done_all</span>
+<span class="font-label-xs text-label-xs">മഷി നീക്കം ചെയ്തത്</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>റിംഗ് കട്ട് / റോസ്റ്റ് കട്ട്</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Item 12: Kilimeen / Pink Perch -->
+<article class="flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm product-card" data-category="sea">
+<div class="relative w-full aspect-square bg-surface-container-low overflow-hidden">
+<div class="w-full h-full flex flex-col items-center justify-center bg-surface-container text-outline"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-ocean-midnight/80 backdrop-blur-sm text-white font-label-xs text-label-xs">
+          #12
+        </div>
+<div class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-fresh-emerald text-white font-label-xs text-label-xs">
+          ഡെയ്‌ലി ക്യാച്ച്
+        </div>
+</div>
+<div class="p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
+<div>
+<div class="flex items-center justify-between gap-space-2xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">കിളിമീൻ</h2>
+<button aria-label="Listen name" class="pronounce-btn p-1 rounded-full text-sea-teal hover:bg-surface-container transition-colors" data-audio="കിളിമീൻ, Pink Perch">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Kilimeen (Pink Perch)</p>
+<div class="mt-1 flex items-center gap-1 text-fresh-emerald">
+<span class="material-symbols-outlined text-[14px]">water</span>
+<span class="font-label-xs text-label-xs">തോട്ടപ്പള്ളി തീരം</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px] bg-surface-container-low px-2 py-0.5 rounded-md">
+<span>ചെതുമ്പൽ കളഞ്ഞു നൽകും</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<button class="w-full py-1.5 px-space-xs rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ ചെയ്യുക</span>
+</button>
+</div>
+</div>
+</article>
+</section>
+<!-- Harbor Guarantee Banner Card -->
+<section class="bg-surface-card rounded-xl p-space-md shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-full bg-sky-tint flex items-center justify-center text-sea-teal shrink-0">
+<span class="material-symbols-outlined text-[28px]">shield</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-md text-headline-md text-ocean-deep">100% കെമിക്കൽ ഫ്രീ ഉറപ്പ്</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">ഫോർമാലിൻ അല്ലെങ്കിൽ അമോണിയ ഉപയോഗിക്കാത്ത, ഹാർബറിൽ നിന്നും നേരിട്ട് ലഭ്യമാക്കുന്ന ശുദ്ധമായ മീൻ മാത്രം.</p>
+</div>
+</section>
+<!-- Interactive Client Micro-Script -->
+<script>
+    (function initFreshMarketHub() {
+      // Category Filter Handling
+      const chips = document.querySelectorAll('.category-chip');
+      const cards = document.querySelectorAll('.product-card');
+
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          chips.forEach(c => {
+            c.classList.remove('bg-ocean-deep', 'text-on-primary');
+            c.classList.add('bg-surface-card', 'text-on-surface-variant');
+          });
+          chip.classList.remove('bg-surface-card', 'text-on-surface-variant');
+          chip.classList.add('bg-ocean-deep', 'text-on-primary');
+
+          const filter = chip.getAttribute('data-filter');
+          cards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.style.display = 'flex';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Quick Search Interaction
+      const searchInput = document.getElementById('fishSearchInput');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const query = e.target.value.toLowerCase().trim();
+          cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            card.style.display = text.includes(query) ? 'flex' : 'none';
+          });
+        });
+      }
+
+      // Voice Pronunciation Simulation for Vernacular Fish Names
+      let voiceEnabled = true;
+      const voiceToggle = document.getElementById('voiceGuideBtn');
+      const voiceStatus = document.getElementById('voiceStatusText');
+
+      if (voiceToggle && voiceStatus) {
+        voiceToggle.addEventListener('click', () => {
+          voiceEnabled = !voiceEnabled;
+          voiceStatus.textContent = voiceEnabled ? 'ശബ്ദം ON' : 'ശബ്ദം OFF';
+          voiceToggle.classList.toggle('text-sea-teal', voiceEnabled);
+          voiceToggle.classList.toggle('text-outline', !voiceEnabled);
+        });
+      }
+
+      const pronounceBtns = document.querySelectorAll('.pronounce-btn');
+      pronounceBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const fishName = btn.getAttribute('data-audio');
+          if (voiceEnabled && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(fishName);
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+            window.speechSynthesis.speak(utterance);
+          }
+          btn.classList.add('scale-125', 'text-coral-catch');
+          setTimeout(() => btn.classList.remove('scale-125', 'text-coral-catch'), 400);
+        });
+      });
+    })();
+  </script>
+</div></main><aside class="fixed bottom-20 inset-x-0 z-40 px-margin pointer-events-none"><div class="max-w-md mx-auto pointer-events-auto flex items-center gap-space-sm bg-white/95 backdrop-blur-xl p-space-xs rounded-full shadow-[0_10px_25px_-5px_rgba(8,45,89,0.18)]"><button class="flex-1 h-11 px-space-md rounded-full bg-fresh-emerald text-white flex items-center justify-center gap-space-xs shadow-sm hover:opacity-95 active:scale-[0.98] transition-all"><span class="material-symbols-outlined text-[20px]">chat</span><span class="font-label-md text-label-md font-bold">ഓർഡർ ചെയ്യുക (WhatsApp)</span></button><button class="h-11 px-space-md rounded-full bg-surface-container text-ocean-deep flex items-center justify-center gap-space-2xs hover:bg-surface-container-high active:scale-[0.98] transition-all"><span class="material-symbols-outlined text-[18px]">share</span><span class="font-label-md text-label-md">പങ്കിടുക</span></button></div></aside><nav class="fixed bottom-0 w-full z-50 pb-safe bg-white/90 backdrop-blur-xl shadow-[0_-4px_20px_-4px_rgba(8,45,89,0.06)]" data-active-classes="text-ocean-deep font-bold"><div class="flex justify-around items-center h-16 px-space-xs"><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 transition-all text-ocean-deep font-bold" data-path="todays-catch" href="#"><span class="material-symbols-outlined text-[22px]">set_meal</span><span class="font-label-xs text-label-xs">ഇന്നത്തെ മീൻ</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="categories" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-xs text-label-xs">വിഭാഗങ്ങൾ</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="rate-card" href="#"><span class="material-symbols-outlined text-[22px]">receipt_long</span><span class="font-label-xs text-label-xs">വിലനിലവാരം</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="contact" href="#"><span class="material-symbols-outlined text-[22px]">call</span><span class="font-label-xs text-label-xs">വിളിക്കുക</span></a></div></nav>
+
+</body></html>
+
+<!-- വിഭാഗങ്ങൾ - Biju Chettan Fresh Meen -->
+<!DOCTYPE html><html lang="ml"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-container": "#082d59", "surface-tint": "#425f8e", "border-subtle": "#E2E8F0", "tertiary-container": "#551a00", "primary-fixed-dim": "#aac7fc", "on-background": "#0b1c30", "secondary": "#006a61", "sea-teal": "#0D9488", "fresh-emerald": "#059669", "amber-sun": "#F59E0B", "surface-card": "#FFFFFF", "surface-dim": "#cbdbf5", "sea-teal-light": "#CCFBF1", "surface-container-low": "#eff4ff", "sky-tint": "#F0F9FF", "outline": "#747780", "surface-bright": "#f8f9ff", "secondary-fixed": "#89f5e7", "on-secondary-container": "#006f66", "secondary-container": "#86f2e4", "surface-container-highest": "#d3e4fe", "on-tertiary-fixed-variant": "#7f2b00", "on-secondary-fixed-variant": "#005049", "on-tertiary": "#ffffff", "on-secondary": "#ffffff", "inverse-surface": "#213145", "error-container": "#ffdad6", "background": "#f8f9ff", "surface-bg": "#F5F8FC", "on-surface": "#0b1c30", "error": "#ba1a1a", "outline-variant": "#c4c6d0", "inverse-on-surface": "#eaf1ff", "on-primary-fixed": "#001b3d", "on-error": "#ffffff", "primary-fixed": "#d6e3ff", "tertiary": "#330c00", "on-error-container": "#93000a", "on-secondary-fixed": "#00201d", "coral-catch": "#EA580C", "on-surface-variant": "#43474f", "on-tertiary-container": "#fc651d", "surface-container": "#e5eeff", "on-tertiary-fixed": "#370e00", "on-primary-container": "#7996c8", "surface-variant": "#d3e4fe", "ocean-midnight": "#0A1F3D", "secondary-fixed-dim": "#6bd8cb", "ocean-deep": "#082D59", "inverse-primary": "#aac7fc", "surface-container-high": "#dce9ff", "on-primary": "#ffffff", "on-primary-fixed-variant": "#294774", "primary": "#001838", "surface": "#f8f9ff", "tertiary-fixed": "#ffdbce", "surface-container-lowest": "#ffffff", "tertiary-fixed-dim": "#ffb599" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin-desktop": "2rem", "space-sm": "0.5rem", "space-2xl": "2rem", "margin": "1rem", "space-2xs": "0.125rem", "space-md": "0.75rem", "gutter": "0.75rem", "space-xs": "0.25rem", "space-lg": "1rem", "gutter-desktop": "1.25rem", "space-xl": "1.5rem" }, "fontFamily": { "body-sm": ["Noto Sans"], "label-xs": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-md": ["Noto Sans"], "headline-xl": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "title-sm": ["Noto Sans"], "body-lg": ["Noto Sans"], "headline-lg": ["Plus Jakarta Sans"], "body-md": ["Noto Sans"] }, "fontSize": { "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "label-xs": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700"}], "headline-xl-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "800"}], "headline-md": ["17px", {"lineHeight": "24px", "fontWeight": "700"}], "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}], "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}], "label-lg": ["14px", {"lineHeight": "18px", "fontWeight": "600"}], "headline-lg-mobile": ["18px", {"lineHeight": "24px", "fontWeight": "700"}], "title-sm": ["15px", {"lineHeight": "20px", "fontWeight": "600"}], "body-lg": ["15px", {"lineHeight": "22px", "fontWeight": "400"}], "headline-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}], "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "400"}] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior:none;background-color:#F5F8FC;}.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>body { min-height: max(884px, 100dvh); }</style></head><body class="bg-surface text-on-surface font-body-md flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-xl shadow-[0_4px_20px_-4px_rgba(8,45,89,0.08)] pt-safe"><div class="h-28 px-margin flex flex-col justify-center gap-space-xs"><div class="flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><div class="w-11 h-11 rounded-full bg-ocean-deep flex items-center justify-center text-white shadow-sm shrink-0 border border-white/20"><span class="material-symbols-outlined text-[24px]">sailing</span></div><div class="flex flex-col min-w-0"><h1 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ബിജു ചേട്ടൻ ഫ്രഷ് മീൻ</h1><span class="font-label-xs text-label-xs text-on-surface-variant truncate uppercase tracking-wider">Neendakara Harbor Fresh Catch</span></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Live Audio Announcement" class="h-9 px-space-sm rounded-full bg-surface-container flex items-center gap-space-2xs text-ocean-deep hover:bg-surface-container-high transition-colors active:scale-95"><span class="material-symbols-outlined text-[18px] text-coral-catch animate-pulse">campaign</span><span class="font-label-xs text-label-xs font-bold">അറിയിപ്പ്</span></button><div class="flex items-center bg-surface-container p-0.5 rounded-full"><button aria-label="Malayalam" class="px-2.5 py-1 rounded-full bg-ocean-deep text-white font-label-xs text-label-xs font-bold shadow-sm">മലയാളം</button><button aria-label="English" class="px-2 py-1 rounded-full text-on-surface-variant hover:text-ocean-deep font-label-xs text-label-xs font-semibold transition-colors">EN</button></div></div></div><div class="flex items-center justify-between pt-space-2xs"><div class="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-amber-sun/15 text-tertiary-container"><span class="w-2 h-2 rounded-full bg-coral-catch animate-pulse"></span><span class="font-label-xs text-label-xs text-coral-catch font-bold">ഇന്നത്തെ ചാകര മീൻ • Live Morning Stock</span></div><span class="font-label-xs text-label-xs text-sea-teal font-semibold flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">verified</span>100% നാച്ചുറൽ &amp; കെമിക്കൽ ഫ്രീ</span></div></div></header><main class="flex flex-col relative w-full pt-28 pb-32 px-margin bg-surface"><div class="flex flex-col w-full gap-space-lg">
+<!-- Screen Header Banner (No duplicate H1, pure category context) -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between gap-space-xs">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-fresh-emerald"></span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep truncate">മീൻ വിഭാഗങ്ങൾ</span>
+</div>
+<span class="font-label-md text-label-md text-sea-teal font-semibold">Fish Categories &amp; Coastal Variety</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-ocean-deep shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[22px]">category</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs leading-relaxed">
+      തരംതിരിച്ച ഫ്രഷ് മീനുകൾ • നീണ്ടകര &amp; തോട്ടപ്പള്ളി ഹാർബറുകളിൽ നിന്ന് നേരിട്ട് എത്തിച്ചത്.
+    </p>
+<!-- Quick Stats Metric Strip -->
+<div class="grid grid-cols-3 gap-space-xs mt-space-md pt-space-xs">
+<div class="flex flex-col items-center bg-surface-card rounded-lg py-2 px-1 shadow-sm text-center">
+<span class="font-headline-md text-headline-md text-ocean-deep leading-none">4</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant mt-1">പ്രധാന വിഭാഗം</span>
+</div>
+<div class="flex flex-col items-center bg-surface-card rounded-lg py-2 px-1 shadow-sm text-center">
+<span class="font-headline-md text-headline-md text-coral-catch leading-none">32+</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant mt-1">ഇന്നത്തെ ഇനങ്ങൾ</span>
+</div>
+<div class="flex flex-col items-center bg-surface-card rounded-lg py-2 px-1 shadow-sm text-center">
+<div class="flex items-center text-fresh-emerald">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+</div>
+<span class="font-label-xs text-label-xs text-fresh-emerald font-bold mt-1">100% നാച്ചുറൽ</span>
+</div>
+</div>
+</div>
+<!-- Search & Quick Anchor Pill Bar -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 -mx-margin px-margin">
+<a class="shrink-0 px-3 py-1.5 rounded-full bg-ocean-deep text-white font-label-xs text-label-xs flex items-center gap-1 shadow-sm" href="#sea-fish">
+<span class="material-symbols-outlined text-[14px]">water</span>കടൽ മീൻ (18)
+    </a>
+<a class="shrink-0 px-3 py-1.5 rounded-full bg-surface-card text-ocean-deep font-label-xs text-label-xs flex items-center gap-1 shadow-sm hover:bg-surface-container transition-colors" href="#backwater-fish">
+<span class="material-symbols-outlined text-[14px]">kayaking</span>കായൽ മീൻ (8)
+    </a>
+<a class="shrink-0 px-3 py-1.5 rounded-full bg-surface-card text-ocean-deep font-label-xs text-label-xs flex items-center gap-1 shadow-sm hover:bg-surface-container transition-colors" href="#shellfish-catch">
+<span class="material-symbols-outlined text-[14px]">pest_control</span>കൊഞ്ച് &amp; ഞണ്ട് (6)
+    </a>
+<a class="shrink-0 px-3 py-1.5 rounded-full bg-surface-card text-ocean-deep font-label-xs text-label-xs flex items-center gap-1 shadow-sm hover:bg-surface-container transition-colors" href="#steaks-section">
+<span class="material-symbols-outlined text-[14px]">set_meal</span>സ്റ്റീക്കുകൾ
+    </a>
+</div>
+<!-- CATEGORY 1: കടൽ മീനുകൾ (Sea Fish Catch) -->
+<section class="flex flex-col bg-surface-card rounded-xl p-space-md shadow-sm scroll-mt-32" id="sea-fish">
+<!-- Category Header Card -->
+<div class="flex items-start justify-between gap-space-sm mb-space-sm">
+<div class="flex flex-col min-w-0">
+<div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-fixed text-ocean-deep font-label-xs text-label-xs font-bold w-fit mb-1">
+<span class="material-symbols-outlined text-[12px] text-coral-catch">flare</span>
+          ദിവസേന കടലിൽ നിന്ന് നേരിട്ട്
+        </div>
+<h2 class="font-headline-md text-headline-md text-ocean-deep">കടൽ മീനുകൾ</h2>
+<span class="font-label-md text-label-md text-on-surface-variant">Sea Fish Catch • 18 ഇനങ്ങൾ ലഭ്യമാണ്</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-high text-ocean-deep font-label-xs text-label-xs font-bold shrink-0">
+        18 Varieties
+      </span>
+</div>
+<!-- Category Visual Hero Mini Card -->
+<div class="relative w-full h-32 rounded-lg overflow-hidden mb-space-md shadow-sm">
+<div class="w-full h-full bg-surface-container flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[32px] opacity-40">image</span></div>
+<div class="absolute inset-0 bg-gradient-to-t from-ocean-deep/80 via-ocean-deep/20 to-transparent flex items-end p-space-sm">
+<div class="flex items-center justify-between w-full text-white">
+<span class="font-label-xs text-label-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-amber-sun">verified</span>പുലർച്ചെ 4 മണിക്ക് ലേലം പിടിച്ചത്
+          </span>
+<span class="font-label-xs text-label-xs bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full">ഹാർബർ റേറ്റ്</span>
+</div>
+</div>
+</div>
+<!-- Subcategory Product Micro-Grid -->
+<div class="grid grid-cols-2 gap-space-xs">
+<!-- Item 1: Neymeen -->
+<div class="flex flex-col bg-surface-bg rounded-lg p-space-sm shadow-sm justify-between">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-surface-container"><div class="w-full h-full flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px] opacity-40">set_meal</span></div></div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-ocean-deep truncate leading-tight">നെയ്മീൻ</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Seer Fish</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-1">
+<span class="font-label-md text-label-md text-coral-catch font-bold">₹780 <span class="text-on-surface-variant text-[10px] font-normal">/kg</span></span>
+<button aria-label="Add Neymeen" class="w-7 h-7 rounded-full bg-ocean-deep text-white flex items-center justify-center shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+<!-- Item 2: Ayala -->
+<div class="flex flex-col bg-surface-bg rounded-lg p-space-sm shadow-sm justify-between">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-surface-container"><div class="w-full h-full flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px] opacity-40">set_meal</span></div></div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-ocean-deep truncate leading-tight">അയല</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Mackerel (Big)</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-1">
+<span class="font-label-md text-label-md text-coral-catch font-bold">₹240 <span class="text-on-surface-variant text-[10px] font-normal">/kg</span></span>
+<button aria-label="Add Ayala" class="w-7 h-7 rounded-full bg-ocean-deep text-white flex items-center justify-center shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+<!-- Item 3: Mathi / Chala -->
+<div class="flex flex-col bg-surface-bg rounded-lg p-space-sm shadow-sm justify-between">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-surface-container"><div class="w-full h-full flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px] opacity-40">set_meal</span></div></div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-ocean-deep truncate leading-tight">മത്തി / ചാള</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Sardines</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-1">
+<span class="font-label-md text-label-md text-coral-catch font-bold">₹160 <span class="text-on-surface-variant text-[10px] font-normal">/kg</span></span>
+<button aria-label="Add Mathi" class="w-7 h-7 rounded-full bg-ocean-deep text-white flex items-center justify-center shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+<!-- Item 4: Choora -->
+<div class="flex flex-col bg-surface-bg rounded-lg p-space-sm shadow-sm justify-between">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-surface-container"><div class="w-full h-full flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px] opacity-40">set_meal</span></div></div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-ocean-deep truncate leading-tight">ചൂര / വെളിച്ചൂര</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Tuna Catch</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-1">
+<span class="font-label-md text-label-md text-coral-catch font-bold">₹360 <span class="text-on-surface-variant text-[10px] font-normal">/kg</span></span>
+<button aria-label="Add Choora" class="w-7 h-7 rounded-full bg-ocean-deep text-white flex items-center justify-center shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Fish Tags Pill Scroller -->
+<div class="flex flex-wrap gap-1.5 mt-space-sm pt-space-xs">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">വറ്റ (Trevally)</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">ആവോലി (Pomfret)</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">കിളിമീൻ (Pink Perch)</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">ചെമ്പല്ലി (Red Snapper)</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">ഷിങ്കൂരത്</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">ഓലിക്കണ്ണി</span>
+</div>
+<!-- View All Sea Fish Button -->
+<button class="w-full mt-space-md py-2.5 rounded-lg bg-surface-container-high text-ocean-deep font-label-md text-label-md flex items-center justify-center gap-1.5 shadow-sm active:bg-surface-variant transition-colors">
+<span>കടൽ മീനുകൾ എല്ലാം കാണുക (18 ഇനങ്ങൾ)</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</section>
+<!-- CATEGORY 2: കായൽ & പുഴ മീനുകൾ (Backwater & River Special) -->
+<section class="flex flex-col bg-surface-card rounded-xl p-space-md shadow-sm scroll-mt-32" id="backwater-fish">
+<!-- Category Header Card -->
+<div class="flex items-start justify-between gap-space-sm mb-space-sm">
+<div class="flex flex-col min-w-0">
+<div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sea-teal-light text-secondary font-label-xs text-label-xs font-bold w-fit mb-1">
+<span class="material-symbols-outlined text-[12px] text-sea-teal">water_lux</span>
+          കുമരകം &amp; വേമ്പനാട്ട് കായൽ
+        </div>
+<h2 class="font-headline-md text-headline-md text-ocean-deep">കായൽ &amp; പുഴ മീനുകൾ</h2>
+<span class="font-label-md text-label-md text-on-surface-variant">Backwater &amp; River Special • 8 ഇനങ്ങൾ</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-high text-ocean-deep font-label-xs text-label-xs font-bold shrink-0">
+        8 Varieties
+      </span>
+</div>
+<!-- Karimeen Special Showcase Card -->
+<div class="bg-surface-bg rounded-lg p-space-sm flex flex-col gap-space-xs shadow-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface-container"><div class="w-full h-full flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[28px] opacity-40">set_meal</span></div></div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center gap-1">
+<span class="font-title-sm text-title-sm text-ocean-deep font-bold truncate">കരിമീൻ (Karimeen)</span>
+<span class="px-1.5 py-0.2 rounded bg-amber-sun/20 text-tertiary-container font-label-xs text-label-xs font-bold shrink-0">ടോപ്പ് ചോയ്‌സ്</span>
+</div>
+<span class="font-body-sm text-body-sm text-fresh-emerald font-semibold">പൊള്ളിക്കാൻ ഏറ്റവും ഉത്തമം • Medium/Large</span>
+<div class="flex items-center justify-between mt-1">
+<span class="font-label-md text-label-md text-coral-catch font-bold">₹640 <span class="text-on-surface-variant text-[10px] font-normal">/kg</span></span>
+<button class="px-3 py-1 rounded-full bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[14px]">add</span>ചേർക്കുക
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Backwater Grid -->
+<div class="grid grid-cols-2 gap-space-xs mt-space-sm">
+<div class="flex flex-col bg-surface-bg rounded-lg p-space-sm shadow-sm justify-between">
+<div>
+<span class="font-title-sm text-title-sm text-ocean-deep block truncate">കാളാഞ്ചി</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant block truncate">Kaalanji (Barramundi)</span>
+</div>
+<div class="flex items-center justify-between mt-2">
+<span class="font-label-md text-label-md text-coral-catch font-bold">₹580 <span class="text-on-surface-variant text-[10px] font-normal">/kg</span></span>
+<button aria-label="Add Kaalanji" class="w-7 h-7 rounded-full bg-ocean-deep text-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col bg-surface-bg rounded-lg p-space-sm shadow-sm justify-between">
+<div>
+<span class="font-title-sm text-title-sm text-ocean-deep block truncate">കടുവ കൂരി</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant block truncate">Kaduva Koori</span>
+</div>
+<div class="flex items-center justify-between mt-2">
+<span class="font-label-md text-label-md text-coral-catch font-bold">₹340 <span class="text-on-surface-variant text-[10px] font-normal">/kg</span></span>
+<button aria-label="Add Koori" class="w-7 h-7 rounded-full bg-ocean-deep text-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-1.5 mt-space-sm">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">പൂമീൻ (Milkfish)</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">പള്ളത്തി (Pallathi)</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">മാന്തൾ (Sole Fish)</span>
+</div>
+<div class="flex items-center gap-1.5 mt-space-sm bg-sea-teal-light/60 p-2 rounded-lg text-secondary">
+<span class="material-symbols-outlined text-[16px] text-sea-teal">content_cut</span>
+<span class="font-body-sm text-body-sm font-semibold">കായൽ മീനുകൾ വരഞ്ഞു റെഡിയാക്കി നൽകുന്നു (Fry Cut ready)</span>
+</div>
+</section>
+<!-- CATEGORY 3: കൊഞ്ചും ഞണ്ടും കണവയും (Prawns, Crabs & Squid) -->
+<section class="flex flex-col bg-surface-card rounded-xl p-space-md shadow-sm scroll-mt-32" id="shellfish-catch">
+<!-- Category Header Card -->
+<div class="flex items-start justify-between gap-space-sm mb-space-sm">
+<div class="flex flex-col min-w-0">
+<div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-xs text-label-xs font-bold w-fit mb-1">
+<span class="material-symbols-outlined text-[12px] text-coral-catch">bubble_chart</span>
+          ലൈവ് സ്റ്റോക്ക് &amp; പീലിംഗ് സൗകര്യം
+        </div>
+<h2 class="font-headline-md text-headline-md text-ocean-deep">കൊഞ്ചും ഞണ്ടും കണവയും</h2>
+<span class="font-label-md text-label-md text-on-surface-variant">Prawns, Crabs &amp; Squid • 6 ഇനങ്ങൾ</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-high text-ocean-deep font-label-xs text-label-xs font-bold shrink-0">
+        6 Varieties
+      </span>
+</div>
+<!-- 3-Item Row -->
+<div class="flex flex-col gap-space-xs">
+<!-- Prawns item -->
+<div class="flex items-center justify-between bg-surface-bg p-space-sm rounded-lg shadow-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-surface-container"><div class="w-full h-full flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[22px] opacity-40">set_meal</span></div></div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-ocean-deep truncate">കൈതച്ചിറ ടൈഗർ പ്രോൺസ്</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Tiger Prawns (Big)</span>
+<span class="font-label-xs text-label-xs text-fresh-emerald">പീൽ ചെയ്തു നരമ്പ് കളഞ്ഞ് നൽകും</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 pl-2">
+<span class="font-label-md text-label-md text-coral-catch font-bold">₹620</span>
+<button class="mt-1 px-2.5 py-1 rounded-md bg-ocean-deep text-white font-label-xs text-label-xs font-bold shadow-sm active:scale-95">
+            വാങ്ങുക
+          </button>
+</div>
+</div>
+<!-- Crabs item -->
+<div class="flex items-center justify-between bg-surface-bg p-space-sm rounded-lg shadow-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-surface-container"><div class="w-full h-full flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[22px] opacity-40">set_meal</span></div></div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-ocean-deep truncate">കടൽ ഞണ്ട് / നീല ഞണ്ട്</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Blue Sea Crabs (Live)</span>
+<span class="font-label-xs text-label-xs text-sea-teal font-semibold">റോപ്പ് കളഞ്ഞ് വൃത്തിയാക്കിയത്</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 pl-2">
+<span class="font-label-md text-label-md text-coral-catch font-bold">₹420</span>
+<button class="mt-1 px-2.5 py-1 rounded-md bg-ocean-deep text-white font-label-xs text-label-xs font-bold shadow-sm active:scale-95">
+            വാങ്ങുക
+          </button>
+</div>
+</div>
+<!-- Squid Item -->
+<div class="flex items-center justify-between bg-surface-bg p-space-sm rounded-lg shadow-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-surface-container"><div class="w-full h-full flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[22px] opacity-40">set_meal</span></div></div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-ocean-deep truncate">കണവ / കൂന്തൽ (Squid)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Squid Rings or Whole Clean</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">റോസ്റ്റ് / ഫ്രൈ സ്പെഷ്യൽ</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 pl-2">
+<span class="font-label-md text-label-md text-coral-catch font-bold">₹380</span>
+<button class="mt-1 px-2.5 py-1 rounded-md bg-ocean-deep text-white font-label-xs text-label-xs font-bold shadow-sm active:scale-95">
+            വാങ്ങുക
+          </button>
+</div>
+</div>
+</div>
+<!-- Extra pills -->
+<div class="flex items-center justify-between mt-space-sm pt-space-xs">
+<div class="flex gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">കരിക്കാടി ചെമ്മീൻ</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs">കക്ക ഇറച്ചി (Clams)</span>
+</div>
+<span class="font-label-xs text-label-xs text-sea-teal font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">done_all</span>പീലിംഗ് സൗജന്യം
+      </span>
+</div>
+</section>
+<!-- CATEGORY 4: പ്രീമിയം കട്ടിങ് & സ്റ്റീക്ക് സ്പെഷ്യൽ (Premium Steaks) -->
+<section class="flex flex-col bg-surface-card rounded-xl p-space-md shadow-sm scroll-mt-32" id="steaks-section">
+<!-- Category Header Card -->
+<div class="flex items-start justify-between gap-space-sm mb-space-sm">
+<div class="flex flex-col min-w-0">
+<div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high text-ocean-deep font-label-xs text-label-xs font-bold w-fit mb-1">
+<span class="material-symbols-outlined text-[12px] text-fresh-emerald">kitchen</span>
+          കുക്കിംഗിന് തയ്യാറായവ (Ready to Cook)
+        </div>
+<h2 class="font-headline-md text-headline-md text-ocean-deep">പ്രീമിയം സ്റ്റീക്ക് &amp; കട്ടിങ് സ്പെഷ്യൽ</h2>
+<span class="font-label-md text-label-md text-on-surface-variant">Premium Cut Steaks &amp; Fillets</span>
+</div>
+</div>
+<!-- Bento Style Cut Highlights -->
+<div class="grid grid-cols-2 gap-space-xs">
+<div class="flex flex-col bg-surface-bg p-space-sm rounded-lg shadow-sm">
+<span class="font-label-xs text-label-xs text-coral-catch font-bold">നെയ്മീൻ ബിഗ് സ്റ്റീക്ക്</span>
+<span class="font-title-sm text-title-sm text-ocean-deep font-bold mt-0.5">King Fish Steaks</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">മുള്ള് വൃത്തിയാക്കി കട്ടിയുള്ള സ്ലൈസ് കട്ട്.</p>
+<span class="font-label-md text-label-md text-ocean-deep font-bold mt-2">₹450 / 500g</span>
+</div>
+<div class="flex flex-col bg-surface-bg p-space-sm rounded-lg shadow-sm">
+<span class="font-label-xs text-label-xs text-sea-teal font-bold">ചൂര ബോൺലെസ്സ് ക്യൂബ്സ്</span>
+<span class="font-title-sm text-title-sm text-ocean-deep font-bold mt-0.5">Tuna Boneless Cubes</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">കറി വെക്കാനും അച്ചാറിടാനും അനുയോജ്യം.</p>
+<span class="font-label-md text-label-md text-ocean-deep font-bold mt-2">₹220 / 500g</span>
+</div>
+<div class="flex flex-col bg-surface-bg p-space-sm rounded-lg shadow-sm">
+<span class="font-label-xs text-label-xs text-ocean-deep font-bold">ഫില്ലറ്റ് ചെയ്ത കാളാഞ്ചി</span>
+<span class="font-title-sm text-title-sm text-ocean-deep font-bold mt-0.5">Barramundi Fillet</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">കുട്ടികൾക്കും മുതിർന്നവർക്കും കഴിക്കാം.</p>
+<span class="font-label-md text-label-md text-ocean-deep font-bold mt-2">₹340 / 500g</span>
+</div>
+<div class="flex flex-col bg-surface-bg p-space-sm rounded-lg shadow-sm">
+<span class="font-label-xs text-label-xs text-fresh-emerald font-bold">കരിമീൻ ഹോൾ ക്ലീൻഡ്</span>
+<span class="font-title-sm text-title-sm text-ocean-deep font-bold mt-0.5">Whole Clean Karimeen</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">ചെതുമ്പൽ കളഞ്ഞു വരഞ്ഞെടുത്തത്.</p>
+<span class="font-label-md text-label-md text-ocean-deep font-bold mt-2">₹320 / 500g</span>
+</div>
+</div>
+</section>
+<!-- Cleaning Service Guarantee Banner -->
+<div class="flex items-center gap-space-sm bg-sky-tint p-space-md rounded-xl shadow-sm">
+<div class="w-12 h-12 rounded-full bg-surface-card flex items-center justify-center text-ocean-deep shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[24px] text-sea-teal">cleaning_services</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="font-title-sm text-title-sm text-ocean-deep font-bold">സൗജന്യ ക്ലീനിങ് &amp; കട്ടിങ് സർവീസ്</span>
+<span class="px-1.5 py-0.2 rounded-full bg-fresh-emerald text-white font-label-xs text-label-xs font-bold">Free</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+        കറി കട്ട്, ഫ്രൈ കട്ട്, തോട് കളഞ്ഞത് ഓർഡർ ചെയ്യുമ്പോൾ തിരഞ്ഞെടുക്കാം. അധിക ചാർജ്ജ് ഇല്ല!
+      </p>
+</div>
+</div>
+<!-- Biju Chettan WhatsApp Order Floating Bar Helper -->
+<div class="flex flex-col bg-surface-card p-space-md rounded-xl shadow-md gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-fresh-emerald/15 flex items-center justify-center text-fresh-emerald">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-ocean-deep leading-tight">ബിജു ചേട്ടനോട് നേരിട്ട് ചോദിക്കാം</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">പ്രത്യേക മീൻ ആവശ്യങ്ങൾക്ക് വിളിക്കുക</span>
+</div>
+</div>
+<span class="w-2.5 h-2.5 rounded-full bg-fresh-emerald animate-ping"></span>
+</div>
+<div class="flex gap-space-xs pt-1">
+<button class="flex-1 py-2.5 px-space-sm rounded-lg bg-fresh-emerald text-white font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-sm active:scale-98 transition-transform" onclick="window.open('https://wa.me/919876543210?text=ഹലോ%20ബിജു%20ചേട്ടാ,%20ഇന്നത്തെ%20മീൻ%20വിവരങ്ങൾ%20അറിയാൻ%20താൽപ്പര്യമുണ്ട്', '_blank')">
+<span class="material-symbols-outlined text-[20px]">send</span>
+<span>വാട്സ്ആപ്പ് ഓർഡർ (WhatsApp)</span>
+</button>
+<a aria-label="Call Vendor" class="w-12 py-2.5 rounded-lg bg-surface-container flex items-center justify-center text-ocean-deep shadow-sm active:scale-95 transition-transform" href="tel:+919876543210">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</a>
+</div>
+</div>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-white/95 backdrop-blur-xl shadow-[0_-4px_20px_-4px_rgba(8,45,89,0.08)]" data-active-classes="text-ocean-deep font-bold"><div class="grid grid-cols-4 items-center h-16 px-space-2xs"><a class="flex flex-col items-center justify-center gap-0.5 h-14 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="todays-catch" href="#"><span class="material-symbols-outlined text-[22px]">set_meal</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">ഇന്നത്തെ മീൻ</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 h-14 transition-all text-ocean-deep font-bold" data-path="categories" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">വിഭാഗങ്ങൾ</span></a><a class="flex flex-col items-center justify-center gap-0.5 h-14 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="rate-card" href="#"><span class="material-symbols-outlined text-[22px]">monitoring</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">വിലനിലവാരം</span></a><a class="flex flex-col items-center justify-center gap-0.5 h-14 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="contact" href="#"><span class="material-symbols-outlined text-[22px]">phone_in_talk</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">വിളിക്കുക</span></a></div></nav>
+
+</body></html>
+
+<!-- വിലനിലവാരം - Biju Chettan Fresh Meen -->
+<!DOCTYPE html><html lang="ml"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-container": "#082d59", "surface-tint": "#425f8e", "border-subtle": "#E2E8F0", "tertiary-container": "#551a00", "primary-fixed-dim": "#aac7fc", "on-background": "#0b1c30", "secondary": "#006a61", "sea-teal": "#0D9488", "fresh-emerald": "#059669", "amber-sun": "#F59E0B", "surface-card": "#FFFFFF", "surface-dim": "#cbdbf5", "sea-teal-light": "#CCFBF1", "surface-container-low": "#eff4ff", "sky-tint": "#F0F9FF", "outline": "#747780", "surface-bright": "#f8f9ff", "secondary-fixed": "#89f5e7", "on-secondary-container": "#006f66", "secondary-container": "#86f2e4", "surface-container-highest": "#d3e4fe", "on-tertiary-fixed-variant": "#7f2b00", "on-secondary-fixed-variant": "#005049", "on-tertiary": "#ffffff", "on-secondary": "#ffffff", "inverse-surface": "#213145", "error-container": "#ffdad6", "background": "#f8f9ff", "surface-bg": "#F5F8FC", "on-surface": "#0b1c30", "error": "#ba1a1a", "outline-variant": "#c4c6d0", "inverse-on-surface": "#eaf1ff", "on-primary-fixed": "#001b3d", "on-error": "#ffffff", "primary-fixed": "#d6e3ff", "tertiary": "#330c00", "on-error-container": "#93000a", "on-secondary-fixed": "#00201d", "coral-catch": "#EA580C", "on-surface-variant": "#43474f", "on-tertiary-container": "#fc651d", "surface-container": "#e5eeff", "on-tertiary-fixed": "#370e00", "on-primary-container": "#7996c8", "surface-variant": "#d3e4fe", "ocean-midnight": "#0A1F3D", "secondary-fixed-dim": "#6bd8cb", "ocean-deep": "#082D59", "inverse-primary": "#aac7fc", "surface-container-high": "#dce9ff", "on-primary": "#ffffff", "on-primary-fixed-variant": "#294774", "primary": "#001838", "surface": "#f8f9ff", "tertiary-fixed": "#ffdbce", "surface-container-lowest": "#ffffff", "tertiary-fixed-dim": "#ffb599" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin-desktop": "2rem", "space-sm": "0.5rem", "space-2xl": "2rem", "margin": "1rem", "space-2xs": "0.125rem", "space-md": "0.75rem", "gutter": "0.75rem", "space-xs": "0.25rem", "space-lg": "1rem", "gutter-desktop": "1.25rem", "space-xl": "1.5rem" }, "fontFamily": { "body-sm": ["Noto Sans"], "label-xs": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-md": ["Noto Sans"], "headline-xl": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "title-sm": ["Noto Sans"], "body-lg": ["Noto Sans"], "headline-lg": ["Plus Jakarta Sans"], "body-md": ["Noto Sans"] }, "fontSize": { "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "label-xs": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700"}], "headline-xl-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "800"}], "headline-md": ["17px", {"lineHeight": "24px", "fontWeight": "700"}], "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}], "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}], "label-lg": ["14px", {"lineHeight": "18px", "fontWeight": "600"}], "headline-lg-mobile": ["18px", {"lineHeight": "24px", "fontWeight": "700"}], "title-sm": ["15px", {"lineHeight": "20px", "fontWeight": "600"}], "body-lg": ["15px", {"lineHeight": "22px", "fontWeight": "400"}], "headline-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}], "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "400"}] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior:none;background-color:#F5F8FC;}.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>body { min-height: max(884px, 100dvh); }</style></head><body class="bg-surface text-on-surface font-body-md flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-xl shadow-[0_4px_20px_-4px_rgba(8,45,89,0.08)] pt-safe"><div class="h-28 px-margin flex flex-col justify-center gap-space-xs"><div class="flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><div class="w-11 h-11 rounded-full bg-ocean-deep flex items-center justify-center text-white shadow-sm shrink-0 border border-white/20"><span class="material-symbols-outlined text-[24px]">sailing</span></div><div class="flex flex-col min-w-0"><h1 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ബിജു ചേട്ടൻ ഫ്രഷ് മീൻ</h1><span class="font-label-xs text-label-xs text-on-surface-variant truncate uppercase tracking-wider">Neendakara Harbor Fresh Catch</span></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Live Audio Announcement" class="h-9 px-space-sm rounded-full bg-surface-container flex items-center gap-space-2xs text-ocean-deep hover:bg-surface-container-high transition-colors active:scale-95"><span class="material-symbols-outlined text-[18px] text-coral-catch animate-pulse">campaign</span><span class="font-label-xs text-label-xs font-bold">അറിയിപ്പ്</span></button><div class="flex items-center bg-surface-container p-0.5 rounded-full"><button aria-label="Malayalam" class="px-2.5 py-1 rounded-full bg-ocean-deep text-white font-label-xs text-label-xs font-bold shadow-sm">മലയാളം</button><button aria-label="English" class="px-2 py-1 rounded-full text-on-surface-variant hover:text-ocean-deep font-label-xs text-label-xs font-semibold transition-colors">EN</button></div></div></div><div class="flex items-center justify-between pt-space-2xs"><div class="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-amber-sun/15 text-tertiary-container"><span class="w-2 h-2 rounded-full bg-coral-catch animate-pulse"></span><span class="font-label-xs text-label-xs text-coral-catch font-bold">ഇന്നത്തെ ചാകര മീൻ • Live Morning Stock</span></div><span class="font-label-xs text-label-xs text-sea-teal font-semibold flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">verified</span>100% നാച്ചുറൽ &amp; കെമിക്കൽ ഫ്രീ</span></div></div></header><main class="flex flex-col relative w-full pt-28 pb-32 px-margin bg-surface"><div class="flex flex-col w-full gap-space-md">
+<!-- Live Market Status Card -->
+<div class="bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm relative overflow-hidden">
+<div class="absolute -right-6 -bottom-6 w-28 h-28 bg-sea-teal/10 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between gap-space-xs">
+<div class="inline-flex items-center gap-space-2xs px-space-sm py-1 rounded-full bg-amber-sun/15 text-coral-catch">
+<span class="w-2 h-2 rounded-full bg-coral-catch animate-pulse"></span>
+<span class="font-label-xs text-label-xs font-bold uppercase tracking-wider">തത്സമയ വിപണി നിരക്ക് • Live</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-xs text-label-xs">
+<span class="material-symbols-outlined text-[15px] text-sea-teal">schedule</span>
+<span>7:15 PM അപ്ഡേറ്റ്</span>
+</div>
+</div>
+<div class="flex flex-col gap-0.5">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep flex items-center justify-between">
+<span>ഇന്നത്തെ ലൈവ് വിലനിലവാരം</span>
+<span class="font-label-xs text-label-xs text-sea-teal font-bold px-2 py-0.5 rounded-full bg-sea-teal-light/50">മെയ് 17, വ്യാഴം</span>
+</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1.5 pt-0.5">
+<span class="material-symbols-outlined text-[16px] text-fresh-emerald">verified</span>
+<span>ഹാർബർ ലേല വില അടിസ്ഥാനമാക്കി ഏറ്റവും ന്യായമായ നിരക്കുകൾ</span>
+</p>
+</div>
+<!-- Quick Stats Bento Banner -->
+<div class="grid grid-cols-3 gap-space-xs pt-1">
+<div class="bg-sky-tint rounded-lg p-space-xs flex flex-col items-center justify-center text-center">
+<span class="font-label-xs text-label-xs text-ocean-deep font-bold">12 ഇനങ്ങൾ</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">ഇന്ന് ലഭ്യം</span>
+</div>
+<div class="bg-sea-teal-light/40 rounded-lg p-space-xs flex flex-col items-center justify-center text-center">
+<span class="font-label-xs text-label-xs text-sea-teal font-bold">100% നാച്ചുറൽ</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">കെമിക്കൽ രഹിതം</span>
+</div>
+<div class="bg-amber-sun/15 rounded-lg p-space-xs flex flex-col items-center justify-center text-center">
+<span class="font-label-xs text-label-xs text-coral-catch font-bold">സൗജന്യം</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">കട്ടിങ് &amp; ക്ലീനിങ്</span>
+</div>
+</div>
+</div>
+<!-- Interactive Filter Tabs Carousel -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 -mx-margin px-margin scrollbar-none" id="filter-tabs">
+<button class="filter-tab px-3.5 py-1.5 rounded-full bg-ocean-deep text-white font-label-xs text-label-xs font-bold shadow-sm whitespace-nowrap active:scale-95 transition-all" data-category="all">
+      എല്ലാ നിരക്കുകളും (12)
+    </button>
+<button class="filter-tab px-3.5 py-1.5 rounded-full bg-surface-card text-on-surface-variant font-label-xs text-label-xs font-semibold whitespace-nowrap shadow-sm hover:text-ocean-deep transition-all active:scale-95" data-category="sea">
+      കടൽമീൻ
+    </button>
+<button class="filter-tab px-3.5 py-1.5 rounded-full bg-surface-card text-on-surface-variant font-label-xs text-label-xs font-semibold whitespace-nowrap shadow-sm hover:text-ocean-deep transition-all active:scale-95" data-category="backwater">
+      കായൽ / പുഴ
+    </button>
+<button class="filter-tab px-3.5 py-1.5 rounded-full bg-surface-card text-on-surface-variant font-label-xs text-label-xs font-semibold whitespace-nowrap shadow-sm hover:text-ocean-deep transition-all active:scale-95" data-category="shellfish">
+      കൊഞ്ചും ഞണ്ടും
+    </button>
+<button class="filter-tab px-3.5 py-1.5 rounded-full bg-surface-card text-on-surface-variant font-label-xs text-label-xs font-semibold whitespace-nowrap shadow-sm hover:text-ocean-deep transition-all active:scale-95" data-category="perkilo">
+      കിലോ നിരക്കിൽ
+    </button>
+</div>
+<!-- Search / Quick Filter Bar -->
+<div class="relative w-full">
+<div class="flex items-center bg-surface-card rounded-xl px-space-md py-2.5 shadow-sm gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-ocean-deep">search</span>
+<input class="w-full bg-transparent text-on-surface font-body-sm text-body-sm outline-none placeholder:text-on-surface-variant/70" id="rate-search" placeholder="മീൻ തിരയുക (Search Ayala, Karimeen...)" type="text">
+<button aria-label="Voice Search" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-ocean-deep shrink-0 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[18px]">mic</span>
+</button>
+</div>
+</div>
+<!-- Rate & Availability List -->
+<div class="flex flex-col gap-space-xs" id="rate-list">
+<!-- Item 1: Ayala -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="sea perkilo" data-name="ayala mackerel അയല">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">അയല</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="അയല, കിലോയ്ക്ക് 220 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Ayala • Indian Mackerel (Med/Lrg)</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹220</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-fresh-emerald font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-fresh-emerald"></span>24 kg ബാക്കി
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 border-none">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-sea-teal-light/60 text-sea-teal font-label-xs text-label-xs font-semibold">ഫ്രഷ് ലേലം</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">സൗജന്യ കട്ടിങ്</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="അയല" data-rate="220">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 2: Karimeen -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="backwater perkilo" data-name="karimeen pearl spot കരിമീൻ">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">കരിമീൻ</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="കരിമീൻ, കിലോയ്ക്ക് 580 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Karimeen • Pearl Spot (Kumarakom Fresh)</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹580</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-coral-catch font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-coral-catch animate-pulse"></span>12 kg ബാക്കി
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-amber-sun/20 text-coral-catch font-label-xs text-label-xs font-bold">തീരാറായി</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">മീൻപൊള്ളിച്ചത് സ്പെഷ്യൽ</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="കരിമീൻ" data-rate="580">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 3: Neymeen -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="sea perkilo" data-name="neymeen seer fish king fish നെയ്മീൻ">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">നെയ്മീൻ</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="നെയ്മീൻ കിങ് ഫിഷ്, കിലോയ്ക്ക് 890 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Neymeen • Seer Fish (King Fish Slices)</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹890</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-coral-catch font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-coral-catch animate-pulse"></span>8 kg ബാക്കി
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-amber-sun/20 text-coral-catch font-label-xs text-label-xs font-bold">ഡിമാൻഡ് കൂടുതൽ</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">സ്റ്റേക്ക് / ഫ്രൈ കട്ട്</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="നെയ്മീൻ" data-rate="890">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 4: Choora -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="sea perkilo" data-name="choora tuna ചൂര വെളിച്ചൂര">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ചൂര / വെളിച്ചൂര</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="ചൂര മീൻ, കിലോയ്ക്ക് 280 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Choora • Fresh Tuna (Whole / Curry Cut)</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹280</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-fresh-emerald font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-fresh-emerald"></span>35 kg സ്റ്റോക്ക്
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-sea-teal-light/60 text-sea-teal font-label-xs text-label-xs font-semibold">കറി സ്പെഷ്യൽ</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">ഫ്രീ കട്ടിങ്</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="ചൂര" data-rate="280">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 5: Mathi / Chala -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="sea perkilo" data-name="mathi chala sardines മത്തി ചാള">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">മത്തി / ചാള</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="നല്ല കൊഴുപ്പുള്ള മത്തി, കിലോയ്ക്ക് 140 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Mathi • Sardines (നല്ല കൊഴുപ്പുള്ളത്)</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹140</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-fresh-emerald font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-fresh-emerald"></span>40 kg സ്റ്റോക്ക്
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-sea-teal-light/60 text-sea-teal font-label-xs text-label-xs font-semibold">സൂപ്പർ ഫ്രഷ്</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">ഹെഡ് കട്ട് / ക്ലീൻഡ്</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="മത്തി" data-rate="140">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 6: Vellavoli -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="sea perkilo" data-name="aavoli pomfret white വെള്ള ആവോലി">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">വെള്ള ആവോലി</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="വെള്ള ആവോലി, കിലോയ്ക്ക് 750 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">White Pomfret • Premium Grade</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹750</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-coral-catch font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-coral-catch animate-pulse"></span>6 kg ബാക്കി
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-amber-sun/20 text-coral-catch font-label-xs text-label-xs font-bold">ലിമിറ്റഡ് സ്റ്റോക്ക്</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">ഹോൾ ക്ലീൻഡ്</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="വെള്ള ആവോലി" data-rate="750">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 7: Kalanji -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="backwater perkilo" data-name="kalanji barramundi seabass കാളാഞ്ചി">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">കാളാഞ്ചി</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="കാളാഞ്ചി മീൻ, കിലോയ്ക്ക് 480 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Barramundi • Asian Sea Bass (River Fresh)</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹480</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-fresh-emerald font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-fresh-emerald"></span>10 kg ബാക്കി
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-sea-teal-light/60 text-sea-teal font-label-xs text-label-xs font-semibold">പുഴമീൻ</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">ഫില്ലറ്റ് / കറി കട്ട്</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="കാളാഞ്ചി" data-rate="480">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 8: Tiger Prawns -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="shellfish perkilo" data-name="chemmeen tiger prawns ചെമ്മീൻ">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ചെമ്മീൻ (ടൈഗർ)</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="ടൈഗർ ചെമ്മീൻ, കിലോയ്ക്ക് 420 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Tiger Prawns • Large Sea Catch</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹420</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-fresh-emerald font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-fresh-emerald"></span>15 kg ബാക്കി
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-sea-teal-light/60 text-sea-teal font-label-xs text-label-xs font-semibold">റോസ്റ്റ് സ്പെഷ്യൽ</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">ഡീ-വീൻ സൗജന്യം</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="ടൈഗർ ചെമ്മീൻ" data-rate="420">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 9: Karikkadi Prawns -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="shellfish perkilo" data-name="karikkadi small prawns കരിക്കാടി ചെമ്മീൻ">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">കരിക്കാടി ചെമ്മീൻ</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="കരിക്കാടി ചെമ്മീൻ, കിലോയ്ക്ക് 260 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Karikkadi • Small Pink Coastal Prawns</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹260</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-fresh-emerald font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-fresh-emerald"></span>18 kg ബാക്കി
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-sea-teal-light/60 text-sea-teal font-label-xs text-label-xs font-semibold">തോരൻ സ്പെഷ്യൽ</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">സൗജന്യ ക്ലീനിങ്</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="കരിക്കാടി ചെമ്മീൻ" data-rate="260">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 10: Live Sea Crab -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="shellfish perkilo" data-name="crab njandu mud crab ജീവനുള്ള ഞണ്ട്">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ജീവനുള്ള ഞണ്ട്</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="ജീവനുള്ള ഞണ്ട്, കിലോയ്ക്ക് 520 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Live Sea / Mud Crabs (കായൽ ഞണ്ട്)</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹520</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-coral-catch font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-coral-catch animate-pulse"></span>9 kg ബാക്കി
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-amber-sun/20 text-coral-catch font-label-xs text-label-xs font-bold">ലൈവ് സ്റ്റോക്ക്</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">സൗജന്യ ക്ലീനിങ്</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="ഞണ്ട്" data-rate="520">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 11: Kanava / Squid -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="sea perkilo" data-name="kanava koonthal squid കണവ കൂന്തൽ">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">കണവ / കൂന്തൽ</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="കണവ കൂന്തൽ, കിലോയ്ക്ക് 360 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Squid / Koonthal • Calamari Rings Cut</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹360</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-fresh-emerald font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-fresh-emerald"></span>14 kg ബാക്കി
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-sea-teal-light/60 text-sea-teal font-label-xs text-label-xs font-semibold">റോസ്റ്റ് സ്പെഷ്യൽ</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">റിങ് കട്ട് സൗജന്യം</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="കണവ" data-rate="360">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+<!-- Item 12: Kilimeen -->
+<div class="rate-card bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs" data-category="sea perkilo" data-name="kilimeen pink perch threadfin bream കിളിമീൻ">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">set_meal</span></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">കിളിമീൻ</h3>
+<button aria-label="Audio Announcement" class="audio-btn p-0.5 rounded-full text-sea-teal hover:bg-sea-teal-light/40 transition-colors" data-audio="കിളിമീൻ, കിലോയ്ക്ക് 240 രൂപ">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Kilimeen • Pink Perch / Threadfin Bream</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-ocean-deep font-extrabold">₹240</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">/ kg</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-fresh-emerald font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-fresh-emerald"></span>20 kg ബാക്കി
+          </span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-sea-teal-light/60 text-sea-teal font-label-xs text-label-xs font-semibold">ഫ്രൈ സ്പെഷ്യൽ</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-xs text-label-xs">വരയിട്ട് നൽകും</span>
+</div>
+<button class="order-btn px-3 py-1.5 rounded-lg bg-ocean-deep text-white font-label-xs text-label-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-fish="കിളിമീൻ" data-rate="240">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>ഓർഡർ</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Disclaimer & Quality Assurance Note -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col gap-space-xs mt-1">
+<div class="flex items-center gap-2 text-ocean-deep">
+<span class="material-symbols-outlined text-[20px] text-sea-teal">workspace_premium</span>
+<h4 class="font-title-sm text-title-sm font-bold">ബിജു ചേട്ടന്റെ ഉറപ്പ് &amp; അറിയിപ്പ്</h4>
+</div>
+<ul class="flex flex-col gap-1 text-on-surface-variant font-body-sm text-body-sm">
+<li class="flex items-start gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-sea-teal shrink-0 mt-0.5">check_circle</span>
+<span>മീനിന്റെ വലിപ്പവും ലഭ്യതയും അനുസരിച്ച് ദിവസേന നിരക്കുകളിൽ വ്യത്യാസം വരാം. 100% കെമിക്കൽ ഫ്രീ ഉറപ്പ്.</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-fresh-emerald shrink-0 mt-0.5">content_cut</span>
+<span>സൗജന്യ ക്ലീനിങ്ങും കട്ടിങ്ങും എല്ലാ ഓർഡറുകൾക്കും തികച്ചും സൗജന്യം.</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-coral-catch shrink-0 mt-0.5">local_shipping</span>
+<span>രാവിലെ 7 മണി മുതൽ ഉച്ചയ്ക്ക് 1 മണി വരെ ഓർഡറുകൾ ഞൊടിയിടയിൽ വീടുകളിൽ എത്തിക്കുന്നു.</span>
+</li>
+</ul>
+</div>
+<!-- Floating Sticky Action Dock -->
+<div class="fixed bottom-16 left-0 right-0 z-40 px-margin pb-2 pt-2 bg-gradient-to-t from-surface via-surface/90 to-transparent pointer-events-none">
+<div class="flex items-center gap-space-xs pointer-events-auto">
+<!-- Share Rate Card via PDF / WhatsApp -->
+<button class="flex-1 h-12 rounded-xl bg-surface-card text-ocean-deep font-label-md text-label-md font-bold flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all" id="share-card-btn">
+<span class="material-symbols-outlined text-[20px] text-ocean-deep">share</span>
+<span>റേറ്റ് കാർഡ് ഷെയർ</span>
+</button>
+<!-- Direct WhatsApp Order CTA -->
+<a class="flex-[1.5] h-12 rounded-xl bg-fresh-emerald text-white font-label-md text-label-md font-bold flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all" href="https://wa.me/919876543210?text=ഹലോ%20ബിജു%20ചേട്ടാ,%20ഇന്നത്തെ%20മീൻ%20ഓർഡർ%20നൽകാൻ%20ആഗ്രഹിക്കുന്നു" id="whatsapp-order-cta" target="_blank">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+<span>നേരിട്ട് ഓർഡർ ചെയ്യുക</span>
+</a>
+</div>
+</div>
+<!-- Audio Announcement Toast (Micro-interaction) -->
+<div class="fixed top-28 left-1/2 -translate-x-1/2 z-50 bg-ocean-deep text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 font-label-xs text-label-xs transition-opacity duration-300 opacity-0 pointer-events-none" id="audio-toast">
+<span class="material-symbols-outlined text-[16px] text-amber-sun animate-pulse">volume_up</span>
+<span id="toast-text">ഓഡിയോ പ്ലേ ചെയ്യുന്നു...</span>
+</div>
+</div>
+<script>
+  (function() {
+    // Filter Tabs Interaction
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const rateCards = document.querySelectorAll('.rate-card');
+    const searchInput = document.getElementById('rate-search');
+    let currentFilter = 'all';
+
+    function applyFilterAndSearch() {
+      const query = (searchInput.value || '').toLowerCase().trim();
+
+      rateCards.forEach(card => {
+        const categories = card.getAttribute('data-category') || '';
+        const nameKeywords = card.getAttribute('data-name') || '';
+
+        const matchesCat = (currentFilter === 'all') || categories.includes(currentFilter);
+        const matchesSearch = !query || nameKeywords.toLowerCase().includes(query);
+
+        if (matchesCat && matchesSearch) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => {
+          t.classList.remove('bg-ocean-deep', 'text-white');
+          t.classList.add('bg-surface-card', 'text-on-surface-variant');
+        });
+        tab.classList.remove('bg-surface-card', 'text-on-surface-variant');
+        tab.classList.add('bg-ocean-deep', 'text-white');
+        currentFilter = tab.getAttribute('data-category');
+        applyFilterAndSearch();
+      });
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', applyFilterAndSearch);
+    }
+
+    // Audio Playback simulation / Vernacular speech synthesis
+    const audioButtons = document.querySelectorAll('.audio-btn');
+    const toast = document.getElementById('audio-toast');
+    const toastText = document.getElementById('toast-text');
+    let toastTimeout = null;
+
+    audioButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const text = btn.getAttribute('data-audio') || 'റേറ്റ് പ്രഖ്യാപനം';
+        
+        // Show delightful pill toast
+        if (toast && toastText) {
+          toastText.textContent = text;
+          toast.classList.remove('opacity-0');
+          toast.classList.add('opacity-100');
+          clearTimeout(toastTimeout);
+          toastTimeout = setTimeout(() => {
+            toast.classList.remove('opacity-100');
+            toast.classList.add('opacity-0');
+          }, 2400);
+        }
+
+        // Web Speech API if supported in Malayalam / Indian accent
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'ml-IN';
+          utterance.rate = 0.95;
+          window.speechSynthesis.speak(utterance);
+        }
+      });
+    });
+
+    // Add to Order / One-click WhatsApp Builder
+    const orderButtons = document.querySelectorAll('.order-btn');
+    const whatsappCTA = document.getElementById('whatsapp-order-cta');
+    const selectedItems = new Set();
+
+    orderButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const fish = btn.getAttribute('data-fish');
+        const rate = btn.getAttribute('data-rate');
+        
+        if (selectedItems.has(fish)) {
+          selectedItems.delete(fish);
+          btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span><span>ഓർഡർ</span>`;
+          btn.classList.remove('bg-fresh-emerald');
+          btn.classList.add('bg-ocean-deep');
+        } else {
+          selectedItems.add(fish);
+          btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">check</span><span>ചേർത്തു</span>`;
+          btn.classList.remove('bg-ocean-deep');
+          btn.classList.add('bg-fresh-emerald');
+        }
+
+        // Update WhatsApp message link
+        if (whatsappCTA) {
+          if (selectedItems.size > 0) {
+            const listStr = Array.from(selectedItems).join(', ');
+            const encoded = encodeURIComponent(`ഹലോ ബിജു ചേട്ടാ, ഇന്നത്തെ റേറ്റ് കാർഡിൽ നിന്ന് എനിക്ക് ആവശ്യമുള്ള മീൻ: ${listStr}. ദയവായി ഓർഡർ സ്ഥിരീകരിക്കൂ.`);
+            whatsappCTA.href = `https://wa.me/919876543210?text=${encoded}`;
+            whatsappCTA.querySelector('span:last-child').textContent = `ഓർഡർ ചെയ്യുക (${selectedItems.size})`;
+          } else {
+            whatsappCTA.href = `https://wa.me/919876543210?text=ഹലോ%20ബിജു%20ചേട്ടാ,%20ഇന്നത്തെ%20മീൻ%20ഓർഡർ%20നൽകാൻ%20ആഗ്രഹിക്കുന്നു`;
+            whatsappCTA.querySelector('span:last-child').textContent = `നേരിട്ട് ഓർഡർ ചെയ്യുക`;
+          }
+        }
+      });
+    });
+
+    // Share Card via Web Share API
+    const shareBtn = document.getElementById('share-card-btn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        const shareData = {
+          title: 'ബിജു ചേട്ടൻ ഫ്രഷ് മീൻ - ഇന്നത്തെ ലൈവ് വിലനിലവാരം',
+          text: 'ഹാർബർ ലേല വില അടിസ്ഥാനമാക്കിയുള്ള ഇന്നത്തെ ഫ്രഷ് മീൻ നിരക്കുകൾ (മെയ് 17): അയല ₹220, കരിമീൻ ₹580, നെയ്മീൻ ₹890, മത്തി ₹140...',
+          url: window.location.href
+        };
+        if (navigator.share) {
+          navigator.share(shareData).catch(() => {});
+        } else {
+          const shareText = encodeURIComponent(`${shareData.title}\n${shareData.text}\n${shareData.url}`);
+          window.open(`https://api.whatsapp.com/send?text=${shareText}`, '_blank');
+        }
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-white/95 backdrop-blur-xl shadow-[0_-4px_20px_-4px_rgba(8,45,89,0.08)]" data-active-classes="text-ocean-deep font-bold"><div class="grid grid-cols-4 items-center h-16 px-space-2xs"><a class="flex flex-col items-center justify-center gap-0.5 h-14 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="todays-catch" href="#"><span class="material-symbols-outlined text-[22px]">set_meal</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">ഇന്നത്തെ മീൻ</span></a><a class="flex flex-col items-center justify-center gap-0.5 h-14 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="categories" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">വിഭാഗങ്ങൾ</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 h-14 transition-all text-ocean-deep font-bold" data-path="rate-card" href="#"><span class="material-symbols-outlined text-[22px]">monitoring</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">വിലനിലവാരം</span></a><a class="flex flex-col items-center justify-center gap-0.5 h-14 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="contact" href="#"><span class="material-symbols-outlined text-[22px]">phone_in_talk</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">വിളിക്കുക</span></a></div></nav>
+
+</body></html>
+
+<!-- വിളിക്കുക & ഓർഡർ - Biju Chettan Fresh Meen -->
+<!DOCTYPE html><html lang="ml"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-container": "#082d59", "surface-tint": "#425f8e", "border-subtle": "#E2E8F0", "tertiary-container": "#551a00", "primary-fixed-dim": "#aac7fc", "on-background": "#0b1c30", "secondary": "#006a61", "sea-teal": "#0D9488", "fresh-emerald": "#059669", "amber-sun": "#F59E0B", "surface-card": "#FFFFFF", "surface-dim": "#cbdbf5", "sea-teal-light": "#CCFBF1", "surface-container-low": "#eff4ff", "sky-tint": "#F0F9FF", "outline": "#747780", "surface-bright": "#f8f9ff", "secondary-fixed": "#89f5e7", "on-secondary-container": "#006f66", "secondary-container": "#86f2e4", "surface-container-highest": "#d3e4fe", "on-tertiary-fixed-variant": "#7f2b00", "on-secondary-fixed-variant": "#005049", "on-tertiary": "#ffffff", "on-secondary": "#ffffff", "inverse-surface": "#213145", "error-container": "#ffdad6", "background": "#f8f9ff", "surface-bg": "#F5F8FC", "on-surface": "#0b1c30", "error": "#ba1a1a", "outline-variant": "#c4c6d0", "inverse-on-surface": "#eaf1ff", "on-primary-fixed": "#001b3d", "on-error": "#ffffff", "primary-fixed": "#d6e3ff", "tertiary": "#330c00", "on-error-container": "#93000a", "on-secondary-fixed": "#00201d", "coral-catch": "#EA580C", "on-surface-variant": "#43474f", "on-tertiary-container": "#fc651d", "surface-container": "#e5eeff", "on-tertiary-fixed": "#370e00", "on-primary-container": "#7996c8", "surface-variant": "#d3e4fe", "ocean-midnight": "#0A1F3D", "secondary-fixed-dim": "#6bd8cb", "ocean-deep": "#082D59", "inverse-primary": "#aac7fc", "surface-container-high": "#dce9ff", "on-primary": "#ffffff", "on-primary-fixed-variant": "#294774", "primary": "#001838", "surface": "#f8f9ff", "tertiary-fixed": "#ffdbce", "surface-container-lowest": "#ffffff", "tertiary-fixed-dim": "#ffb599" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin-desktop": "2rem", "space-sm": "0.5rem", "space-2xl": "2rem", "margin": "1rem", "space-2xs": "0.125rem", "space-md": "0.75rem", "gutter": "0.75rem", "space-xs": "0.25rem", "space-lg": "1rem", "gutter-desktop": "1.25rem", "space-xl": "1.5rem" }, "fontFamily": { "body-sm": ["Noto Sans"], "label-xs": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-md": ["Noto Sans"], "headline-xl": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "title-sm": ["Noto Sans"], "body-lg": ["Noto Sans"], "headline-lg": ["Plus Jakarta Sans"], "body-md": ["Noto Sans"] }, "fontSize": { "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "label-xs": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700"}], "headline-xl-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "800"}], "headline-md": ["17px", {"lineHeight": "24px", "fontWeight": "700"}], "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}], "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}], "label-lg": ["14px", {"lineHeight": "18px", "fontWeight": "600"}], "headline-lg-mobile": ["18px", {"lineHeight": "24px", "fontWeight": "700"}], "title-sm": ["15px", {"lineHeight": "20px", "fontWeight": "600"}], "body-lg": ["15px", {"lineHeight": "22px", "fontWeight": "400"}], "headline-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}], "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "400"}] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior:none;background-color:#F5F8FC;}.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>body { min-height: max(884px, 100dvh); }</style></head><body class="bg-surface text-on-surface font-body-md flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-xl shadow-[0_4px_20px_-4px_rgba(8,45,89,0.08)] pt-safe"><div class="h-28 px-margin flex flex-col justify-center gap-space-xs"><div class="flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><div class="w-11 h-11 rounded-full bg-ocean-deep flex items-center justify-center text-white shadow-sm shrink-0 border border-white/20"><span class="material-symbols-outlined text-[24px]">sailing</span></div><div class="flex flex-col min-w-0"><h1 class="font-headline-md text-headline-md text-ocean-deep leading-tight truncate">ബിജു ചേട്ടൻ ഫ്രഷ് മീൻ</h1><span class="font-label-xs text-label-xs text-on-surface-variant truncate uppercase tracking-wider">Neendakara Harbor Fresh Catch</span></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Live Audio Announcement" class="h-9 px-space-sm rounded-full bg-surface-container flex items-center gap-space-2xs text-ocean-deep hover:bg-surface-container-high transition-colors active:scale-95"><span class="material-symbols-outlined text-[18px] text-coral-catch animate-pulse">campaign</span><span class="font-label-xs text-label-xs font-bold">അറിയിപ്പ്</span></button><div class="flex items-center bg-surface-container p-0.5 rounded-full"><button aria-label="Malayalam" class="px-2.5 py-1 rounded-full bg-ocean-deep text-white font-label-xs text-label-xs font-bold shadow-sm">മലയാളം</button><button aria-label="English" class="px-2 py-1 rounded-full text-on-surface-variant hover:text-ocean-deep font-label-xs text-label-xs font-semibold transition-colors">EN</button></div></div></div><div class="flex items-center justify-between pt-space-2xs"><div class="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-amber-sun/15 text-tertiary-container"><span class="w-2 h-2 rounded-full bg-coral-catch animate-pulse"></span><span class="font-label-xs text-label-xs text-coral-catch font-bold">ഇന്നത്തെ ചാകര മീൻ • Live Morning Stock</span></div><span class="font-label-xs text-label-xs text-sea-teal font-semibold flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">verified</span>100% നാച്ചുറൽ &amp; കെമിക്കൽ ഫ്രീ</span></div></div></header><main class="flex flex-col relative w-full pt-28 pb-32 px-margin bg-surface"><div class="flex flex-col w-full gap-space-lg pb-12">
+<!-- Vendor Persona Profile Header -->
+<section class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="relative">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant border border-subtle shadow-inner"><span class="material-symbols-outlined text-[28px]">image</span></div>
+<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-fresh-emerald flex items-center justify-center text-white text-[10px]">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-md text-headline-md text-ocean-deep">ബിജു ചേട്ടനെ നേരിട്ട് വിളിക്കാം</h2>
+</div>
+<span class="font-label-xs text-label-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sea-teal text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+            നീണ്ടകര ഹാർബർ ലൈസൻസ്ഡ് മർച്ചന്റ് #NK-42
+          </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Call Biju Chettan Directly • Harbor Fresh</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-sea-teal-light text-secondary">
+<span class="w-2 h-2 rounded-full bg-fresh-emerald animate-ping"></span>
+<span class="font-label-xs text-label-xs font-bold">ഇപ്പോൾ ലഭ്യമാണ്</span>
+</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant mt-1">Avail. Till 9:00 PM</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-coral-catch text-[20px]">anchor</span>
+<p class="font-body-sm text-body-sm text-ocean-midnight leading-snug">
+        "ഹാർബറിൽ പുലർച്ചെ എത്തുന്ന ഏറ്റവും പുതിയ മീൻ നേരിട്ട് ഞാൻ തന്നെ തിരഞ്ഞെടുത്തു നൽകുന്നു!"
+      </p>
+</div>
+</section>
+<!-- Quick Call & WhatsApp Action Cards -->
+<section class="grid grid-cols-1 gap-space-md">
+<!-- Card 1: Direct Phone Call -->
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-ocean-deep text-white flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[24px]">call</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-ocean-deep">നേരിട്ട് ഫോണിൽ വിളിക്കാം</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">Direct Phone Call</span>
+</div>
+</div>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container font-label-xs text-label-xs text-ocean-deep font-semibold">
+          തൽക്ഷണം ബന്ധപ്പെടാം
+        </span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md font-bold text-ocean-midnight">+91 98470 12345</span>
+<span class="font-label-xs text-label-xs text-fresh-emerald font-bold">പ്രൈമറി ലൈൻ</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md font-bold text-ocean-midnight">0474 2748900</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">ഹാർബർ കൗണ്ടർ</span>
+</div>
+<span class="font-label-xs text-label-xs text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+          രാവിലെ 6:00 AM മുതൽ രാത്രി 9:00 PM വരെ
+        </span>
+</div>
+<a class="w-full h-12 rounded-xl bg-ocean-deep text-white flex items-center justify-center gap-space-xs font-label-lg text-label-lg font-bold shadow-md hover:bg-ocean-midnight transition-transform active:scale-[0.98]" href="tel:+919847012345">
+<span class="material-symbols-outlined text-[20px]">phone_in_talk</span>
+<span>വിളിക്കുക (Call Now)</span>
+</a>
+</div>
+<!-- Card 2: WhatsApp Direct Order -->
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-fresh-emerald text-white flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[26px]">chat</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-ocean-deep">WhatsApp വഴി ഓർഡർ ചെയ്യാം</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">Instant WhatsApp Order</span>
+</div>
+</div>
+<span class="px-space-sm py-0.5 rounded-full bg-sea-teal-light font-label-xs text-label-xs text-secondary font-bold">
+          2 മിനിറ്റിൽ മറുപടി
+        </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        ഇന്നത്തെ മീൻ ലിസ്റ്റ്, യഥാർത്ഥ വിലവിവരം അറിയാനും നിങ്ങളുടെ പ്രത്യേക ഓർഡറുകൾ നൽകാനും മെസ്സേജ് അയക്കുക.
+      </p>
+<a class="w-full h-12 rounded-xl bg-fresh-emerald text-white flex items-center justify-center gap-space-xs font-label-lg text-label-lg font-bold shadow-md hover:opacity-95 transition-transform active:scale-[0.98]" href="https://wa.me/919847012345?text=%E0%B4%B9%E0%B4%B2%E0%B5%8B%20%E0%B4%AC%E0%B4%BF%E0%B4%9C%E0%B5%81%20%E0%B4%9A%E0%B5%87%E0%B4%9F%E0%B5%8D%E0%B4%9F%E0%B4%BE%2C%20%E0%B4%87%E0%B4%A8%E0%B5%8D%E0%B4%A8%E0%B4%A4%E0%B5%8D%E0%B4%A4%E0%B5%86%20%E0%B4%AB%E0%B5%8D%E0%B4%B0%E0%B4%B7%E0%B5%8D%20%E0%B4%AE%E0%B5%80%E0%B4%A8%E0%B5%81%E0%B4%95%E0%B5%93%E0%B4%9F%E0%B5%86%20%E0%B4%B5%E0%B4%BF%E0%B4%B5%E0%B4%B0%E0%B4%99%E0%B5%8D%E0%B4%99%E0%B5%8D%E0%B4%99%E0%B5%BE%20%E0%B4%85%E0%B4%B1%E0%B4%BF%E0%B4%AF%E0%B4%BE%E0%B4%AE%E0%B5%8B%3F" target="_blank">
+<span class="material-symbols-outlined text-[20px]">send</span>
+<span>WhatsApp മെസ്സേജ് അയക്കുക</span>
+</a>
+</div>
+</section>
+<!-- Cutting & Packaging Quality Guarantee -->
+<section class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-coral-catch text-[22px]">health_and_safety</span>
+<h3 class="font-headline-md text-headline-md text-ocean-deep">ശുചിത്വവും പാക്കിംഗ് ഉറപ്പും</h3>
+</div>
+<div class="grid grid-cols-1 gap-space-sm">
+<div class="p-space-sm rounded-lg bg-sky-tint flex items-start gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-ocean-deep text-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">ac_unit</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-ocean-deep">ഐസ് ബോക്സ് സീൽഡ് പാക്കിംഗ്</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            മീനിന്റെ കടൽ ഫ്രഷ്‌നസ് ഒട്ടും നഷ്ടപ്പെടാതെ ഇൻസുലേറ്റഡ് ഐസ് ബോക്സിൽ നിങ്ങളുടെ വീട്ടുപടിക്കൽ എത്തിക്കുന്നു.
+          </p>
+</div>
+</div>
+<div class="p-space-sm rounded-lg bg-sea-teal-light flex items-start gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-sea-teal text-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">restaurant</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-secondary">സൗജന്യ ക്ലീനിംഗ് &amp; കട്ടിംഗ്</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            ചെതുമ്പൽ പൂർണ്ണമായും കളഞ്ഞ്, കറി കട്ട് അല്ലെങ്കിൽ വറുക്കാൻ പാകത്തിന് റെഡി-ടു-കുക്ക് ആയി ചിട്ടപ്പെടുത്തുന്നു.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Direct Quick Order Form -->
+<section class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-ocean-deep text-[22px]">edit_note</span>
+<h3 class="font-headline-md text-headline-md text-ocean-deep">ഡയറക്ട് ഓർഡർ ഫോം</h3>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">ആവശ്യങ്ങൾ പൂരിപ്പിച്ച് നേരിട്ട് വാട്സാപ്പിലേക്ക് ഓർഡർ അയക്കാം</span>
+</div>
+<form class="flex flex-col gap-space-md" id="direct-order-form" onsubmit="event.preventDefault(); submitDirectOrder();">
+<!-- Customer Name -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-ocean-deep" for="order-name">നിങ്ങളുടെ പേര് (Your Name)</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">person</span>
+<input class="w-full h-11 pl-10 pr-3 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:bg-white focus:shadow-sm" id="order-name" placeholder="ഉദാ: രാജേഷ് കുമാർ" required="" type="text">
+</div>
+</div>
+<!-- Delivery Location Selector -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-ocean-deep" for="order-location">ഡെലിവറി സ്ഥലം (Select Location)</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">location_on</span>
+<select class="w-full h-11 pl-10 pr-8 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md appearance-none focus:outline-none focus:bg-white focus:shadow-sm" id="order-location" required="">
+<option value="">സ്ഥലം തിരഞ്ഞെടുക്കുക...</option>
+<option value="Neendakara">Neendakara (നീണ്ടകര)</option>
+<option value="Sakthikulangara">Sakthikulangara (ശക്തികുളങ്ങര)</option>
+<option value="Kollam City">Kollam City (കൊല്ലം നഗരം)</option>
+<option value="Kavanad">Kavanad (കാവനാട്)</option>
+<option value="Chavara">Chavara (ചവറ)</option>
+<option value="Kundara">Kundara (കുണ്ടറ)</option>
+<option value="Karunagappally">Karunagappally (കരുനാഗപ്പള്ളി)</option>
+<option value="Kayamkulam">Kayamkulam (കായംകുളം)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 pointer-events-none text-on-surface-variant text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Fish Variety & Quantity -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-ocean-deep" for="fish-item">ആവശ്യമായ മീൻ</label>
+<input class="w-full h-11 px-3 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:bg-white focus:shadow-sm" id="fish-item" placeholder="ഉദാ: നെയ്മീൻ, ചാള" required="" type="text">
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-ocean-deep" for="fish-qty">അളവ് (Quantity)</label>
+<input class="w-full h-11 px-3 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:bg-white focus:shadow-sm" id="fish-qty" placeholder="ഉദാ: 2 Kg" required="" type="text">
+</div>
+</div>
+<!-- Preferred Cutting Style -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-ocean-deep">കട്ടിംഗ് രീതി (Preparation Choice)</label>
+<div class="grid grid-cols-3 gap-space-xs">
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="cutting-style" type="radio" value="കറി കട്ട് (Curry Cut)">
+<div class="p-2 rounded-lg bg-surface-container-low text-center font-label-xs text-label-xs text-on-surface peer-checked:bg-ocean-deep peer-checked:text-white transition-colors">
+              കറി കട്ട്
+            </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="cutting-style" type="radio" value="ഫ്രൈ / സ്റ്റീക്ക് (Fry Cut)">
+<div class="p-2 rounded-lg bg-surface-container-low text-center font-label-xs text-label-xs text-on-surface peer-checked:bg-ocean-deep peer-checked:text-white transition-colors">
+              ഫ്രൈ പീസ്
+            </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="cutting-style" type="radio" value="മുഴുവനോടെ വൃത്തിയാക്കി (Whole Cleaned)">
+<div class="p-2 rounded-lg bg-surface-container-low text-center font-label-xs text-label-xs text-on-surface peer-checked:bg-ocean-deep peer-checked:text-white transition-colors">
+              മുഴുവനോടെ
+            </div>
+</label>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full h-12 rounded-xl bg-fresh-emerald text-white flex items-center justify-center gap-space-xs font-label-lg text-label-lg font-bold shadow-md hover:bg-emerald-700 transition-transform active:scale-[0.98]" type="submit">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+<span>ഓർഡർ സമർപ്പിക്കുക (Send Order via WhatsApp)</span>
+</button>
+</form>
+</section>
+<!-- Delivery Locations & Timings Section -->
+<section class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-ocean-deep text-[22px]">local_shipping</span>
+<h3 class="font-headline-md text-headline-md text-ocean-deep">ഡെലിവറി സ്ഥലങ്ങളും സമയവും</h3>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Daily Doorstep Delivery Slots in Kollam Region</span>
+</div>
+<!-- Slots Grid -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="p-space-sm rounded-lg bg-amber-sun/10 flex flex-col gap-1">
+<span class="font-label-xs text-label-xs text-coral-catch font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">sunny</span> മോണിംഗ് സ്ലോട്ട്
+        </span>
+<span class="font-title-sm text-title-sm text-ocean-deep font-bold">7:30 AM - 11:30 AM</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">പുലർച്ചെയുള്ള ചാകര മീൻ</span>
+</div>
+<div class="p-space-sm rounded-lg bg-sky-tint flex flex-col gap-1">
+<span class="font-label-xs text-label-xs text-secondary font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">bedtime</span> ഈവനിംഗ് സ്ലോട്ട്
+        </span>
+<span class="font-title-sm text-title-sm text-ocean-deep font-bold">4:30 PM - 8:30 PM</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">വൈകുന്നേരത്തെ ഫ്രഷ് സ്റ്റോക്ക്</span>
+</div>
+</div>
+<!-- Active Towns Badges -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-md text-label-md text-ocean-deep">ഡെലിവറി ലഭ്യമായ സ്ഥലങ്ങൾ:</span>
+<div class="flex flex-wrap gap-1.5">
+<span class="px-space-sm py-1 rounded-full bg-surface-container-low font-label-xs text-label-xs text-ocean-deep">നീണ്ടകര (Neendakara)</span>
+<span class="px-space-sm py-1 rounded-full bg-surface-container-low font-label-xs text-label-xs text-ocean-deep">ശക്തികുളങ്ങര (Sakthikulangara)</span>
+<span class="px-space-sm py-1 rounded-full bg-surface-container-low font-label-xs text-label-xs text-ocean-deep">കൊല്ലം നഗരം (Kollam City)</span>
+<span class="px-space-sm py-1 rounded-full bg-surface-container-low font-label-xs text-label-xs text-ocean-deep">കാവനാട് (Kavanad)</span>
+<span class="px-space-sm py-1 rounded-full bg-surface-container-low font-label-xs text-label-xs text-ocean-deep">ചവറ (Chavara)</span>
+<span class="px-space-sm py-1 rounded-full bg-surface-container-low font-label-xs text-label-xs text-ocean-deep">കുണ്ടറ (Kundara)</span>
+<span class="px-space-sm py-1 rounded-full bg-surface-container-low font-label-xs text-label-xs text-ocean-deep">കരുനാഗപ്പള്ളി (Karunagappally)</span>
+<span class="px-space-sm py-1 rounded-full bg-surface-container-low font-label-xs text-label-xs text-ocean-deep">കായംകുളം (Kayamkulam)</span>
+</div>
+</div>
+</section>
+<!-- Harbor Counter Location & Map -->
+<section class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-coral-catch text-[22px]">store</span>
+<h3 class="font-headline-md text-headline-md text-ocean-deep">ഹാർബർ കൗണ്ടർ വിലാസം</h3>
+</div>
+<!-- Map Preview Container using data-location -->
+<div class="w-full h-44 rounded-xl bg-surface-container border border-subtle relative flex flex-col items-center justify-center gap-1 shadow-inner overflow-hidden p-space-sm" data-location="Neendakara Fishing Harbour, Kollam, Kerala, India"><div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 mb-6"><span class="material-symbols-outlined text-[32px]">map</span><span class="font-label-xs text-label-xs text-on-surface-variant">ഹാർബർ മാപ്പ് ലൊക്കേഷൻ (Map Photo)</span></div><div class="w-full bg-ocean-midnight/80 backdrop-blur-md rounded-lg p-space-sm text-white flex items-center justify-between absolute bottom-3 left-3 right-3 max-w-[calc(100%-1.5rem)]"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-coral-catch text-[20px]">pin_drop</span><span class="font-label-xs text-label-xs truncate font-bold">നീണ്ടകര ഫിഷിംഗ് ഹാർബർ ഗേറ്റ്</span></div><span class="font-label-xs text-label-xs text-sea-teal-light">Live Outlet</span></div></div>
+<div class="flex flex-col gap-1">
+<span class="font-title-sm text-title-sm text-ocean-deep">ബിജു ചേട്ടൻ ഫ്രഷ് മീൻ കൗണ്ടർ</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+        നീണ്ടകര ഫിഷിംഗ് ഹാർബർ ഗേറ്റിന് സമീപം, ശാക്തികുളങ്ങര റോഡ്, കൊല്ലം, കേരളം - 691582
+      </p>
+</div>
+<a class="w-full h-11 rounded-lg bg-surface-container text-ocean-deep flex items-center justify-center gap-space-xs font-label-md text-label-md font-bold hover:bg-surface-container-high transition-colors" href="https://maps.google.com/?q=Neendakara+Fishing+Harbour+Kollam" target="_blank">
+<span class="material-symbols-outlined text-[18px] text-coral-catch">map</span>
+<span>Google Maps-ൽ കാണുക (Open in Google Maps)</span>
+</a>
+</section>
+<!-- FAQ Accordion in Malayalam -->
+<section class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-ocean-deep text-[22px]">quiz</span>
+<h3 class="font-headline-md text-headline-md text-ocean-deep">പതിവ് ചോദ്യങ്ങൾ (FAQ)</h3>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- FAQ 1 -->
+<div class="rounded-lg bg-surface-container-low p-space-sm flex flex-col gap-1 cursor-pointer" onclick="toggleFaq(this)">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-ocean-deep">കെമിക്കൽ ചേർക്കാത്ത മീനാണെന്ന് എങ്ങനെ ഉറപ്പിക്കാം?</span>
+<span class="material-symbols-outlined text-ocean-deep text-[18px] transition-transform duration-200">expand_more</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pt-1">
+          നീണ്ടകര ഹാർബറിൽ നിന്നും വള്ളങ്ങളും ബോട്ടുകളും എത്തുമ്പോൾ തത്സമയം ലേലം പിടിച്ചു ശേഖരിക്കുന്ന മീനാണിത്. ഫോർമാലിനോ അമോണിയയോ തുടങ്ങിയ യാതൊരു പ്രിസർവേറ്റീവുകളും ഉപയോഗിക്കുന്നില്ല. ആവശ്യമെങ്കിൽ ക്വാളിറ്റി ടെസ്റ്റിംഗ് സ്ട്രിപ്പ് ഉപയോഗിച്ച് പരിശോധിക്കാവുന്നതാണ്.
+        </p>
+</div>
+<!-- FAQ 2 -->
+<div class="rounded-lg bg-surface-container-low p-space-sm flex flex-col gap-1 cursor-pointer" onclick="toggleFaq(this)">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-ocean-deep">മിനിമം ഓർഡർ എത്ര കിലോയാണ്?</span>
+<span class="material-symbols-outlined text-ocean-deep text-[18px] transition-transform duration-200">expand_more</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pt-1">
+          മിനിമം 1 കിലോഗ്രാം മുതൽ ഓർഡറുകൾ സ്വീകരിക്കുന്നു. വലിയ മീനുകളുടെ കഷണങ്ങളോ (Steak pieces) ചെറുമീനുകളുടെ 1 കിലോ പായ്ക്കറ്റുകളോ ആയി ഓർഡർ നൽകാം.
+        </p>
+</div>
+<!-- FAQ 3 -->
+<div class="rounded-lg bg-surface-container-low p-space-sm flex flex-col gap-1 cursor-pointer" onclick="toggleFaq(this)">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-ocean-deep">ക്ലീനിംഗിന് അധിക ചാർജ്ജ് ഉണ്ടോ?</span>
+<span class="material-symbols-outlined text-ocean-deep text-[18px] transition-transform duration-200">expand_more</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pt-1">
+          ഇല്ല! ചെതുമ്പൽ കളയുന്നതിനും ആവശ്യമുള്ള രീതിയിൽ മുറിക്കുന്നതിനും (Curry cut / Fry cut) യാതൊരു അധിക നിരക്കും ഈടാക്കുന്നില്ല. പൂർണ്ണമായും സൗജന്യമാണ്.
+        </p>
+</div>
+</div>
+</section>
+</div>
+<script>
+  function toggleFaq(element) {
+    const icon = element.querySelector('.material-symbols-outlined');
+    const answer = element.querySelector('p');
+    if (answer.classList.contains('hidden')) {
+      answer.classList.remove('hidden');
+      icon.classList.add('rotate-180');
+    } else {
+      answer.classList.add('hidden');
+      icon.classList.remove('rotate-180');
+    }
+  }
+
+  function submitDirectOrder() {
+    const name = document.getElementById('order-name').value;
+    const location = document.getElementById('order-location').value;
+    const fish = document.getElementById('fish-item').value;
+    const qty = document.getElementById('fish-qty').value;
+    const styleEl = document.querySelector('input[name="cutting-style"]:checked');
+    const style = styleEl ? styleEl.value : 'കറി കട്ട്';
+
+    const text = `ഹലോ ബിജു ചേട്ടാ, എനിക്ക് ഓർഡർ നൽകണം:%0A• പേര്: ${name}%0A• സ്ഥലം: ${location}%0A• മീൻ: ${fish}%0A• അളവ്: ${qty}%0A• കട്ടിംഗ്: ${style}%0Aദയവായി ലഭ്യമാണോ എന്ന് അറിയിക്കുമല്ലോ!`;
+    window.open(`https://wa.me/919847012345?text=${text}`, '_blank');
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-white/95 backdrop-blur-xl shadow-[0_-4px_20px_-4px_rgba(8,45,89,0.08)]" data-active-classes="text-ocean-deep font-bold"><div class="grid grid-cols-4 items-center h-16 px-space-2xs"><a class="flex flex-col items-center justify-center gap-0.5 h-14 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="todays-catch" href="#"><span class="material-symbols-outlined text-[22px]">set_meal</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">ഇന്നത്തെ മീൻ</span></a><a class="flex flex-col items-center justify-center gap-0.5 h-14 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="categories" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">വിഭാഗങ്ങൾ</span></a><a class="flex flex-col items-center justify-center gap-0.5 h-14 text-on-surface-variant hover:text-ocean-deep transition-all" data-path="rate-card" href="#"><span class="material-symbols-outlined text-[22px]">monitoring</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">വിലനിലവാരം</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 h-14 transition-all text-ocean-deep font-bold" data-path="contact" href="#"><span class="material-symbols-outlined text-[22px]">phone_in_talk</span><span class="font-label-xs text-label-xs text-center leading-none truncate max-w-[76px]">വിളിക്കുക</span></a></div></nav>
+
+</body></html>

@@ -245,7 +245,7 @@ export const CustomerSnapshotModal: React.FC<CustomerSnapshotModalProps> = ({
         </div>
 
         {/* Body */}
-        <div className="overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-4">
           {/* Honest static snapshot notice */}
           <div className="rounded-2xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 p-3 text-xs sm:text-sm text-[#082d59] dark:text-sky-200 flex items-start gap-2.5 leading-relaxed">
             <ShieldCheck className="w-5 h-5 shrink-0 text-[#0879d9] dark:text-sky-400 mt-0.5" />
