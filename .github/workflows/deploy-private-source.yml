@@ -12,6 +12,7 @@ on:
       - 'bun.lock'
       - 'tsconfig.json'
       - 'vite.config.ts'
+      - '.github/workflows/deploy-private-source.yml'
   workflow_dispatch:
 
 permissions:
@@ -19,7 +20,7 @@ permissions:
 
 concurrency:
   group: private-build-public-pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build-and-publish:
@@ -54,10 +55,40 @@ jobs:
           The editable application source code and development history are maintained separately in a private repository. This deployment repository is not an open-source distribution of the application.
           EOF
           # Do not publish AI Studio prompts, authoring notes, source manifests, or examples.
-          find dist/assets/aistudio -type f \\( -iname '*.md' -o -iname '*.txt' -o -iname '*.example' -o -iname '*.json' -o -iname '*.webmanifest' \\) -delete
+          find dist/assets/aistudio -type f \( -iname '*.md' -o -iname '*.txt' -o -iname '*.example' -o -iname '*.json' -o -iname '*.webmanifest' \) -delete
           # The former custom business sticker is private branding, not a public app asset.
           rm -f dist/assets/aistudio/a_high_quality_colorful_promotional_sticker_graphi_777412be.png
           # Keep 802e626a..., 85e7c938..., and 9e88a73e... referenced by catalog items #30-#32.
+
+      - name: Wait for any active public Pages deployment
+        env:
+          GH_TOKEN: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            exit 0
+          fi
+          for attempt in $(seq 1 18); do
+            status_code=$(curl -sS -o /tmp/runs.json -w "%{http_code}" \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/x7z9/biju-chettan-fresh-meen/actions/runs?per_page=5" || echo "000")
+            if [ "$status_code" != "200" ]; then
+              break
+            fi
+            active=$(node -e '
+              const fs = require("fs");
+              const data = JSON.parse(fs.readFileSync("/tmp/runs.json", "utf8"));
+              const busy = (data.workflow_runs || []).some(
+                (r) => ["in_progress", "queued", "waiting", "pending", "requested"].includes(r.status)
+              );
+              process.stdout.write(busy ? "1" : "0");
+            ' 2>/dev/null || echo "0")
+            if [ "$active" != "1" ]; then
+              break
+            fi
+            echo "Public repo Pages deployment still in progress (attempt $attempt/18); waiting 10s..."
+            sleep 10
+          done
 
       - name: Publish compiled files only
         uses: peaceiris/actions-gh-pages@v4
