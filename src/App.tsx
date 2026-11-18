@@ -550,12 +550,12 @@ export default function App() {
     (fishIds: string[], select: boolean) => {
       if (fishIds.length === 0) return;
       triggerHaptic();
+      setUndoState(null);
+      if (undoTimerRef.current !== undefined) {
+        window.clearTimeout(undoTimerRef.current);
+      }
       const latest = dailyRecordRef.current;
       const now = Date.now();
-      const prevSnapshots: Array<{
-        fishId: string;
-        prevEntry: DailyFishEntry | undefined;
-      }> = [];
       const nextEntries = { ...latest.entries };
       let changedCount = 0;
 
@@ -569,7 +569,6 @@ export default function App() {
         } else if (currentStatus === 'not_listed') {
           continue;
         }
-        prevSnapshots.push({ fishId, prevEntry });
         nextEntries[fishId] = {
           ...prevEntry,
           fishId,
@@ -588,14 +587,8 @@ export default function App() {
         updatedAt: now,
       };
       void persistDailyRecord(nextRecord);
-
-      const baseMsg = t(
-        langRef.current,
-        select ? 'bulk_selected_msg' : 'bulk_deselected_msg'
-      );
-      showUndoToast(prevSnapshots, `${baseMsg} (${changedCount})`);
     },
-    [persistDailyRecord, showUndoToast]
+    [persistDailyRecord]
   );
 
   const handleToggleIncludePrices = useCallback(
