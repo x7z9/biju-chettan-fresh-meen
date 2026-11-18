@@ -30,7 +30,13 @@ export function resolvePublicAsset(path: string): string {
           ? pathname.slice(BASE_URL.length)
           : pathname
         ).replace(/^\/+/, '');
-  return `${BASE_URL}${clean}?v=${encodeURIComponent(ASSET_VERSION)}`;
+  const effectiveBase =
+    typeof window !== 'undefined' &&
+    BASE_URL !== '/' &&
+    !window.location.pathname.startsWith(BASE_URL)
+      ? '/'
+      : BASE_URL;
+  return `${effectiveBase}${clean}?v=${encodeURIComponent(ASSET_VERSION)}`;
 }
 
 export const BUSINESS_LOGO_PATH = resolvePublicAsset('/icon.svg');

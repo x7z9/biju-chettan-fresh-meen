@@ -15,6 +15,7 @@ import {
 import { t } from '../data/translations';
 import type { FishItem, Language } from '../types';
 import { speakPronunciation } from '../utils/speechAndDate';
+import { ResilientFishImage } from './ResilientFishImage';
 
 interface FishCatalogueScreenProps {
   lang: Language;
@@ -31,28 +32,33 @@ interface CatalogueFishCardProps {
   onEditFish: (fish: FishItem) => void;
   onAskDelete: (fishId: string) => void;
   onOpenPosterStudio: (fish: FishItem) => void;
+  eager?: boolean;
+  highPriority?: boolean;
 }
 
 const CatalogueFishCard: React.FC<CatalogueFishCardProps> = React.memo(
-  ({ fish, lang, onEditFish, onAskDelete, onOpenPosterStudio }) => {
+  ({
+    fish,
+    lang,
+    onEditFish,
+    onAskDelete,
+    onOpenPosterStudio,
+    eager = false,
+    highPriority = false,
+  }) => {
     const photoSrc = fish.customActualPhotos[0]?.dataUrl || fish.referenceImage;
     return (
       <article className="rounded-2xl sm:rounded-3xl bg-white dark:bg-[#0a0a0a] p-2 sm:p-3.5 border border-slate-200/75 dark:border-neutral-800 shadow-[0_4px_14px_-4px_rgba(8,45,89,0.08)] flex flex-col justify-between overflow-hidden min-w-0">
         <div className="min-w-0">
-          <div className="relative w-full aspect-[3/4] rounded-xl sm:rounded-2xl bg-[#eff4ff] dark:bg-black overflow-hidden flex items-center justify-center">
-            {photoSrc ? (
-              <img
-                src={photoSrc}
-                alt={`${fish.nameMl} (${fish.pronunciationLatin})`}
-                className="w-full h-full object-contain"
-                loading="lazy"
-                decoding="async"
-              />
-            ) : (
-              <span className="text-sm text-slate-400 dark:text-neutral-500 p-3 text-center break-words">
-                {fish.nameMl}
-              </span>
-            )}
+          <div className="relative w-full aspect-[3/4] min-h-[140px] rounded-xl sm:rounded-2xl bg-[#eff4ff] dark:bg-black overflow-hidden flex items-center justify-center">
+            <ResilientFishImage
+              src={photoSrc}
+              fallbackSrc={fish.referenceImage}
+              alt={`${fish.nameMl} (${fish.pronunciationLatin})`}
+              fallbackLabel={fish.nameMl}
+              eager={eager}
+              highPriority={highPriority}
+            />
             {fish.referenceNumber !== null && (
               <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-[#0a1f3d]/85 text-white text-[10px] font-extrabold tabular-nums">
                 #{String(fish.referenceNumber).padStart(2, '0')}
@@ -273,7 +279,7 @@ export const FishCatalogueScreen: React.FC<FishCatalogueScreenProps> = ({
         </div>
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
-          {filtered.map((fish) => (
+          {filtered.map((fish, idx) => (
             <CatalogueFishCard
               key={fish.id}
               fish={fish}
@@ -281,6 +287,8 @@ export const FishCatalogueScreen: React.FC<FishCatalogueScreenProps> = ({
               onEditFish={onEditFish}
               onAskDelete={setConfirmDeleteId}
               onOpenPosterStudio={onOpenPosterStudio}
+              eager={idx < 6}
+              highPriority={idx < 4}
             />
           ))}
         </div>

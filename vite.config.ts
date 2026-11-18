@@ -90,17 +90,17 @@ export default defineConfig(() => {
           navigateFallbackDenylist: [/\/assets\//],
           runtimeCaching: [
             {
-              urlPattern: /\/assets\/(?:aistudio|catalog)\/.*\.(?:png|jpg|jpeg|webp)$/i,
+              urlPattern: /\/assets\/(?:aistudio|catalog)\/.*\.(?:png|jpg|jpeg|webp)(?:\?.*)?$/i,
               handler: 'CacheFirst',
               options: {
-                cacheName: 'biju-fish-images-v3',
+                cacheName: 'biju-fish-images-v4',
                 expiration: {
                   maxEntries: 90,
                   maxAgeSeconds: 60 * 60 * 24 * 90,
                   purgeOnQuotaError: true,
                 },
                 cacheableResponse: {
-                  statuses: [0, 200],
+                  statuses: [200],
                 },
               },
             },

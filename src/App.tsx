@@ -314,20 +314,33 @@ export default function App() {
             )
           )
         );
+        if ('caches' in window) {
+          await caches.delete('biju-fish-images-v3').catch(() => {});
+        }
         const cache =
-          'caches' in window ? await caches.open('biju-fish-images-v3') : null;
+          'caches' in window ? await caches.open('biju-fish-images-v4') : null;
         for (const url of urls) {
           if (cancelled || !navigator.onLine) break;
           if (cache) {
             const hit = await cache.match(url);
             if (hit) continue;
           }
-          await fetch(url, { credentials: 'same-origin' }).catch(() => {});
+          const res = await fetch(url, { credentials: 'same-origin' }).catch(() => null);
+          if (
+            cache &&
+            res &&
+            res.ok &&
+            res.type === 'basic' &&
+            (res.headers.get('content-type') || '').startsWith('image/')
+          ) {
+            await cache.put(url, res.clone()).catch(() => {});
+          }
+          await new Promise((r) => window.setTimeout(r, 120));
         }
       } catch {
         // Non-critical offline cache warmup
       }
-    }, 2500);
+    }, 6000);
 
     return () => {
       cancelled = true;

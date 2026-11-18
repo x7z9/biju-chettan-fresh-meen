@@ -23,6 +23,7 @@ import {
   type FishCategoryFilter,
 } from '../data/seedCatalog';
 import { t } from '../data/translations';
+import { ResilientFishImage } from './ResilientFishImage';
 import { resolveEntryStatus } from '../db/indexedDb';
 import type {
   AvailabilityStatus,
@@ -79,6 +80,8 @@ interface TodayFishCardProps {
   onToggleNoteDrawer: (fishId: string) => void;
   onStatusSelect: (fishId: string, status: AvailabilityStatus) => void;
   onUpdateEntry: (fishId: string, patch: Partial<DailyFishEntry>) => void;
+  eager?: boolean;
+  highPriority?: boolean;
 }
 
 const TodayFishCard: React.FC<TodayFishCardProps> = React.memo(
@@ -93,6 +96,8 @@ const TodayFishCard: React.FC<TodayFishCardProps> = React.memo(
     onToggleNoteDrawer,
     onStatusSelect,
     onUpdateEntry,
+    eager = false,
+    highPriority = false,
   }) => {
     const status = resolveEntryStatus(entry);
     const isAvailable = status === 'available' || status === 'limited';
@@ -132,7 +137,7 @@ const TodayFishCard: React.FC<TodayFishCardProps> = React.memo(
           <button
             type="button"
             onClick={() => onToggleAvailability(fish.id)}
-            className="w-full text-left group focus-visible:outline-none"
+            className="block w-full text-left group focus-visible:outline-none"
             aria-pressed={isAvailable}
             aria-label={`${fish.nameMl} (${fish.pronunciationLatin}) — ${t(
               lang,
@@ -140,7 +145,7 @@ const TodayFishCard: React.FC<TodayFishCardProps> = React.memo(
             )}`}
           >
             <div
-              className={`relative w-full aspect-[3/4] rounded-xl sm:rounded-2xl overflow-hidden flex items-center justify-center transition-colors duration-150 ${
+              className={`relative w-full aspect-[3/4] min-h-[140px] rounded-xl sm:rounded-2xl overflow-hidden flex items-center justify-center transition-colors duration-150 ${
                 isLimited
                   ? 'bg-white dark:bg-black border border-amber-400/60'
                   : isAvailable
@@ -148,19 +153,14 @@ const TodayFishCard: React.FC<TodayFishCardProps> = React.memo(
                     : 'bg-[#eff4ff] dark:bg-black'
               }`}
             >
-              {cardImageSrc ? (
-                <img
-                  src={cardImageSrc}
-                  alt={`${fish.nameMl} (${fish.pronunciationLatin})`}
-                  className="w-full h-full object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <div className="p-3 text-center text-[#43474f] dark:text-neutral-300 text-xs font-semibold">
-                  {fish.nameMl}
-                </div>
-              )}
+              <ResilientFishImage
+                src={cardImageSrc}
+                fallbackSrc={fish.referenceImage}
+                alt={`${fish.nameMl} (${fish.pronunciationLatin})`}
+                fallbackLabel={fish.nameMl}
+                eager={eager}
+                highPriority={highPriority}
+              />
 
               {fish.referenceNumber !== null && (
                 <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-[#0a1f3d]/85 text-white text-[10px] font-extrabold tabular-nums">
@@ -929,7 +929,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
         )
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
-          {displayedFish.map((fish) => (
+          {displayedFish.map((fish, idx) => (
             <TodayFishCard
               key={fish.id}
               fish={fish}
@@ -942,6 +942,8 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
               onToggleNoteDrawer={toggleNoteDrawer}
               onStatusSelect={handleStatusSelect}
               onUpdateEntry={onUpdateEntry}
+              eager={idx < 6}
+              highPriority={idx < 4}
             />
           ))}
         </div>

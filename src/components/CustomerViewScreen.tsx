@@ -23,6 +23,7 @@ import type {
 } from '../types';
 import { formatSnapshotAge } from '../utils/customerSnapshot';
 import { formatDisplayDate, speakPronunciation } from '../utils/speechAndDate';
+import { ResilientFishImage } from './ResilientFishImage';
 import { openWhatsAppTextLink } from '../utils/whatsappHelper';
 import { GlossaryModal } from './GlossaryModal';
 
@@ -322,7 +323,7 @@ export const CustomerViewScreen: React.FC<CustomerViewScreenProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
-            {displayedItems.map((item) => {
+            {displayedItems.map((item, idx) => {
               const imgUrl = item.img ? resolvePublicAsset(item.img) : null;
               const isLimited = item.status === 'limited';
               const isSold = item.status === 'sold_out';
@@ -342,19 +343,14 @@ export const CustomerViewScreen: React.FC<CustomerViewScreenProps> = ({
                   }`}
                 >
                   <div>
-                    <div className="relative w-full aspect-[3/4] rounded-xl sm:rounded-2xl bg-[#eff4ff] dark:bg-black overflow-hidden flex items-center justify-center">
-                      {imgUrl ? (
-                        <img
-                          src={imgUrl}
-                          alt={`${item.nameMl} (${item.pron})`}
-                          className="w-full h-full object-contain"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <span className="p-3 text-center text-xs font-bold text-slate-500">
-                          {item.nameMl}
-                        </span>
-                      )}
+                    <div className="relative w-full aspect-[3/4] min-h-[140px] rounded-xl sm:rounded-2xl bg-[#eff4ff] dark:bg-black overflow-hidden flex items-center justify-center">
+                      <ResilientFishImage
+                        src={imgUrl}
+                        alt={`${item.nameMl} (${item.pron})`}
+                        fallbackLabel={item.nameMl}
+                        eager={idx < 6}
+                        highPriority={idx < 4}
+                      />
                       {item.refNum !== null && (
                         <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-[#0a1f3d]/85 backdrop-blur-xs text-white text-[10px] font-extrabold tabular-nums">
                           #{String(item.refNum).padStart(2, '0')}
