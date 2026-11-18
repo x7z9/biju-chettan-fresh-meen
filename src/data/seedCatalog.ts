@@ -1030,6 +1030,42 @@ export const SEEDED_FISH_CATALOG: FishItem[] = [
     createdAt: BASE_TIMESTAMP + 79,
     updatedAt: BASE_TIMESTAMP + 79,
   },
+  {
+    id: 'uluva_meen',
+    referenceNumber: 33,
+    catalogueGroup: 'finfish',
+    seafoodClass: 'finfish',
+    nameMl: 'ഉലുവ മീൻ',
+    pronunciationLatin: 'Uluva Meen',
+    aliasesMl: ['ഉലുവ', 'ഉലുവാച്ചി', 'അരണ മീൻ'],
+    nameEn: 'Lizardfish (Uluva Meen)',
+    scientificName: 'Saurida spp. (Saurida tumbil)',
+    family: 'Synodontidae',
+    speciesNote: 'Traditional coastal Kerala market name ഉലുവ മീൻ for marine lizardfishes (Saurida tumbil / Saurida spp., Family Synodontidae).',
+    identificationFeatures: 'Elongated cylindrical bronze-olive back fading to silvery-white belly, blunt lizard-like head with wide mouth extending behind the eye, prominent cycloid scales, small adipose fin, and deeply forked tail.',
+    habitatSummary: 'Demersal coastal muddy and sandy shelf grounds along the Kerala coast.',
+    imageMethod: 'Seller-supplied banana-leaf showcase photo preserving exact Malayalam name ഉലുവ മീൻ.',
+    sourceReferences: [
+      {
+        title: 'FishBase: Saurida tumbil',
+        url: 'https://www.fishbase.org/summary/Saurida-tumbil',
+        accessedAt: '2026-11-18',
+      },
+      {
+        title: 'ICAR-CMFRI: Vernacular names of Kerala fishes (Eprint 3635)',
+        url: 'https://eprints.cmfri.org.in/3635/',
+        accessedAt: '2026-11-18',
+      },
+    ],
+    identificationConfidence: 'probable',
+    ambiguityNote: 'ഉലുവ മീൻ (ഉലുവാച്ചി / അരണ മീൻ) covers more than one Saurida lizardfish species in Kerala trawl landings; commonly Saurida tumbil.',
+    referenceImage: '/assets/catalog/uluva_meen.jpg',
+    isReferenceArtworkOnly: true,
+    customActualPhotos: [],
+    preferredBackground: 'banana-leaf',
+    createdAt: BASE_TIMESTAMP + 78,
+    updatedAt: BASE_TIMESTAMP + 78,
+  },
 ];
 
 export type FishCategoryFilter = 'sea' | 'backwater' | 'shellfish';

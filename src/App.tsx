@@ -596,7 +596,7 @@ export default function App() {
   const handleSaveFish = async (fish: FishItem) => {
     let nextRefNumber = fish.referenceNumber;
     if (nextRefNumber === null) {
-      let maxNum = 32;
+      let maxNum = SEEDED_FISH_CATALOG.length;
       for (const f of fishList) {
         if (f.referenceNumber !== null && f.referenceNumber > maxNum) {
           maxNum = f.referenceNumber;
