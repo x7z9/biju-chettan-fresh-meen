@@ -300,6 +300,10 @@ export const translations = {
     harbor_fresh_badge: 'ഹാർബർ ഫ്രഷ് • 100% കെമിക്കൽ ഫ്രീ',
     cleaning_service_banner: 'സൗജന്യ ക്ലീനിങ് & കട്ടിങ് സൗകര്യം ലഭ്യമാണ്',
     natural_fresh_tag: '100% ഫ്രഷ്',
+    select_all: 'എല്ലാം തിരഞ്ഞെടുക്കുക',
+    deselect_all: 'എല്ലാം ഒഴിവാക്കുക',
+    bulk_selected_msg: 'എല്ലാ മീനുകളും തിരഞ്ഞെടുത്തു',
+    bulk_deselected_msg: 'എല്ലാ മീനുകളും ഒഴിവാക്കി',
   },
   en: {
     app_title: 'Biju Chettante Fresh Fish',
@@ -600,6 +604,10 @@ export const translations = {
     harbor_fresh_badge: 'Harbor Fresh • 100% Chemical-Free',
     cleaning_service_banner: 'Free cleaning & custom cutting available',
     natural_fresh_tag: '100% Fresh',
+    select_all: 'Select All',
+    deselect_all: 'Deselect All',
+    bulk_selected_msg: 'Selected all fish',
+    bulk_deselected_msg: 'Deselected all fish',
   },
 } as const;
 

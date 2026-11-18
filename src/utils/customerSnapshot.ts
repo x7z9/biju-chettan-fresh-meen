@@ -1,10 +1,13 @@
+import { DEFAULT_BUSINESS_SETTINGS, SEEDED_FISH_CATALOG } from '../data/seedCatalog';
 import { isSafeImageSrc, resolveEntryStatus } from '../db/indexedDb';
 import type {
+  AvailabilityStatus,
   BusinessSettings,
   CustomerSnapshotV1,
   DailyRecord,
   FishItem,
   Language,
+  PriceUnit,
   SnapshotFishItemV1,
 } from '../types';
 
@@ -18,8 +21,31 @@ export interface SnapshotBuildOptions {
   includeSoldOut?: boolean;
 }
 
-export const SNAPSHOT_URL_WARN_LENGTH = 2200;
+export const SNAPSHOT_URL_WARN_LENGTH = 1800;
 export const SNAPSHOT_URL_HARD_LENGTH = 3600;
+
+const STATUS_TO_CODE: Record<Exclude<AvailabilityStatus, 'not_listed'>, number> = {
+  available: 0,
+  limited: 1,
+  sold_out: 2,
+};
+const CODE_TO_STATUS: Exclude<AvailabilityStatus, 'not_listed'>[] = [
+  'available',
+  'limited',
+  'sold_out',
+];
+
+const UNIT_TO_CODE: Record<PriceUnit, number> = {
+  per_kg: 1,
+  per_piece: 2,
+  per_packet: 3,
+};
+const CODE_TO_UNIT: Array<PriceUnit | undefined> = [
+  undefined,
+  'per_kg',
+  'per_piece',
+  'per_packet',
+];
 
 function stripToPublicAssetPath(src: string | null | undefined): string | null {
   if (!src || typeof src !== 'string') return null;
@@ -119,7 +145,7 @@ export function buildCustomerSnapshotPayload(
     lang: options.customerLang,
     businessMl: settings.businessNameMl.slice(0, 100),
     businessEn: settings.businessNameEn.slice(0, 100),
-    owner: (settings.ownerName || 'ബിജു R').slice(0, 80),
+    owner: settings.ownerName.slice(0, 80),
     locMl: settings.locationMl.slice(0, 140),
     locEn: settings.locationEn.slice(0, 140),
     ...(allowPhone
@@ -188,16 +214,286 @@ async function decompressDeflateRaw(bytes: Uint8Array): Promise<Uint8Array | nul
   }
 }
 
+function trimTrailingEmpty(arr: Array<string | number>): Array<string | number> {
+  const copy = [...arr];
+  while (
+    copy.length > 0 &&
+    (copy[copy.length - 1] === '' || copy[copy.length - 1] === 0)
+  ) {
+    copy.pop();
+  }
+  return copy;
+}
+
+const SEED_INDEX_BY_ID = new Map(SEEDED_FISH_CATALOG.map((f, idx) => [f.id, idx]));
+
+function encodePayloadV2Json(payload: CustomerSnapshotV1): string {
+  const yyyymmdd = Number(payload.dateKey.replace(/-/g, ''));
+  const dCompact = Number.isFinite(yyyymmdd)
+    ? yyyymmdd.toString(36)
+    : payload.dateKey;
+  const tMins = Math.floor(payload.createdAt / 60000);
+
+  const rawHeader: string[] = [
+    payload.businessMl === DEFAULT_BUSINESS_SETTINGS.businessNameMl ? '' : payload.businessMl,
+    payload.businessEn === DEFAULT_BUSINESS_SETTINGS.businessNameEn ? '' : payload.businessEn,
+    payload.owner || '',
+    payload.locMl || '',
+    payload.locEn || '',
+    payload.phone || '',
+    payload.phoneDigits || '',
+    payload.mapsUrl || '',
+  ];
+  while (rawHeader.length > 0 && rawHeader[rawHeader.length - 1] === '') {
+    rawHeader.pop();
+  }
+
+  let mask = 0n;
+  const overrides: Array<Array<string | number>> = [];
+  const customs: Array<Array<string | number>> = [];
+
+  for (const item of payload.items) {
+    const seedIdx = SEED_INDEX_BY_ID.get(item.id);
+    const seed = seedIdx !== undefined ? SEEDED_FISH_CATALOG[seedIdx] : undefined;
+    const matchesSeed =
+      seedIdx !== undefined &&
+      seed !== undefined &&
+      item.nameMl === seed.nameMl &&
+      item.pron === seed.pronunciationLatin &&
+      (item.nameEn || '') === (seed.nameEn || '') &&
+      (item.refNum ?? null) === (seed.referenceNumber ?? null) &&
+      (item.img || '') === (stripToPublicAssetPath(seed.referenceImage) || '');
+
+    const stCode = STATUS_TO_CODE[item.status] ?? 0;
+    const unitCode = item.unit ? UNIT_TO_CODE[item.unit] ?? 0 : 0;
+    const pocBit = item.priceOnCall ? 1 : 0;
+    const hasDetails =
+      stCode !== 0 ||
+      Boolean(item.price) ||
+      unitCode !== 0 ||
+      pocBit === 1 ||
+      Boolean(item.qty) ||
+      Boolean(item.size) ||
+      Boolean(item.source) ||
+      Boolean(item.note);
+
+    if (matchesSeed) {
+      if (!hasDetails) {
+        mask |= 1n << BigInt(seedIdx);
+      } else {
+        overrides.push(
+          trimTrailingEmpty([
+            seedIdx,
+            stCode,
+            item.price || '',
+            unitCode,
+            pocBit,
+            item.qty || '',
+            item.size || '',
+            item.source || '',
+            item.note || '',
+          ])
+        );
+      }
+    } else {
+      customs.push(
+        trimTrailingEmpty([
+          item.id,
+          item.refNum ?? '',
+          item.nameMl,
+          item.pron,
+          item.nameEn || '',
+          stCode,
+          item.price || '',
+          unitCode,
+          pocBit,
+          item.qty || '',
+          item.size || '',
+          item.source || '',
+          item.note || '',
+          item.img || '',
+        ])
+      );
+    }
+  }
+
+  const compactObj: Record<string, unknown> = {
+    v: 2,
+    d: dCompact,
+    t: tMins,
+    ...(payload.lang === 'en' ? { l: 1 } : {}),
+    ...(rawHeader.length > 0 ? { h: rawHeader } : {}),
+    ...(mask > 0n ? { b: mask.toString(16) } : {}),
+    ...(overrides.length > 0 ? { o: overrides } : {}),
+    ...(customs.length > 0 ? { x: customs } : {}),
+  };
+  return JSON.stringify(compactObj);
+}
+
+function decodePayloadV2Object(raw: unknown): CustomerSnapshotV1 | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const obj = raw as Record<string, unknown>;
+  if (obj.v !== 2) return null;
+
+  let dateKey = '';
+  if (typeof obj.d === 'string') {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(obj.d)) {
+      dateKey = obj.d;
+    } else {
+      const parsedInt = parseInt(obj.d, 36);
+      const ymd = Number.isFinite(parsedInt) ? String(parsedInt) : '';
+      if (/^\d{8}$/.test(ymd)) {
+        dateKey = `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`;
+      }
+    }
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) return null;
+
+  const createdAt =
+    typeof obj.t === 'number' && Number.isFinite(obj.t)
+      ? obj.t * 60000
+      : Date.now();
+  const lang: Language = obj.l === 1 ? 'en' : 'ml';
+  const hdr = Array.isArray(obj.h) ? obj.h : [];
+  const strAt = (idx: number) =>
+    typeof hdr[idx] === 'string' ? (hdr[idx] as string) : '';
+
+  const decodedItems: SnapshotFishItemV1[] = [];
+
+  if (typeof obj.b === 'string' && /^[0-9a-f]+$/i.test(obj.b)) {
+    const mask = BigInt('0x' + obj.b);
+    for (let i = 0; i < SEEDED_FISH_CATALOG.length; i++) {
+      if ((mask & (1n << BigInt(i))) !== 0n) {
+        const seed = SEEDED_FISH_CATALOG[i];
+        decodedItems.push({
+          id: seed.id,
+          refNum: seed.referenceNumber,
+          nameMl: seed.nameMl,
+          pron: seed.pronunciationLatin,
+          ...(seed.nameEn ? { nameEn: seed.nameEn } : {}),
+          status: 'available',
+          ...(seed.referenceImage ? { img: seed.referenceImage } : {}),
+        });
+      }
+    }
+  }
+
+  if (Array.isArray(obj.o)) {
+    for (const row of obj.o) {
+      if (!Array.isArray(row)) continue;
+      const seedIdx = typeof row[0] === 'number' ? row[0] : -1;
+      const seed = SEEDED_FISH_CATALOG[seedIdx];
+      if (!seed) continue;
+      const stIdx = typeof row[1] === 'number' ? row[1] : 0;
+      const unitIdx = typeof row[3] === 'number' ? row[3] : 0;
+      const unit = CODE_TO_UNIT[unitIdx];
+      const price = typeof row[2] === 'string' ? row[2] : '';
+      const priceOnCall = row[4] === 1;
+      const qty = typeof row[5] === 'string' ? row[5] : '';
+      const size = typeof row[6] === 'string' ? row[6] : '';
+      const source = typeof row[7] === 'string' ? row[7] : '';
+      const note = typeof row[8] === 'string' ? row[8] : '';
+
+      decodedItems.push({
+        id: seed.id,
+        refNum: seed.referenceNumber,
+        nameMl: seed.nameMl,
+        pron: seed.pronunciationLatin,
+        ...(seed.nameEn ? { nameEn: seed.nameEn } : {}),
+        status: CODE_TO_STATUS[stIdx] || 'available',
+        ...(price ? { price } : {}),
+        ...(unit ? { unit } : {}),
+        ...(priceOnCall ? { priceOnCall: true } : {}),
+        ...(qty ? { qty } : {}),
+        ...(size ? { size } : {}),
+        ...(source ? { source } : {}),
+        ...(note ? { note } : {}),
+        ...(seed.referenceImage ? { img: seed.referenceImage } : {}),
+      });
+    }
+  }
+
+  if (Array.isArray(obj.x)) {
+    for (const row of obj.x) {
+      if (!Array.isArray(row)) continue;
+      const id = typeof row[0] === 'string' ? row[0] : '';
+      const refNum =
+        typeof row[1] === 'number' && Number.isFinite(row[1]) ? row[1] : null;
+      const nameMl = typeof row[2] === 'string' ? row[2] : '';
+      const pron = typeof row[3] === 'string' ? row[3] : '';
+      if (!id || !nameMl) continue;
+      const nameEn = typeof row[4] === 'string' ? row[4] : '';
+      const stIdx = typeof row[5] === 'number' ? row[5] : 0;
+      const price = typeof row[6] === 'string' ? row[6] : '';
+      const unitIdx = typeof row[7] === 'number' ? row[7] : 0;
+      const unit = CODE_TO_UNIT[unitIdx];
+      const priceOnCall = row[8] === 1;
+      const qty = typeof row[9] === 'string' ? row[9] : '';
+      const size = typeof row[10] === 'string' ? row[10] : '';
+      const source = typeof row[11] === 'string' ? row[11] : '';
+      const note = typeof row[12] === 'string' ? row[12] : '';
+      const img = typeof row[13] === 'string' ? row[13] : '';
+
+      decodedItems.push({
+        id,
+        refNum,
+        nameMl,
+        pron: pron || nameMl,
+        ...(nameEn ? { nameEn } : {}),
+        status: CODE_TO_STATUS[stIdx] || 'available',
+        ...(price ? { price } : {}),
+        ...(unit ? { unit } : {}),
+        ...(priceOnCall ? { priceOnCall: true } : {}),
+        ...(qty ? { qty } : {}),
+        ...(size ? { size } : {}),
+        ...(source ? { source } : {}),
+        ...(note ? { note } : {}),
+        ...(img ? { img } : {}),
+      });
+    }
+  }
+
+  decodedItems.sort((a, b) => (a.refNum ?? 9999) - (b.refNum ?? 9999));
+
+  const businessMl = strAt(0) || DEFAULT_BUSINESS_SETTINGS.businessNameMl;
+  const businessEn = strAt(1) || DEFAULT_BUSINESS_SETTINGS.businessNameEn;
+  const owner = strAt(2);
+  const locMl = strAt(3);
+  const locEn = strAt(4);
+  const phone = strAt(5);
+  const phoneDigits = strAt(6);
+  const mapsUrl = strAt(7);
+
+  return validateSnapshotObject({
+    v: 1,
+    createdAt,
+    dateKey,
+    lang,
+    businessMl,
+    businessEn,
+    owner,
+    locMl,
+    locEn,
+    ...(phone ? { phone, phoneDigits } : {}),
+    ...(mapsUrl ? { mapsUrl } : {}),
+    items: decodedItems,
+  });
+}
+
 export async function encodeCustomerSnapshotToken(
   payload: CustomerSnapshotV1
 ): Promise<string> {
-  const jsonStr = JSON.stringify(payload);
+  const jsonStr = encodePayloadV2Json(payload);
   const rawBytes = new TextEncoder().encode(jsonStr);
+  const rawToken = `v2u.${bytesToBase64Url(rawBytes)}`;
   const compressed = await compressDeflateRaw(rawBytes);
-  if (compressed && compressed.length < rawBytes.length) {
-    return `v1c.${bytesToBase64Url(compressed)}`;
+  if (compressed) {
+    const compToken = `v2c.${bytesToBase64Url(compressed)}`;
+    if (compToken.length < rawToken.length) {
+      return compToken;
+    }
   }
-  return `v1u.${bytesToBase64Url(rawBytes)}`;
+  return rawToken;
 }
 
 export function getPublicAppBaseUrl(): string {
@@ -217,7 +513,7 @@ export async function buildCustomerSnapshotUrl(
   const token = await encodeCustomerSnapshotToken(payload);
   const base = (baseOverride || getPublicAppBaseUrl()).split('?')[0].split('#')[0];
   const normalizedBase = base.endsWith('/') ? base : `${base}/`;
-  const url = `${normalizedBase}?view=customer#market=${token}`;
+  const url = `${normalizedBase}?c=1#${token}`;
   return {
     url,
     token,
@@ -305,9 +601,9 @@ function validateSnapshotObject(raw: unknown): CustomerSnapshotV1 | null {
         : Date.now(),
     dateKey: obj.dateKey,
     lang: obj.lang === 'en' ? 'en' : 'ml',
-    businessMl: safeStr(obj.businessMl, 'ബിജു ചേട്ടന്റെ ഫ്രെഷ് മീൻ', 100),
-    businessEn: safeStr(obj.businessEn, 'Biju Chettante Fresh Fish', 100),
-    owner: safeStr(obj.owner, 'ബിജു R', 80),
+    businessMl: safeStr(obj.businessMl, DEFAULT_BUSINESS_SETTINGS.businessNameMl, 100),
+    businessEn: safeStr(obj.businessEn, DEFAULT_BUSINESS_SETTINGS.businessNameEn, 100),
+    owner: safeStr(obj.owner, DEFAULT_BUSINESS_SETTINGS.ownerName, 80),
     locMl: safeStr(obj.locMl, '', 140),
     locEn: safeStr(obj.locEn, '', 140),
     ...(typeof obj.phone === 'string' && obj.phone.trim()
@@ -328,12 +624,19 @@ export async function decodeCustomerSnapshotToken(
     let token = hashOrToken.trim();
     if (token.startsWith('#')) token = token.slice(1);
     if (token.startsWith('market=')) token = token.slice('market='.length);
+    else if (token.startsWith('m=')) token = token.slice('m='.length);
     if (!token || token.length > 32000) return null;
 
     let bytes: Uint8Array | null = null;
-    if (token.startsWith('v1c.')) {
-      const compressed = base64UrlToBytes(token.slice(4));
-      bytes = await decompressDeflateRaw(compressed);
+    let version: 1 | 2 = 1;
+    if (token.startsWith('v2c.')) {
+      version = 2;
+      bytes = await decompressDeflateRaw(base64UrlToBytes(token.slice(4)));
+    } else if (token.startsWith('v2u.')) {
+      version = 2;
+      bytes = base64UrlToBytes(token.slice(4));
+    } else if (token.startsWith('v1c.')) {
+      bytes = await decompressDeflateRaw(base64UrlToBytes(token.slice(4)));
     } else if (token.startsWith('v1u.')) {
       bytes = base64UrlToBytes(token.slice(4));
     } else {
@@ -343,7 +646,9 @@ export async function decodeCustomerSnapshotToken(
     if (!bytes || bytes.length > 64000) return null;
     const json = new TextDecoder().decode(bytes);
     const parsed = JSON.parse(json);
-    return validateSnapshotObject(parsed);
+    return version === 2
+      ? decodePayloadV2Object(parsed)
+      : validateSnapshotObject(parsed);
   } catch {
     return null;
   }

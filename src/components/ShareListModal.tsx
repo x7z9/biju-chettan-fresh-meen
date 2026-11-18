@@ -334,6 +334,22 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
     }));
   };
 
+  const handleSelectAllPhotos = () => {
+    const next: Record<string, boolean> = {};
+    for (const item of fishPhotoEntries) {
+      next[item.fish.id] = true;
+    }
+    setSelectedPhotoIds(next);
+  };
+
+  const handleDeselectAllPhotos = () => {
+    const next: Record<string, boolean> = {};
+    for (const item of fishPhotoEntries) {
+      next[item.fish.id] = false;
+    }
+    setSelectedPhotoIds(next);
+  };
+
   const handleCopy = async () => {
     const textToCopy = isMultiBatch ? fullListMessage : messageText;
     try {
@@ -858,6 +874,29 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
                         ? `${t(lang, 'share_photos_ready')} ✓`
                         : `${t(lang, 'share_preparing')} (${preparedItems.length}/${activeTargetEntries.length})`}
                     </span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      type="button"
+                      data-testid="share-select-all"
+                      disabled={checkedPhotoEntries.length === fishPhotoEntries.length}
+                      onClick={handleSelectAllPhotos}
+                      className="min-h-[34px] px-3 py-1 rounded-full bg-[#eff4ff] hover:bg-[#dce9ff] dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-[#082d59]/15 dark:border-neutral-700 text-[#082d59] dark:text-sky-300 text-xs font-bold flex items-center gap-1.5 transition disabled:opacity-45 disabled:pointer-events-none whitespace-nowrap"
+                    >
+                      <Check className="w-3.5 h-3.5 shrink-0 text-[#059669] dark:text-emerald-400" />
+                      <span>{t(lang, 'select_all')}</span>
+                    </button>
+                    <button
+                      type="button"
+                      data-testid="share-deselect-all"
+                      disabled={checkedPhotoEntries.length === 0}
+                      onClick={handleDeselectAllPhotos}
+                      className="min-h-[34px] px-3 py-1 rounded-full bg-slate-100 hover:bg-rose-50 dark:bg-neutral-900 dark:hover:bg-rose-950/50 border border-slate-200 dark:border-neutral-800 text-[#43474f] hover:text-rose-700 dark:text-neutral-300 dark:hover:text-rose-300 text-xs font-bold flex items-center gap-1.5 transition disabled:opacity-45 disabled:pointer-events-none whitespace-nowrap"
+                    >
+                      <X className="w-3.5 h-3.5 shrink-0" />
+                      <span>{t(lang, 'deselect_all')}</span>
+                    </button>
                   </div>
 
                   {/* Interactive Multi-Batch Stepper when > 10 individual photos are selected */}

@@ -230,8 +230,9 @@ export const CustomerSnapshotModal: React.FC<CustomerSnapshotModalProps> = ({
               {t(lang, 'customer_snapshot_title')}
             </h2>
             <p className="text-xs text-slate-500 dark:text-neutral-400 tabular-nums mt-0.5">
-              {payload.items.length} {t(lang, 'fish_word')} · {t(lang, 'snapshot_size_label')}:{' '}
-              {formatBytes(estimatedBytes)}
+              {payload.items.length} {t(lang, 'fish_word')}
+              {urlInfo.length > 0 ? ` · ${urlInfo.length} chars` : ''} ·{' '}
+              {t(lang, 'snapshot_size_label')}: {formatBytes(estimatedBytes)}
             </p>
           </div>
           <button

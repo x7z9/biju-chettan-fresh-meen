@@ -49,6 +49,7 @@ interface TodayScreenProps {
   trashList: TrashFishItem[];
   settings: BusinessSettings;
   onToggleAvailability: (fishId: string) => void;
+  onBulkAvailability: (fishIds: string[], select: boolean) => void;
   onToggleIncludePrices: (include: boolean) => void;
   onUpdateEntry: (fishId: string, patch: Partial<DailyFishEntry>) => void;
   onOpenPosterStudio: (fish: FishItem) => void;
@@ -492,6 +493,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
   trashList,
   settings,
   onToggleAvailability,
+  onBulkAvailability,
   onToggleIncludePrices,
   onUpdateEntry,
   onOpenPosterStudio,
@@ -585,6 +587,17 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
     hasSearch,
     searchOutput.matchedFishIds,
   ]);
+
+  const displayedSelectionStats = useMemo(() => {
+    let selected = 0;
+    let listed = 0;
+    for (const f of displayedFish) {
+      const st = resolveEntryStatus(dailyRecord.entries[f.id]);
+      if (st === 'available' || st === 'limited') selected++;
+      if (st !== 'not_listed') listed++;
+    }
+    return { selected, listed };
+  }, [displayedFish, dailyRecord.entries]);
 
   const toggleNoteDrawer = useCallback((fishId: string) => {
     setExpandedNotes((prev) => ({ ...prev, [fishId]: !prev[fishId] }));
@@ -827,6 +840,51 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
             );
           })}
         </div>
+
+        {/* Quick Bulk Select All / Deselect All Controls */}
+        {displayedFish.length > 0 && (
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
+            <span className="text-[11px] sm:text-xs font-bold text-[#43474f] dark:text-neutral-300 tabular-nums">
+              {t(lang, 'available_count')}:{' '}
+              <strong className="text-[#059669] dark:text-emerald-400">
+                {displayedSelectionStats.selected}
+              </strong>
+              /{displayedFish.length}
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5 min-w-0 max-w-full">
+              <button
+                type="button"
+                data-testid="today-select-all"
+                disabled={displayedSelectionStats.selected === displayedFish.length}
+                onClick={() =>
+                  onBulkAvailability(
+                    displayedFish.map((f) => f.id),
+                    true
+                  )
+                }
+                className="min-h-[36px] px-2.5 sm:px-3 py-1 rounded-full bg-[#eff4ff] hover:bg-[#dce9ff] dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-[#082d59]/15 dark:border-neutral-700 text-[#082d59] dark:text-sky-300 text-xs font-bold flex items-center gap-1.5 transition disabled:opacity-45 disabled:pointer-events-none whitespace-nowrap"
+              >
+                <Check className="w-3.5 h-3.5 shrink-0 text-[#059669] dark:text-emerald-400" />
+                <span>{t(lang, 'select_all')}</span>
+              </button>
+              <button
+                type="button"
+                data-testid="today-deselect-all"
+                disabled={displayedSelectionStats.listed === 0}
+                onClick={() =>
+                  onBulkAvailability(
+                    displayedFish.map((f) => f.id),
+                    false
+                  )
+                }
+                className="min-h-[36px] px-2.5 sm:px-3 py-1 rounded-full bg-slate-100 hover:bg-rose-50 dark:bg-neutral-900 dark:hover:bg-rose-950/50 border border-slate-200 dark:border-neutral-800 text-[#43474f] hover:text-rose-700 dark:text-neutral-300 dark:hover:text-rose-300 text-xs font-bold flex items-center gap-1.5 transition disabled:opacity-45 disabled:pointer-events-none whitespace-nowrap"
+              >
+                <X className="w-3.5 h-3.5 shrink-0" />
+                <span>{t(lang, 'deselect_all')}</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Offline Spell Check Suggestions + App-wide Search Matches */}
         {hasSearch && (

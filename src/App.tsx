@@ -99,13 +99,30 @@ import {
 const LANG_STORAGE_KEY = 'biju_meen_lang';
 const THEME_STORAGE_KEY = 'biju_meen_theme';
 
+function safeDecodeUri(raw: string): string {
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
 function checkIsCustomerViewUrl(): { isCustomer: boolean; token: string } {
   if (typeof window === 'undefined') return { isCustomer: false, token: '' };
   const params = new URLSearchParams(window.location.search);
-  const isCustomer = params.get('view') === 'customer';
   const hash = window.location.hash || '';
-  const match = hash.match(/(?:^#|&)market=([^&]+)/);
-  const token = match ? decodeURIComponent(match[1]) : '';
+  const paramMatch = hash.match(/(?:^#|&)(?:market|m)=([^&]+)/);
+  const compactMatch = hash.match(/^#((?:v[12][cu])\.[^&]+)/);
+  const rawToken = paramMatch
+    ? paramMatch[1]
+    : compactMatch
+      ? compactMatch[1]
+      : '';
+  const token = rawToken ? safeDecodeUri(rawToken) : '';
+  const isCustomer =
+    params.get('view') === 'customer' ||
+    params.get('c') === '1' ||
+    Boolean(token);
   return { isCustomer, token };
 }
 
@@ -172,8 +189,7 @@ export default function App() {
   const [moreFocusSection, setMoreFocusSection] = useState<string | null>(null);
 
   const [undoState, setUndoState] = useState<{
-    fishId: string;
-    prevEntry: DailyFishEntry | undefined;
+    prevEntries: Array<{ fishId: string; prevEntry: DailyFishEntry | undefined }>;
     message: string;
   } | null>(null);
 
@@ -451,15 +467,12 @@ export default function App() {
 
   const showUndoToast = useCallback(
     (
-      fishId: string,
-      prevEntry: DailyFishEntry | undefined,
-      fishName: string,
-      nextStatusLabel: string
+      prevEntries: Array<{ fishId: string; prevEntry: DailyFishEntry | undefined }>,
+      message: string
     ) => {
       setUndoState({
-        fishId,
-        prevEntry,
-        message: `${fishName}: ${nextStatusLabel}`,
+        prevEntries,
+        message,
       });
       if (undoTimerRef.current !== undefined) {
         window.clearTimeout(undoTimerRef.current);
@@ -474,17 +487,19 @@ export default function App() {
   const handleUndoLastToggle = useCallback(() => {
     if (!undoState) return;
     triggerHaptic();
-    const { fishId, prevEntry } = undoState;
+    const { prevEntries } = undoState;
     setUndoState(null);
     if (undoTimerRef.current !== undefined) {
       window.clearTimeout(undoTimerRef.current);
     }
     const latest = dailyRecordRef.current;
     const nextEntries = { ...latest.entries };
-    if (prevEntry) {
-      nextEntries[fishId] = prevEntry;
-    } else {
-      delete nextEntries[fishId];
+    for (const { fishId, prevEntry } of prevEntries) {
+      if (prevEntry) {
+        nextEntries[fishId] = prevEntry;
+      } else {
+        delete nextEntries[fishId];
+      }
     }
     const nextRecord: DailyRecord = {
       ...latest,
@@ -523,12 +538,62 @@ export default function App() {
       const matchedFish = fishListRef.current.find((f) => f.id === fishId);
       if (matchedFish) {
         showUndoToast(
-          fishId,
-          prevEntry,
-          matchedFish.nameMl,
-          t(langRef.current, `status_${nextStatus}` as const)
+          [{ fishId, prevEntry }],
+          `${matchedFish.nameMl}: ${t(langRef.current, `status_${nextStatus}` as const)}`
         );
       }
+    },
+    [persistDailyRecord, showUndoToast]
+  );
+
+  const handleBulkAvailability = useCallback(
+    (fishIds: string[], select: boolean) => {
+      if (fishIds.length === 0) return;
+      triggerHaptic();
+      const latest = dailyRecordRef.current;
+      const now = Date.now();
+      const prevSnapshots: Array<{
+        fishId: string;
+        prevEntry: DailyFishEntry | undefined;
+      }> = [];
+      const nextEntries = { ...latest.entries };
+      let changedCount = 0;
+
+      for (const fishId of fishIds) {
+        const prevEntry = latest.entries[fishId];
+        const currentStatus = resolveEntryStatus(prevEntry);
+        if (select) {
+          if (currentStatus === 'available' || currentStatus === 'limited') {
+            continue;
+          }
+        } else if (currentStatus === 'not_listed') {
+          continue;
+        }
+        prevSnapshots.push({ fishId, prevEntry });
+        nextEntries[fishId] = {
+          ...prevEntry,
+          fishId,
+          available: select,
+          status: select ? 'available' : 'not_listed',
+          updatedAt: now,
+        };
+        changedCount++;
+      }
+
+      if (changedCount === 0) return;
+
+      const nextRecord: DailyRecord = {
+        ...latest,
+        entries: nextEntries,
+        updatedAt: now,
+      };
+      void persistDailyRecord(nextRecord);
+
+      const baseMsg = t(
+        langRef.current,
+        select ? 'bulk_selected_msg' : 'bulk_deselected_msg'
+      );
+      showUndoToast(prevSnapshots, `${baseMsg} (${changedCount})`);
     },
     [persistDailyRecord, showUndoToast]
   );
@@ -1053,6 +1118,7 @@ export default function App() {
               trashList={trashList}
               settings={settings}
               onToggleAvailability={handleToggleAvailability}
+              onBulkAvailability={handleBulkAvailability}
               onToggleIncludePrices={handleToggleIncludePrices}
               onUpdateEntry={handleUpdateEntry}
               onOpenPosterStudio={handleOpenPosterStudio}
