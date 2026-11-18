@@ -51,6 +51,8 @@ const CustomerViewScreen = lazy(() =>
 import {
   BUSINESS_LOGO_PATH,
   DEFAULT_BUSINESS_SETTINGS,
+  getPublicAssetCandidates,
+  resolvePublicAsset,
   SEEDED_FISH_CATALOG,
 } from './data/seedCatalog';
 import { t } from './data/translations';
@@ -124,6 +126,31 @@ function checkIsCustomerViewUrl(): { isCustomer: boolean; token: string } {
     params.get('c') === '1' ||
     Boolean(token);
   return { isCustomer, token };
+}
+
+function logImageLoadDiagnostic(
+  url: string,
+  error: unknown,
+  context?: Record<string, unknown>
+): void {
+  const errObj =
+    error instanceof Error
+      ? error
+      : error instanceof Event
+        ? new Error(
+            `Image load event "${error.type}" failed for URL: ${url || '(empty)'}`
+          )
+        : new Error(String(error ?? `Unknown image load failure for URL: ${url}`));
+
+  console.error('[ImageLoadDiagnostic]', {
+    url,
+    error: errObj,
+    rawError: error,
+    online: typeof navigator !== 'undefined' ? navigator.onLine : undefined,
+    locationHref: typeof window !== 'undefined' ? window.location.href : undefined,
+    baseUrl: import.meta.env.BASE_URL,
+    ...context,
+  });
 }
 
 export default function App() {
@@ -305,64 +332,160 @@ export default function App() {
   }, [urlViewState.isCustomer, loadAllData]);
 
   useEffect(() => {
-    if (
-      urlViewState.isCustomer ||
-      !isOnline ||
-      fishList.length === 0 ||
-      typeof window === 'undefined'
-    ) {
+    if (typeof window === 'undefined') return;
+
+    const handleGlobalImageError = (event: Event) => {
+      const target = event.target;
+      if (target instanceof HTMLImageElement) {
+        const failedUrl =
+          target.currentSrc ||
+          target.getAttribute('src') ||
+          target.src ||
+          '(unknown)';
+        const err =
+          event instanceof ErrorEvent && event.error
+            ? event.error
+            : new Error(`<img> failed to load: ${failedUrl}`);
+        logImageLoadDiagnostic(failedUrl, err, {
+          stage: 'img_element_error',
+          alt: target.alt,
+          complete: target.complete,
+          naturalWidth: target.naturalWidth,
+          eventType: event.type,
+        });
+      }
+    };
+
+    const handleCustomImageError = (event: Event) => {
+      const customEvent = event as CustomEvent<{
+        url?: string;
+        error?: unknown;
+        stage?: string;
+      }>;
+      const detail = customEvent.detail;
+      if (!detail) return;
+      logImageLoadDiagnostic(
+        detail.url || '(unknown)',
+        detail.error ?? new Error('Image asset load failed'),
+        { stage: detail.stage || 'asset_loader' }
+      );
+    };
+
+    window.addEventListener('error', handleGlobalImageError, true);
+    window.addEventListener('biju:image-load-error', handleCustomImageError);
+    return () => {
+      window.removeEventListener('error', handleGlobalImageError, true);
+      window.removeEventListener('biju:image-load-error', handleCustomImageError);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isOnline || typeof window === 'undefined') {
       return;
     }
+    const imageSources: Array<string | null | undefined> = [BUSINESS_LOGO_PATH];
+    if (urlViewState.isCustomer) {
+      if (!decodedSnapshot) return;
+      for (const item of decodedSnapshot.items) {
+        if (item.img) imageSources.push(resolvePublicAsset(item.img));
+      }
+    } else {
+      if (fishList.length === 0) return;
+      for (const f of fishList) {
+        if (f.referenceImage) imageSources.push(f.referenceImage);
+      }
+    }
+
+    const urls = Array.from(
+      new Set(
+        imageSources.filter(
+          (u): u is string =>
+            typeof u === 'string' &&
+            u.length > 0 &&
+            !u.startsWith('data:') &&
+            !u.startsWith('blob:')
+        )
+      )
+    );
+    if (urls.length === 0) return;
+
     let cancelled = false;
     const timer = window.setTimeout(async () => {
+      let currentUrl = '';
       try {
-        const urls = Array.from(
-          new Set(
-            [
-              BUSINESS_LOGO_PATH,
-              ...fishList.map((f) => f.referenceImage),
-            ].filter(
-              (u): u is string =>
-                typeof u === 'string' &&
-                u.length > 0 &&
-                !u.startsWith('data:') &&
-                !u.startsWith('blob:')
-            )
-          )
-        );
         if ('caches' in window) {
           await caches.delete('biju-fish-images-v3').catch(() => {});
+          await caches.delete('biju-fish-images-v4').catch(() => {});
         }
         const cache =
-          'caches' in window ? await caches.open('biju-fish-images-v4') : null;
+          'caches' in window ? await caches.open('biju-fish-images-v5') : null;
         for (const url of urls) {
+          currentUrl = url;
           if (cancelled || !navigator.onLine) break;
           if (cache) {
-            const hit = await cache.match(url);
+            const hit = await cache
+              .match(url, { ignoreSearch: true })
+              .catch(() => null);
             if (hit) continue;
           }
-          const res = await fetch(url, { credentials: 'same-origin' }).catch(() => null);
-          if (
-            cache &&
-            res &&
-            res.ok &&
-            res.type === 'basic' &&
-            (res.headers.get('content-type') || '').startsWith('image/')
-          ) {
-            await cache.put(url, res.clone()).catch(() => {});
+          const candidates = getPublicAssetCandidates(url);
+          let cachedSuccessfully = false;
+          let lastAttemptUrl = url;
+          let lastAttemptError: unknown = null;
+
+          for (let idx = 0; idx < candidates.length; idx++) {
+            const candidate = candidates[idx];
+            lastAttemptUrl = candidate;
+            if (cancelled || !navigator.onLine) break;
+            try {
+              const res = await fetch(candidate, { credentials: 'same-origin' });
+              const ct = (res.headers.get('content-type') || '').toLowerCase();
+              if (
+                res.ok &&
+                res.type !== 'opaque' &&
+                (ct.startsWith('image/') || ct === 'image/svg+xml')
+              ) {
+                if (cache) {
+                  await cache.put(candidate, res.clone()).catch((putErr) => {
+                    logImageLoadDiagnostic(candidate, putErr, {
+                      stage: 'warmup_cache_put',
+                    });
+                  });
+                }
+                cachedSuccessfully = true;
+                break;
+              }
+              lastAttemptError = new Error(
+                `Unexpected image fetch response (status=${res.status}, type=${res.type}, contentType=${ct || 'empty'})`
+              );
+            } catch (fetchErr) {
+              lastAttemptError = fetchErr;
+            }
           }
-          await new Promise((r) => window.setTimeout(r, 120));
+
+          if (!cachedSuccessfully && !cancelled && navigator.onLine && lastAttemptError) {
+            logImageLoadDiagnostic(lastAttemptUrl, lastAttemptError, {
+              stage: 'warmup_fetch',
+              primaryUrl: url,
+              candidatesCount: candidates.length,
+            });
+          }
+          await new Promise((r) => window.setTimeout(r, 80));
         }
-      } catch {
-        // Non-critical offline cache warmup
+      } catch (err) {
+        if (!cancelled && navigator.onLine) {
+          logImageLoadDiagnostic(currentUrl || '(warmup)', err, {
+            stage: 'warmup_lifecycle',
+          });
+        }
       }
-    }, 6000);
+    }, 1200);
 
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [urlViewState.isCustomer, fishList, isOnline]);
+  }, [urlViewState.isCustomer, decodedSnapshot, fishList, isOnline]);
 
   useEffect(() => {
     const isDark = theme === 'dark';

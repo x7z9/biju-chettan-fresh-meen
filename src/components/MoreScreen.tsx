@@ -25,6 +25,7 @@ import {
 } from '../data/coastalDirectory';
 import { BUSINESS_LOGO_PATH, REFERENCE_SHEET_PATH } from '../data/seedCatalog';
 import { t } from '../data/translations';
+import { ResilientFishImage } from './ResilientFishImage';
 import {
   buildFullBackup,
   resolveEntryStatus,
@@ -708,20 +709,13 @@ export const MoreScreen: React.FC<MoreScreenProps> = ({
                   className="rounded-2xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 p-3 flex flex-col min-[420px]:flex-row min-[420px]:items-center justify-between gap-3"
                 >
                   <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <div className="w-14 h-16 rounded-xl bg-white dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 overflow-hidden flex items-center justify-center shrink-0">
-                      {photoSrc ? (
-                        <img
-                          src={photoSrc}
-                          alt={item.fish.nameMl}
-                          className="w-full h-full object-contain"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      ) : (
-                        <span className="text-[10px] text-slate-400 dark:text-neutral-500 p-1 text-center break-words">
-                          {item.fish.nameMl}
-                        </span>
-                      )}
+                    <div className="relative w-14 h-16 rounded-xl bg-white dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 overflow-hidden flex items-center justify-center shrink-0">
+                      <ResilientFishImage
+                        src={photoSrc}
+                        fallbackSrc={item.fish.referenceImage}
+                        alt={item.fish.nameMl}
+                        fallbackLabel={item.fish.nameMl}
+                      />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug break-words">
@@ -1211,11 +1205,14 @@ export const MoreScreen: React.FC<MoreScreenProps> = ({
             <p className="text-xs sm:text-sm text-slate-600 dark:text-neutral-400 leading-relaxed break-words">
               {t(lang, 'reference_sheet_caption')}
             </p>
-            <img
-              src={REFERENCE_SHEET_PATH}
-              alt={t(lang, 'poster_references')}
-              className="w-full rounded-2xl border border-slate-200 dark:border-neutral-800 object-contain bg-slate-50 dark:bg-black"
-            />
+            <div className="relative w-full aspect-[4/3] rounded-2xl border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-black overflow-hidden flex items-center justify-center">
+              <ResilientFishImage
+                src={REFERENCE_SHEET_PATH}
+                alt={t(lang, 'poster_references')}
+                fallbackLabel={t(lang, 'poster_references')}
+                className="w-full h-full object-contain"
+              />
+            </div>
           </div>
         )}
       </section>

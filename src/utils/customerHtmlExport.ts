@@ -4,6 +4,7 @@ import type {
   DailyRecord,
   FishItem,
 } from '../types';
+import { loadImage } from './posterRenderer';
 
 export interface HtmlExportOptions {
   includePhotos: boolean;
@@ -40,13 +41,7 @@ async function createCompactThumbnailDataUrl(src: string): Promise<string | null
   if (typeof document === 'undefined' || typeof Image === 'undefined') return null;
   try {
     const resolved = src.startsWith('data:') ? src : resolvePublicAsset(src);
-    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const el = new Image();
-      el.crossOrigin = 'anonymous';
-      el.onload = () => resolve(el);
-      el.onerror = () => reject(new Error('Image load failed'));
-      el.src = resolved;
-    });
+    const img = await loadImage(resolved, src);
     const maxDim = 420;
     const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
     const w = Math.max(1, Math.round(img.width * scale));

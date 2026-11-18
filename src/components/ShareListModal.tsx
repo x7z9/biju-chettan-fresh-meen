@@ -24,6 +24,7 @@ import {
   renderDailyMenuPosterToDataUrl,
   resolveFishBestPhotoSrc,
 } from '../utils/posterRenderer';
+import { ResilientFishImage } from './ResilientFishImage';
 import { dataUrlToBlob, downloadBlob } from '../utils/speechAndDate';
 import {
   buildWhatsAppBatchMessage,
@@ -75,6 +76,8 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
 
   // Pre-prepared in-memory JPEG File objects so navigator.share() fires synchronously on tap
   const [preparedFiles, setPreparedFiles] = useState<Record<string, File>>({});
+  const [failedPhotoIds, setFailedPhotoIds] = useState<Record<string, boolean>>({});
+  const [retryTrigger, setRetryTrigger] = useState(0);
   const [activeBatchIdx, setActiveBatchIdx] = useState(0);
   const [completedBatches, setCompletedBatches] = useState<Record<number, boolean>>({});
   const [overrideBatchSize, setOverrideBatchSize] = useState<number | null>(null);
@@ -119,10 +122,11 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
     });
   }, [fishPhotoEntries]);
 
-  // Eagerly pre-prepare JPEG File objects in memory in smooth non-blocking slices
+  // Eagerly pre-prepare JPEG File objects in memory in smooth non-blocking slices with automatic retry
   useEffect(() => {
     if (fishPhotoEntries.length === 0) {
       setPreparedFiles({});
+      setFailedPhotoIds({});
       return;
     }
     let cancelled = false;
@@ -130,7 +134,9 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
 
     const prepareAll = async () => {
       const nextMap: Record<string, File> = {};
-      const chunkSize = 2;
+      const retryQueue: typeof fishPhotoEntries = [];
+      const chunkSize = 3;
+
       for (let i = 0; i < fishPhotoEntries.length; i += chunkSize) {
         if (cancelled) return;
         const slice = fishPhotoEntries.slice(i, i + chunkSize);
@@ -138,19 +144,46 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
           slice.map(async (item) => {
             const file = await imageSrcToJpegFile(
               item.src,
-              buildPosterFilename(item.fish.id, dailyRecord.dateKey)
+              buildPosterFilename(item.fish.id, dailyRecord.dateKey),
+              item.fish.referenceImage
             );
-            return { id: item.fish.id, file };
+            return { item, file };
           })
         );
         if (cancelled) return;
         for (const entry of built) {
           if (entry.file) {
-            nextMap[entry.id] = entry.file;
+            nextMap[entry.item.fish.id] = entry.file;
+          } else {
+            retryQueue.push(entry.item);
           }
         }
         setPreparedFiles({ ...nextMap });
         await new Promise<void>((resolve) => setTimeout(resolve, 16));
+      }
+
+      // Automatic second retry pass for any photo that hit a transient mobile blip
+      const stillFailed: Record<string, boolean> = {};
+      if (retryQueue.length > 0 && !cancelled) {
+        await new Promise<void>((resolve) => setTimeout(resolve, 450));
+        for (const item of retryQueue) {
+          if (cancelled) return;
+          const file = await imageSrcToJpegFile(
+            item.src,
+            buildPosterFilename(item.fish.id, dailyRecord.dateKey),
+            item.fish.referenceImage
+          );
+          if (cancelled) return;
+          if (file) {
+            nextMap[item.fish.id] = file;
+          } else {
+            stillFailed[item.fish.id] = true;
+          }
+        }
+        setPreparedFiles({ ...nextMap });
+      }
+      if (!cancelled) {
+        setFailedPhotoIds(stillFailed);
       }
     };
 
@@ -162,7 +195,7 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
       cancelled = true;
       window.cancelAnimationFrame(rafId);
     };
-  }, [fishPhotoEntries, dailyRecord.dateKey]);
+  }, [fishPhotoEntries, dailyRecord.dateKey, retryTrigger]);
 
   // Render preview + pre-prepare full menu card File when Menu Card mode is active
   useEffect(() => {
@@ -580,7 +613,8 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
           if (nextPrepared[item.fish.id]) return;
           const file = await imageSrcToJpegFile(
             item.src,
-            buildPosterFilename(item.fish.id, dailyRecord.dateKey)
+            buildPosterFilename(item.fish.id, dailyRecord.dateKey),
+            item.fish.referenceImage
           );
           if (file) nextPrepared[item.fish.id] = file;
         })
@@ -669,7 +703,7 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
     setBusy(true);
     try {
       const filename = buildPosterFilename(fish.id, dailyRecord.dateKey);
-      const file = await imageSrcToJpegFile(src, filename);
+      const file = await imageSrcToJpegFile(src, filename, fish.referenceImage);
       if (!file) return;
       setPreparedFiles((prev) => ({ ...prev, [fish.id]: file }));
       const outcome = await directShareFilesWithText([file], caption, fish.nameMl);
@@ -863,17 +897,28 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
                       <span className="tabular-nums">{checkedPhotoEntries.length}</span>/
                       <span className="tabular-nums">{fishPhotoEntries.length}</span>)
                     </p>
-                    <span
-                      className={`text-[11px] font-semibold px-2 py-0.5 rounded-lg tabular-nums ${
-                        allTargetsPrepared
-                          ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                          : 'bg-slate-100 dark:bg-neutral-900 text-slate-600 dark:text-neutral-400'
-                      }`}
-                    >
-                      {allTargetsPrepared
-                        ? `${t(lang, 'share_photos_ready')} ✓`
-                        : `${t(lang, 'share_preparing')} (${preparedItems.length}/${activeTargetEntries.length})`}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      {Object.keys(failedPhotoIds).length > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => setRetryTrigger((c) => c + 1)}
+                          className="min-h-[28px] px-2.5 py-0.5 rounded-lg bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700 text-[11px] font-bold"
+                        >
+                          {lang === 'en' ? 'Retry Photos' : 'വീണ്ടും ശ്രമിക്കുക'}
+                        </button>
+                      )}
+                      <span
+                        className={`text-[11px] font-semibold px-2 py-0.5 rounded-lg tabular-nums ${
+                          allTargetsPrepared
+                            ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                            : 'bg-slate-100 dark:bg-neutral-900 text-slate-600 dark:text-neutral-400'
+                        }`}
+                      >
+                        {allTargetsPrepared
+                          ? `${t(lang, 'share_photos_ready')} ✓`
+                          : `${t(lang, 'share_preparing')} (${preparedItems.length}/${activeTargetEntries.length})`}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-1.5">
@@ -945,20 +990,28 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
                       {/* Mini Thumbnail Preview of the Individual Photos in Active Part */}
                       <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
                         {currentBatch.items.map(({ fish, src }) => (
-                          <img
+                          <div
                             key={fish.id}
-                            src={src}
-                            alt={fish.nameMl}
                             title={fish.nameMl}
-                            className="w-9 h-12 rounded-md object-cover border border-amber-300/80 dark:border-amber-700 shrink-0 bg-white dark:bg-neutral-900"
-                          />
+                            className="relative w-9 h-12 rounded-md overflow-hidden border border-amber-300/80 dark:border-amber-700 shrink-0 bg-white dark:bg-neutral-900 flex items-center justify-center"
+                          >
+                            <ResilientFishImage
+                              src={src}
+                              fallbackSrc={fish.referenceImage}
+                              alt={fish.nameMl}
+                              fallbackLabel={fish.nameMl}
+                              className="w-full h-full object-cover"
+                              eager
+                              highPriority
+                            />
+                          </div>
                         ))}
                       </div>
                     </div>
                   )}
 
                   <div className="space-y-2">
-                    {fishPhotoEntries.map(({ fish, src }) => {
+                    {fishPhotoEntries.map(({ fish, src }, idx) => {
                       const isChecked = !!selectedPhotoIds[fish.id];
                       return (
                         <div
@@ -980,11 +1033,16 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({
                             >
                               {isChecked && <Check className="w-4 h-4 stroke-[2.5]" />}
                             </span>
-                            <img
-                              src={src}
-                              alt={fish.nameMl}
-                              className="w-11 h-14 rounded-lg object-contain bg-white dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 shrink-0"
-                            />
+                            <div className="relative w-11 h-14 rounded-lg overflow-hidden bg-white dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 shrink-0 flex items-center justify-center">
+                              <ResilientFishImage
+                                src={src}
+                                fallbackSrc={fish.referenceImage}
+                                alt={fish.nameMl}
+                                fallbackLabel={fish.nameMl}
+                                eager={idx < 10}
+                                highPriority={idx < 5}
+                              />
+                            </div>
                             <div className="min-w-0 flex-1">
                               <p className="text-sm font-bold text-slate-900 dark:text-white leading-snug break-words">
                                 {fish.nameMl}

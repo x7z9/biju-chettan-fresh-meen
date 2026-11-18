@@ -86,16 +86,19 @@ export default defineConfig(() => {
           cleanupOutdatedCaches: true,
           skipWaiting: true,
           clientsClaim: true,
-          ignoreURLParametersMatching: [/^v$/, /^view$/],
+          ignoreURLParametersMatching: [/^v$/, /^view$/, /^c$/],
           navigateFallbackDenylist: [/\/assets\//],
           runtimeCaching: [
             {
               urlPattern: /\/assets\/(?:aistudio|catalog)\/.*\.(?:png|jpg|jpeg|webp)(?:\?.*)?$/i,
               handler: 'CacheFirst',
               options: {
-                cacheName: 'biju-fish-images-v4',
+                cacheName: 'biju-fish-images-v5',
+                matchOptions: {
+                  ignoreSearch: true,
+                },
                 expiration: {
-                  maxEntries: 90,
+                  maxEntries: 120,
                   maxAgeSeconds: 60 * 60 * 24 * 90,
                   purgeOnQuotaError: true,
                 },

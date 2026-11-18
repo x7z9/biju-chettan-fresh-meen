@@ -1,4 +1,7 @@
-import { BUSINESS_LOGO_PATH } from '../data/seedCatalog';
+import {
+  BUSINESS_LOGO_PATH,
+  getPublicAssetCandidates,
+} from '../data/seedCatalog';
 import type {
   BusinessSettings,
   DailyFishEntry,
@@ -132,35 +135,114 @@ function drawBananaLeafBackground(ctx: CanvasRenderingContext2D) {
 
 const imageCache = new Map<string, Promise<HTMLImageElement>>();
 
-function loadImage(src: string): Promise<HTMLImageElement> {
-  const cached = imageCache.get(src);
-  if (cached) return cached;
+function isCrossOriginUrl(url: string): boolean {
+  if (typeof window === 'undefined') return false;
+  if (url.startsWith('data:') || url.startsWith('blob:')) return false;
+  try {
+    return new URL(url, window.location.href).origin !== window.location.origin;
+  } catch {
+    return false;
+  }
+}
 
-  const promise = new Promise<HTMLImageElement>((resolve, reject) => {
+function loadHtmlImageElement(url: string, useCors: boolean): Promise<HTMLImageElement> {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+    if (useCors) {
+      img.crossOrigin = 'anonymous';
+    }
     img.onload = async () => {
       if (typeof img.decode === 'function') {
         try {
           await img.decode();
         } catch {
-          // Safe to ignore decode failure if already loaded
+          // Safe to ignore decode error if naturalWidth is populated
         }
       }
-      resolve(img);
+      if (img.naturalWidth > 0) {
+        resolve(img);
+      } else {
+        reject(new Error('Image decoded with zero dimensions'));
+      }
     };
-    img.onerror = () => {
-      imageCache.delete(src);
-      reject(new Error('Could not load image for poster'));
-    };
-    img.src = src;
+    img.onerror = () => reject(new Error('Could not load image element'));
+    img.src = url;
+  });
+}
+
+async function fetchImageAsObjectUrlImg(url: string): Promise<HTMLImageElement> {
+  const res = await fetch(url, { credentials: 'same-origin' });
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+  const ct = (res.headers.get('content-type') || '').toLowerCase();
+  if (ct.includes('text/html') || ct.includes('application/json')) {
+    throw new Error('Unexpected non-image response');
+  }
+  const blob = await res.blob();
+  if (!blob || blob.size === 0) {
+    throw new Error('Empty image blob');
+  }
+  const objUrl = URL.createObjectURL(blob);
+  try {
+    return await loadHtmlImageElement(objUrl, false);
+  } finally {
+    URL.revokeObjectURL(objUrl);
+  }
+}
+
+export function loadImage(
+  src: string,
+  fallbackSrc?: string | null
+): Promise<HTMLImageElement> {
+  const cacheKey = `${src}::${fallbackSrc || ''}`;
+  const cached = imageCache.get(cacheKey);
+  if (cached) return cached;
+
+  const promise = (async () => {
+    const candidates = getPublicAssetCandidates(src, fallbackSrc);
+    for (const candidate of candidates) {
+      if (candidate.startsWith('data:') || candidate.startsWith('blob:')) {
+        try {
+          return await loadHtmlImageElement(candidate, false);
+        } catch {
+          continue;
+        }
+      }
+
+      const crossOrigin = isCrossOriginUrl(candidate);
+      if (!crossOrigin) {
+        try {
+          return await fetchImageAsObjectUrlImg(candidate);
+        } catch {
+          // Fall back to direct <img> element load
+        }
+      }
+
+      try {
+        return await loadHtmlImageElement(candidate, crossOrigin);
+      } catch {
+        continue;
+      }
+    }
+    throw new Error(`Could not load image for poster: ${src}`);
+  })().catch((err) => {
+    imageCache.delete(cacheKey);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('biju:image-load-error', {
+          detail: { url: src, error: err, stage: 'poster_load_image' },
+        })
+      );
+    }
+    throw err;
   });
 
-  if (imageCache.size >= 16) {
+  if (imageCache.size >= 24) {
     const firstKey = imageCache.keys().next().value;
     if (firstKey) imageCache.delete(firstKey);
   }
-  imageCache.set(src, promise);
+  imageCache.set(cacheKey, promise);
   return promise;
 }
 
@@ -500,9 +582,10 @@ const preparedShareFileCache = new Map<string, File>();
 
 export async function imageSrcToJpegFile(
   src: string,
-  filename: string
+  filename: string,
+  fallbackSrc?: string | null
 ): Promise<File | null> {
-  const cacheKey = `${src}::${filename}`;
+  const cacheKey = `${src}::${fallbackSrc || ''}::${filename}`;
   const cached = preparedShareFileCache.get(cacheKey);
   if (cached) return cached;
 
@@ -518,11 +601,16 @@ export async function imageSrcToJpegFile(
       return file;
     }
 
-    // Fast path for already-compact same-origin JPEG assets (no slow canvas re-encode)
+    // Fast path for already-compact same-origin JPEG assets (tries full candidate chain)
     if (!src.startsWith('data:') && /\.jpe?g(?:[?#]|$)/i.test(src)) {
-      try {
-        const res = await fetch(src, { credentials: 'same-origin' });
-        if (res.ok) {
+      const candidates = getPublicAssetCandidates(src, fallbackSrc);
+      for (const candidate of candidates) {
+        if (candidate.startsWith('data:') || isCrossOriginUrl(candidate)) continue;
+        try {
+          const res = await fetch(candidate, { credentials: 'same-origin' });
+          if (!res.ok) continue;
+          const ct = (res.headers.get('content-type') || '').toLowerCase();
+          if (ct.includes('text/html') || ct.includes('application/json')) continue;
           const blob = await res.blob();
           if (blob.size > 0 && blob.size <= 1.5 * 1024 * 1024) {
             const jpegBlob =
@@ -537,13 +625,13 @@ export async function imageSrcToJpegFile(
             preparedShareFileCache.set(cacheKey, file);
             return file;
           }
+        } catch {
+          // Try next candidate or canvas conversion below
         }
-      } catch {
-        // Fall back to Image + canvas conversion
       }
     }
 
-    const img = await loadImage(src);
+    const img = await loadImage(src, fallbackSrc);
     const maxDim = 1080;
     const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
     const canvas = document.createElement('canvas');
@@ -565,7 +653,14 @@ export async function imageSrcToJpegFile(
     }
     preparedShareFileCache.set(cacheKey, file);
     return file;
-  } catch {
+  } catch (err) {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('biju:image-load-error', {
+          detail: { url: src, error: err, stage: 'whatsapp_jpeg_prepare' },
+        })
+      );
+    }
     return null;
   }
 }

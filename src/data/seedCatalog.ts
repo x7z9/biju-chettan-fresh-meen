@@ -11,6 +11,38 @@ export const ASSET_VERSION =
     ? __APP_ASSET_VERSION__
     : '20261117';
 
+function normalizeAssetSubpath(path: string): string {
+  const pathname = path.split('?')[0].split('#')[0];
+  const assetsIdx = pathname.indexOf('assets/');
+  if (assetsIdx >= 0) {
+    return pathname.slice(assetsIdx);
+  }
+  const trimmedBase = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+  if (BASE_URL !== '/' && pathname.startsWith(BASE_URL)) {
+    return pathname.slice(BASE_URL.length).replace(/^\/+/, '');
+  }
+  if (trimmedBase && pathname.startsWith(`${trimmedBase}/`)) {
+    return pathname.slice(trimmedBase.length + 1).replace(/^\/+/, '');
+  }
+  return pathname.replace(/^\/+/, '');
+}
+
+function resolveEffectiveBase(): string {
+  if (typeof window === 'undefined' || BASE_URL === '/') {
+    return BASE_URL;
+  }
+  const baseTrimmed = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+  const locPath = window.location.pathname || '/';
+  if (
+    locPath === baseTrimmed ||
+    locPath.startsWith(BASE_URL) ||
+    locPath.startsWith(`${baseTrimmed}/`)
+  ) {
+    return BASE_URL;
+  }
+  return '/';
+}
+
 export function resolvePublicAsset(path: string): string {
   if (!path) return path;
   if (
@@ -21,22 +53,68 @@ export function resolvePublicAsset(path: string): string {
   ) {
     return path;
   }
-  const pathname = path.split('?')[0].split('#')[0];
-  const assetsIdx = pathname.indexOf('assets/');
-  const clean =
-    assetsIdx >= 0
-      ? pathname.slice(assetsIdx)
-      : (BASE_URL !== '/' && pathname.startsWith(BASE_URL)
-          ? pathname.slice(BASE_URL.length)
-          : pathname
-        ).replace(/^\/+/, '');
-  const effectiveBase =
-    typeof window !== 'undefined' &&
-    BASE_URL !== '/' &&
-    !window.location.pathname.startsWith(BASE_URL)
-      ? '/'
-      : BASE_URL;
+  const clean = normalizeAssetSubpath(path);
+  const effectiveBase = resolveEffectiveBase();
   return `${effectiveBase}${clean}?v=${encodeURIComponent(ASSET_VERSION)}`;
+}
+
+export function getPublicAssetCandidates(
+  primary: string | null | undefined,
+  fallback?: string | null
+): string[] {
+  const candidates: string[] = [];
+  const pushUnique = (u: string | null | undefined) => {
+    if (!u || typeof u !== 'string') return;
+    const trimmed = u.trim();
+    if (!trimmed) return;
+    if (!candidates.includes(trimmed)) candidates.push(trimmed);
+  };
+
+  const expandVariants = (url: string) => {
+    if (
+      url.startsWith('data:') ||
+      url.startsWith('blob:') ||
+      url.startsWith('http://') ||
+      url.startsWith('https://')
+    ) {
+      pushUnique(url);
+      return;
+    }
+
+    const clean = normalizeAssetSubpath(url);
+    const vQuery = `?v=${encodeURIComponent(ASSET_VERSION)}`;
+
+    // 1. Primary resolved URL (matches current mount path / BASE_URL)
+    pushUnique(resolvePublicAsset(url));
+    // 2. Original URL & queryless primary resolved
+    pushUnique(resolvePublicAsset(url).split('?')[0]);
+    pushUnique(url);
+
+    // 3. Explicit Vite BASE_URL variant (handles subpath without trailing slash)
+    if (BASE_URL !== '/') {
+      pushUnique(`${BASE_URL}${clean}${vQuery}`);
+      pushUnique(`${BASE_URL}${clean}`);
+    }
+
+    // 4. First window pathname segment prefix (handles any reverse-proxy subpath)
+    if (typeof window !== 'undefined' && window.location?.pathname) {
+      const segs = window.location.pathname.split('/').filter(Boolean);
+      if (segs.length > 0 && segs[0] !== 'assets') {
+        const winBase = `/${segs[0]}/`;
+        pushUnique(`${winBase}${clean}${vQuery}`);
+        pushUnique(`${winBase}${clean}`);
+      }
+    }
+
+    // 5. Root-relative & directory-relative fallbacks
+    pushUnique(`/${clean}${vQuery}`);
+    pushUnique(`/${clean}`);
+    pushUnique(`./${clean}`);
+  };
+
+  if (primary) expandVariants(primary);
+  if (fallback && fallback !== primary) expandVariants(fallback);
+  return candidates;
 }
 
 export const BUSINESS_LOGO_PATH = resolvePublicAsset('/icon.svg');

@@ -1000,7 +1000,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
               onToggleNoteDrawer={toggleNoteDrawer}
               onStatusSelect={handleStatusSelect}
               onUpdateEntry={onUpdateEntry}
-              eager={idx < 6}
+              eager={idx < 10}
               highPriority={idx < 4}
             />
           ))}

@@ -287,7 +287,7 @@ export const FishCatalogueScreen: React.FC<FishCatalogueScreenProps> = ({
               onEditFish={onEditFish}
               onAskDelete={setConfirmDeleteId}
               onOpenPosterStudio={onOpenPosterStudio}
-              eager={idx < 6}
+              eager={idx < 10}
               highPriority={idx < 4}
             />
           ))}

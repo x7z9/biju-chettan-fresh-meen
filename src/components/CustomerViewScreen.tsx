@@ -346,9 +346,10 @@ export const CustomerViewScreen: React.FC<CustomerViewScreenProps> = ({
                     <div className="relative w-full aspect-[3/4] min-h-[140px] rounded-xl sm:rounded-2xl bg-[#eff4ff] dark:bg-black overflow-hidden flex items-center justify-center">
                       <ResilientFishImage
                         src={imgUrl}
+                        fallbackSrc={item.img}
                         alt={`${item.nameMl} (${item.pron})`}
                         fallbackLabel={item.nameMl}
-                        eager={idx < 6}
+                        eager={idx < 10}
                         highPriority={idx < 4}
                       />
                       {item.refNum !== null && (
